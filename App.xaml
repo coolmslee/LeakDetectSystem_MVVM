@@ -1,0 +1,18 @@
+<Application x:Class="LeakDetectSystem_MVVM.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        StartupUri를 사용하지 않고 App.xaml.cs의 OnStartup에서
+        MainWindow를 생성하고 DataContext를 주입합니다.
+    -->
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- 색상 리소스 먼저 로드 -->
+                <ResourceDictionary Source="Views/Resources/Colors.xaml" />
+                <!-- 스타일은 색상 리소스를 참조하므로 이후 로드 -->
+                <ResourceDictionary Source="Views/Resources/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

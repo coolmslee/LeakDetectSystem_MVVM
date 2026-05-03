@@ -1,0 +1,87 @@
+<UserControl x:Class="LeakDetectSystem_MVVM.Views.Main.Controls.StationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:LeakDetectSystem_MVVM.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:StationViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="120" d:DesignWidth="240">
+
+    <Border Style="{StaticResource CardStyle}" Margin="4">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- 헤더: 스테이션 이름 + 상태 표시 -->
+            <Grid Grid.Row="0" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{Binding StationName}"
+                           Style="{StaticResource SubHeaderTextStyle}"
+                           VerticalAlignment="Center" />
+
+                <Ellipse Grid.Column="1"
+                         VerticalAlignment="Center">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse" BasedOn="{StaticResource StatusIndicatorStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLeakDetected}" Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource ErrorStatusBrush}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonitoring}" Value="False">
+                                    <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+            </Grid>
+
+            <!-- 압력 값 -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
+                <TextBlock Text="압력: " Style="{StaticResource SecondaryTextStyle}" />
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0:F1} / {1:F1} kPa">
+                            <Binding Path="PressureValue" />
+                            <Binding Path="Threshold" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource BodyTextStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsAboveThreshold}" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource ErrorStatusBrush}" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+
+            <!-- 상태 메시지 -->
+            <TextBlock Grid.Row="2"
+                       Text="{Binding StatusMessage}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource SecondaryTextStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLeakDetected}" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource ErrorStatusBrush}" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+    </Border>
+</UserControl>
