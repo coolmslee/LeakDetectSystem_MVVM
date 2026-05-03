@@ -77,16 +77,27 @@ namespace LeakDetectSystem_MVVM.ViewModels
 
         // ───────────────── Commands ─────────────────
 
-        /// <summary>PLC 연결 상태 토글 (테스트용)</summary>
+        /// <summary>
+        /// PLC 연결 상태 토글.
+        /// 개발·디버그 환경에서 UI 검증에 사용합니다.
+        /// 실제 운용 시에는 PLC 서비스 레이어의 연결/해제 결과로 IsPlcConnected를 갱신하고
+        /// 이 Command는 제거하거나 비활성화합니다.
+        /// </summary>
         public RelayCommand TogglePlcConnectionCommand { get; }
 
-        /// <summary>카메라 연결 상태 토글 (테스트용)</summary>
+        /// <summary>
+        /// 카메라 연결 상태 토글 (개발·디버그용).
+        /// </summary>
         public RelayCommand ToggleCameraConnectionCommand { get; }
 
-        /// <summary>IMQS 연결 상태 토글 (테스트용)</summary>
+        /// <summary>
+        /// IMQS 연결 상태 토글 (개발·디버그용).
+        /// </summary>
         public RelayCommand ToggleImqsConnectionCommand { get; }
 
-        /// <summary>RFID 연결 상태 토글 (테스트용)</summary>
+        /// <summary>
+        /// RFID 연결 상태 토글 (개발·디버그용).
+        /// </summary>
         public RelayCommand ToggleRfidConnectionCommand { get; }
 
         // ───────────────── 생성자 ─────────────────

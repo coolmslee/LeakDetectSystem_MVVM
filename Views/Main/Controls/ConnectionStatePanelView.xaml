@@ -106,7 +106,8 @@
                         <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsRequestSignalActive}" Value="True">
-                                    <Setter Property="Fill" Value="{StaticResource AccentBrush}" />
+                                    <!-- 요청신호 활성: 진행 중임을 나타내는 노란색(경고) 계열로 구분 -->
+                                    <Setter Property="Fill" Value="{StaticResource WarningStatusBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
