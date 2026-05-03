@@ -15,7 +15,6 @@ namespace LeakDetectSystem_MVVM.ViewModels
         private double _pressureValue;
         private double _threshold;
         private DateTime _lastMeasuredAt;
-        private string _statusMessage = string.Empty;
         private bool _isMonitoring;
 
         public int StationId
@@ -54,11 +53,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
             set => SetProperty(ref _lastMeasuredAt, value);
         }
 
-        public string StatusMessage
-        {
-            get => IsLeakDetected ? "⚠ 누설 감지됨" : "✔ 정상";
-            set => SetProperty(ref _statusMessage, value);
-        }
+        public string StatusMessage => IsLeakDetected ? "⚠ 누설 감지됨" : "✔ 정상";
 
         public bool IsAboveThreshold => PressureValue > Threshold;
 

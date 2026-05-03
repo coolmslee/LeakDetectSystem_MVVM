@@ -73,8 +73,8 @@ namespace LeakDetectSystem_MVVM.ViewModels
             var sampleData = new[]
             {
                 new LeakInfoModel { StationId = 1, StationName = "Station 1 - Line A", PressureValue = 102.5, Threshold = 110.0, LastMeasuredAt = DateTime.Now },
-                new LeakInfoModel { StationId = 2, StationName = "Station 2 - Line B", IsLeakDetected = true,  PressureValue = 125.3, Threshold = 110.0, LastMeasuredAt = DateTime.Now },
-                new LeakInfoModel { StationId = 3, StationName = "Station 3 - Line C", PressureValue = 98.7,  Threshold = 110.0, LastMeasuredAt = DateTime.Now },
+                new LeakInfoModel { StationId = 2, StationName = "Station 2 - Line B", IsLeakDetected = true, PressureValue = 125.3, Threshold = 110.0, LastMeasuredAt = DateTime.Now },
+                new LeakInfoModel { StationId = 3, StationName = "Station 3 - Line C", PressureValue = 98.7, Threshold = 110.0, LastMeasuredAt = DateTime.Now },
                 new LeakInfoModel { StationId = 4, StationName = "Station 4 - Line D", PressureValue = 107.1, Threshold = 110.0, LastMeasuredAt = DateTime.Now },
             };
 
