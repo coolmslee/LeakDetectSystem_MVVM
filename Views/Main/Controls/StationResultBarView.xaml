@@ -1,0 +1,40 @@
+<UserControl x:Class="LeakDetectSystem_MVVM.Views.Main.Controls.StationResultBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:LeakDetectSystem_MVVM.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:StationCardViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="36" d:DesignWidth="280">
+
+    <!--
+        StationResultBarView: OK / NG 판정 결과 색상 바
+        원본(LeakDetectSystem) 기준:
+          - 스테이션 하단 Result 표시 영역(OK=녹색, NG=적색 색상 바 + 텍스트)에 대응
+    -->
+    <Border Height="32"
+            CornerRadius="0,0,4,4">
+        <Border.Style>
+            <Style TargetType="Border">
+                <!-- 기본: Unknown(회색) -->
+                <Setter Property="Background" Value="{StaticResource InactiveStatusBrush}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ResultState}" Value="OK">
+                        <Setter Property="Background" Value="{StaticResource NormalStatusBrush}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ResultState}" Value="NG">
+                        <Setter Property="Background" Value="{StaticResource ErrorStatusBrush}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+
+        <TextBlock Text="{Binding ResultText}"
+                   FontWeight="Bold"
+                   FontSize="14"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="#FFFFFF" />
+    </Border>
+</UserControl>
