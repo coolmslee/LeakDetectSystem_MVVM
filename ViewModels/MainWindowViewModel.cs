@@ -37,6 +37,9 @@ namespace LeakDetectSystem_MVVM.ViewModels
         public MainTabViewModel MainTab { get; } = new();
         public SettingTabViewModel SettingTab { get; } = new();
 
+        // TitleBar ViewModel
+        public TitleBarViewModel TitleBar { get; }
+
         // Commands
         public RelayCommand ExitCommand { get; }
         public RelayCommand ShowAboutCommand { get; }
@@ -47,6 +50,9 @@ namespace LeakDetectSystem_MVVM.ViewModels
         public MainWindowViewModel(IDialogService dialogService)
         {
             _dialogService = dialogService;
+
+            // TitleBar ViewModel – FooterStatus 콜백으로 연결
+            TitleBar = new TitleBarViewModel(msg => FooterStatus = msg);
 
             ExitCommand = new RelayCommand(() => System.Windows.Application.Current.Shutdown());
             ShowAboutCommand = new RelayCommand(ShowAbout);
