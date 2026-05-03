@@ -13,15 +13,18 @@ LeakDetectSystem_MVVM/
 ├── App.xaml.cs                     # 앱 진입점 - MainWindow + ViewModel 주입
 │
 ├── Models/                         # 순수 데이터 모델 (비즈니스 엔티티)
-│   └── LeakInfoModel.cs            # 누설 감지 정보 데이터 모델
+│   ├── LeakInfoModel.cs            # 누설 감지 정보 데이터 모델
+│   └── StationResultState.cs       # OK / NG / Unknown 판정 결과 열거형
 │
 ├── ViewModels/                     # UI 상태 + 로직 (View에 바인딩)
 │   ├── Base/
 │   │   └── ViewModelBase.cs        # INotifyPropertyChanged + SetProperty 헬퍼
 │   ├── MainWindowViewModel.cs      # 메인 창 VM (탭 관리, 앱 레벨 명령)
-│   ├── MainTabViewModel.cs         # 모니터링 탭 VM (스테이션 목록, 모니터링 토글)
+│   ├── MainTabViewModel.cs         # 모니터링 탭 VM (StationGroup 관리, 모니터링 토글)
 │   ├── SettingTabViewModel.cs      # 설정 탭 VM (장치/임계값 설정)
-│   └── StationViewModel.cs         # 개별 스테이션 패널 VM
+│   ├── StationViewModel.cs         # 레거시 스테이션 패널 VM (호환 유지)
+│   ├── StationGroupViewModel.cs    # ST1~ST4 전체 그룹 VM (Stations 컬렉션)
+│   └── StationCardViewModel.cs     # 개별 스테이션 카드 VM (표시 모드 + 결과)
 │
 ├── Commands/                       # ICommand 구현체
 │   ├── RelayCommand.cs             # 동기 커맨드 (RelayCommand, RelayCommand<T>)
@@ -35,22 +38,78 @@ LeakDetectSystem_MVVM/
 └── Views/
     ├── Resources/                  # 전역 리소스 사전
     │   ├── Colors.xaml             # 색상 정의 (Color + SolidColorBrush)
-    │   └── Styles.xaml             # 컨트롤 스타일 정의
+    │   └── Styles.xaml             # 컨트롤 스타일 정의 (DisplayModeButtonStyle 포함)
     └── Main/
         ├── MainWindow.xaml         # 메인 창 (탭 헤더 + ContentControl)
         ├── MainWindow.xaml.cs      # 코드-비하인드 최소화 (InitializeComponent만)
-        └── Controls/               # 탭별 UserControl
-            ├── MainTabView.xaml    # 모니터링 탭 View (ItemsControl + StationView)
+        └── Controls/               # 탭별 / 컴포넌트별 UserControl
+            ├── MainTabView.xaml         # 모니터링 탭 View (StationGroupView 포함)
             ├── MainTabView.xaml.cs
-            ├── SettingTabView.xaml # 설정 탭 View
+            ├── SettingTabView.xaml      # 설정 탭 View
             ├── SettingTabView.xaml.cs
-            ├── StationView.xaml    # 개별 스테이션 패널 UserControl
-            └── StationView.xaml.cs
+            ├── StationView.xaml         # 레거시 스테이션 패널 UserControl
+            ├── StationView.xaml.cs
+            ├── StationGroupView.xaml    # ST1~ST4 전체 컨테이너 (2×2 그리드)
+            ├── StationGroupView.xaml.cs
+            ├── StationCardView.xaml     # 개별 스테이션 카드 (헤더+Display+ResultBar)
+            ├── StationCardView.xaml.cs
+            ├── StationDisplayView.xaml  # CogDisplay Placeholder + LIVE/1:1/FIT 버튼
+            ├── StationDisplayView.xaml.cs
+            ├── StationResultBarView.xaml   # OK/NG 색상 결과 바
+            └── StationResultBarView.xaml.cs
 ```
 
 ---
 
-## 🏗️ 아키텍처 패턴
+## 🖥️ Station UI 분해 구조 (B 단계)
+
+원본 `LeakDetectSystem`의 `VisionSystem/MainWindow.xaml` ST1~ST4 영역을 아래 계층으로 분해합니다.
+
+### ViewModel 계층
+
+```
+MainTabViewModel
+└── StationGroupViewModel          # ST1~ST4 전체 그룹 관리
+    └── ObservableCollection<StationCardViewModel>   # 개별 스테이션 ×4
+        ├── StationName, StationId
+        ├── IsLive, IsFitMode, IsOneToOne            # 표시 모드
+        ├── ResultState (OK/NG/Unknown)              # 판정 결과
+        ├── PressureValue, Threshold                 # 측정값
+        └── LiveCommand, OneToOneCommand, FitCommand # 모드 전환 커맨드
+```
+
+### View 계층
+
+```
+MainTabView.xaml
+└── StationGroupView.xaml          # 2×2 UniformGrid (ST1 ST2 / ST3 ST4)
+    └── StationCardView.xaml ×4    # 개별 스테이션 카드
+        ├── 헤더 (StationName + 상태 Ellipse)
+        ├── StationDisplayView.xaml
+        │   ├── CogDisplay Placeholder (Border)
+        │   │   └── [실제 도입 시 <cog:CogDisplay> 로 교체]
+        │   └── LIVE / 1:1 / FIT 버튼
+        └── StationResultBarView.xaml
+            └── OK(녹색) / NG(적색) / ---(회색) 색상 바
+```
+
+### CogDisplay 처리 방침
+
+Cognex VisionPro(`CogDisplay`) 의존성이 없어도 빌드가 되도록  
+`StationDisplayView.xaml` 내 CogDisplay 자리는 **Border Placeholder** 로 대체합니다.
+
+```xml
+<!-- StationDisplayView.xaml 내 CogDisplay Placeholder -->
+<!-- 원본 대응 위치: <cog:CogDisplay x:Name="CogDisplay_ST{n}" /> -->
+<Border Background="#1A1A2E" MinHeight="150">
+    <!-- 실제 도입 시 이 Border를 <cog:CogDisplay> 로 교체 -->
+    ...
+</Border>
+```
+
+---
+
+
 
 ### MVVM 레이어
 

@@ -1,0 +1,77 @@
+<UserControl x:Class="LeakDetectSystem_MVVM.Views.Main.Controls.StationCardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:LeakDetectSystem_MVVM.ViewModels"
+             xmlns:controls="clr-namespace:LeakDetectSystem_MVVM.Views.Main.Controls"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:StationCardViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="260" d:DesignWidth="280">
+
+    <!--
+        StationCardView: 개별 스테이션 카드 (ST1 / ST2 / ST3 / ST4)
+        구성:
+          ┌─────────────────────────────┐
+          │ [헤더] STx    ● 상태         │
+          ├─────────────────────────────┤
+          │ [StationDisplayView]        │
+          │   CogDisplay Placeholder    │
+          │   [LIVE] [1:1] [FIT]        │
+          ├─────────────────────────────┤
+          │ [StationResultBarView]      │
+          │   OK / NG 색상 바            │
+          └─────────────────────────────┘
+        원본(LeakDetectSystem) 기준:
+          MainWindow.xaml 의 ST{n} 패널 하나에 대응합니다.
+    -->
+    <Border Style="{StaticResource CardStyle}" Margin="4">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- ── 헤더: 스테이션 이름 + 상태 표시 Ellipse ─────────────── -->
+            <Grid Grid.Row="0" Margin="0,0,0,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{Binding StationName}"
+                           Style="{StaticResource SubHeaderTextStyle}"
+                           VerticalAlignment="Center" />
+
+                <!-- 모니터링/결과 상태 Ellipse -->
+                <Ellipse Grid.Column="1"
+                         VerticalAlignment="Center">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse" BasedOn="{StaticResource StatusIndicatorStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ResultState}" Value="NG">
+                                    <Setter Property="Fill" Value="{StaticResource ErrorStatusBrush}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ResultState}" Value="OK">
+                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonitoring}" Value="False">
+                                    <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+            </Grid>
+
+            <!-- ── CogDisplay + 버튼 영역 ────────────────────────────────── -->
+            <controls:StationDisplayView Grid.Row="1" />
+
+            <!-- ── Result Bar ────────────────────────────────────────────── -->
+            <controls:StationResultBarView Grid.Row="2"
+                                           Margin="0,6,0,0" />
+        </Grid>
+    </Border>
+</UserControl>
