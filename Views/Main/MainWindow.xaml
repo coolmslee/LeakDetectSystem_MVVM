@@ -32,31 +32,9 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- ===== 메뉴바 ===== -->
-        <Menu Grid.Row="0" Background="{StaticResource PrimaryDarkBrush}">
-            <Menu.ItemContainerStyle>
-                <Style TargetType="MenuItem">
-                    <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
-                </Style>
-            </Menu.ItemContainerStyle>
-            <MenuItem Header="파일(_F)">
-                <MenuItem Header="종료(_X)"
-                          Command="{Binding ExitCommand}"
-                          InputGestureText="Alt+F4" />
-            </MenuItem>
-            <MenuItem Header="보기(_V)">
-                <MenuItem Header="모니터링 탭"
-                          Command="{Binding NavigateCommand}"
-                          CommandParameter="main" />
-                <MenuItem Header="설정 탭"
-                          Command="{Binding NavigateCommand}"
-                          CommandParameter="setting" />
-            </MenuItem>
-            <MenuItem Header="도움말(_H)">
-                <MenuItem Header="정보(_A)..."
-                          Command="{Binding ShowAboutCommand}" />
-            </MenuItem>
-        </Menu>
+        <!-- ===== 상단 TitleBar ===== -->
+        <controls:TitleBarView Grid.Row="0"
+                               DataContext="{Binding TitleBar}" />
 
         <!-- ===== TabControl: ViewModel 기반 탭 바인딩 ===== -->
         <!--
