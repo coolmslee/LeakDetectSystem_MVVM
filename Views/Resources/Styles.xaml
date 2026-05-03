@@ -109,6 +109,34 @@
         <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
     </Style>
 
+    <!-- ===== ConnectionStatePanel 전용 스타일 ===== -->
+
+    <!-- 연결 상태 Ellipse: 기본 회색(미연결), 바인딩으로 녹색(연결) 전환 -->
+    <Style x:Key="ConnectionIndicatorStyle" TargetType="Ellipse">
+        <Setter Property="Width" Value="12" />
+        <Setter Property="Height" Value="12" />
+        <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,4,0" />
+    </Style>
+
+    <!-- 연결 항목 레이블 -->
+    <Style x:Key="ConnectionLabelStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,6,0" />
+    </Style>
+
+    <!-- 항목 간 구분선 -->
+    <Style x:Key="ConnectionDividerStyle" TargetType="Rectangle">
+        <Setter Property="Width" Value="1" />
+        <Setter Property="Height" Value="14" />
+        <Setter Property="Fill" Value="{StaticResource DividerBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="6,0" />
+    </Style>
+
     <!-- ===== TitleBar 메뉴 버튼 스타일 (PLC / Model / Camera / MENU / RFID / LOG 등) ===== -->
     <!-- 상단 헤더의 소형 기능 버튼에 대응 -->
     <Style x:Key="TitleBarMenuButtonStyle" TargetType="Button">

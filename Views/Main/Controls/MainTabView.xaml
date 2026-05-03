@@ -12,6 +12,7 @@
     <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -48,14 +49,19 @@
             </Grid>
         </Border>
 
+        <!-- 연결상태/요청신호 패널 -->
+        <controls:ConnectionStatePanelView Grid.Row="1"
+                                           DataContext="{Binding ConnectionState}"
+                                           Margin="8,8,8,0" />
+
         <!-- 스테이션 그룹 뷰 (ST1~ST4) -->
         <!-- StationGroupView 가 내부적으로 2×2 UniformGrid 로 4개 스테이션을 렌더링합니다. -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="8">
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Padding="8">
             <controls:StationGroupView DataContext="{Binding StationGroup}" />
         </ScrollViewer>
 
         <!-- 하단 상태 표시줄 -->
-        <Border Grid.Row="2"
+        <Border Grid.Row="3"
                 Background="{StaticResource PanelBackgroundBrush}"
                 BorderBrush="{StaticResource DividerBrush}"
                 BorderThickness="0,1,0,0"
