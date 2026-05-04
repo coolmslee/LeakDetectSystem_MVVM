@@ -6,89 +6,147 @@
              xmlns:vm="clr-namespace:LeakDetectSystem_MVVM.ViewModels"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:ConnectionStatePanelViewModel, IsDesignTimeCreatable=True}"
-             d:DesignHeight="100" d:DesignWidth="160">
+             d:DesignHeight="80" d:DesignWidth="700">
 
     <!--
-        ConnectionStatePanelView: 연결상태 패널
-        원본(LeakDetectionSystem) MainWindow.xaml SearchPanel 내 연결상태 섹션에 대응합니다.
-        항목: LIGHT (statusLight) / PLC (statusPLC)
-        상태: 연결됨 = Green(NormalStatusBrush), 미연결 = Gray(InactiveStatusBrush)
+        ConnectionStatePanelView: 연결상태/요청신호/통신 상태 패널
+        원본(LeakDetectSystem) MainWindow.xaml 의 상태 Ellipse 영역에 대응합니다.
+
+        레이아웃:
+          [ 연결 상태 ]  PLC ● | 카메라 ● | IMQS ● | RFID ●
+          [ 신호 상태  ]  요청신호 ● | 결과신호 ● | 통신 ●
     -->
     <Border Style="{StaticResource CardStyle}" Padding="10,8">
-        <StackPanel>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
 
-            <!-- 헤더: 연결상태 -->
-            <TextBlock Text="연결상태"
-                       Style="{StaticResource SubHeaderTextStyle}"
-                       Margin="0,0,0,8" />
+            <!-- ── 연결 상태 행 ────────────────────────────────────────────── -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
 
-            <!-- LIGHT 항목 -->
-            <Grid Margin="0,2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                <TextBlock Text="연결 상태"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           VerticalAlignment="Center"
+                           Width="60"
+                           Margin="0,0,8,0" />
 
-                <TextBlock Grid.Column="0"
-                           Text="LIGHT"
-                           Style="{StaticResource BodyTextStyle}"
-                           VerticalAlignment="Center" />
+                <!-- PLC -->
+                <Ellipse>
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsPlcConnected}" Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <TextBlock Text="PLC" Style="{StaticResource ConnectionLabelStyle}" />
 
-                <Border Grid.Column="1"
-                        Background="White"
-                        BorderBrush="{StaticResource BorderBrush}"
-                        BorderThickness="1"
-                        CornerRadius="2"
-                        Padding="2"
-                        VerticalAlignment="Center">
-                    <Ellipse Width="26" Height="26">
-                        <Ellipse.Style>
-                            <Style TargetType="Ellipse">
-                                <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsLightConnected}" Value="True">
-                                        <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Ellipse.Style>
-                    </Ellipse>
-                </Border>
-            </Grid>
+                <Rectangle Style="{StaticResource ConnectionDividerStyle}" />
 
-            <!-- PLC 항목 -->
-            <Grid Margin="0,2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                <!-- 카메라 -->
+                <Ellipse>
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsCameraConnected}" Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <TextBlock Text="카메라" Style="{StaticResource ConnectionLabelStyle}" />
 
-                <TextBlock Grid.Column="0"
-                           Text="PLC"
-                           Style="{StaticResource BodyTextStyle}"
-                           VerticalAlignment="Center" />
+                <Rectangle Style="{StaticResource ConnectionDividerStyle}" />
 
-                <Border Grid.Column="1"
-                        Background="White"
-                        BorderBrush="{StaticResource BorderBrush}"
-                        BorderThickness="1"
-                        CornerRadius="2"
-                        Padding="2"
-                        VerticalAlignment="Center">
-                    <Ellipse Width="26" Height="26">
-                        <Ellipse.Style>
-                            <Style TargetType="Ellipse">
-                                <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsPlcConnected}" Value="True">
-                                        <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Ellipse.Style>
-                    </Ellipse>
-                </Border>
-            </Grid>
+                <!-- IMQS -->
+                <Ellipse>
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsImqsConnected}" Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <TextBlock Text="IMQS" Style="{StaticResource ConnectionLabelStyle}" />
+
+                <Rectangle Style="{StaticResource ConnectionDividerStyle}" />
+
+                <!-- RFID -->
+                <Ellipse>
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsRfidConnected}" Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <TextBlock Text="RFID" Style="{StaticResource ConnectionLabelStyle}" />
+            </StackPanel>
+
+            <!-- ── 신호 상태 행 ────────────────────────────────────────────── -->
+            <StackPanel Orientation="Horizontal">
+
+                <TextBlock Text="신호 상태"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           VerticalAlignment="Center"
+                           Width="60"
+                           Margin="0,0,8,0" />
+
+                <!-- 요청신호 -->
+                <Ellipse>
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsRequestSignalActive}" Value="True">
+                                    <!-- 요청신호 활성: 진행 중임을 나타내는 노란색(경고) 계열로 구분 -->
+                                    <Setter Property="Fill" Value="{StaticResource WarningStatusBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <TextBlock Text="요청신호" Style="{StaticResource ConnectionLabelStyle}" />
+
+                <Rectangle Style="{StaticResource ConnectionDividerStyle}" />
+
+                <!-- 결과신호 -->
+                <Ellipse>
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsResultSignalActive}" Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <TextBlock Text="결과신호" Style="{StaticResource ConnectionLabelStyle}" />
+
+                <Rectangle Style="{StaticResource ConnectionDividerStyle}" />
+
+                <!-- 통신 상태 -->
+                <Ellipse>
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsCommunicationActive}" Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <TextBlock Text="통신" Style="{StaticResource ConnectionLabelStyle}" />
+            </StackPanel>
 
         </StackPanel>
     </Border>

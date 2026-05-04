@@ -49,10 +49,9 @@
             </Grid>
         </Border>
 
-        <!-- 연결상태 패널 (LIGHT / PLC) -->
+        <!-- 연결상태/요청신호 패널 -->
         <controls:ConnectionStatePanelView Grid.Row="1"
                                            DataContext="{Binding ConnectionState}"
-                                           HorizontalAlignment="Left"
                                            Margin="8,8,8,0" />
 
         <!-- 스테이션 그룹 뷰 (ST1~ST4) -->
