@@ -19,6 +19,12 @@ namespace LeakDetectSystem_MVVM.ViewModels
         /// </summary>
         public StationGroupViewModel StationGroup { get; } = new();
 
+        /// <summary>
+        /// 연결상태 패널 ViewModel (LIGHT / PLC).
+        /// ConnectionStatePanelView.xaml 에 DataContext 로 바인딩됩니다.
+        /// </summary>
+        public ConnectionStatePanelViewModel ConnectionState { get; } = new();
+
         public bool IsMonitoring
         {
             get => _isMonitoring;

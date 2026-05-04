@@ -1,0 +1,95 @@
+<UserControl x:Class="LeakDetectSystem_MVVM.Views.Main.Controls.ConnectionStatePanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:LeakDetectSystem_MVVM.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:ConnectionStatePanelViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="100" d:DesignWidth="160">
+
+    <!--
+        ConnectionStatePanelView: 연결상태 패널
+        원본(LeakDetectionSystem) MainWindow.xaml SearchPanel 내 연결상태 섹션에 대응합니다.
+        항목: LIGHT (statusLight) / PLC (statusPLC)
+        상태: 연결됨 = Green(NormalStatusBrush), 미연결 = Gray(InactiveStatusBrush)
+    -->
+    <Border Style="{StaticResource CardStyle}" Padding="10,8">
+        <StackPanel>
+
+            <!-- 헤더: 연결상태 -->
+            <TextBlock Text="연결상태"
+                       Style="{StaticResource SubHeaderTextStyle}"
+                       Margin="0,0,0,8" />
+
+            <!-- LIGHT 항목 -->
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="LIGHT"
+                           Style="{StaticResource BodyTextStyle}"
+                           VerticalAlignment="Center" />
+
+                <Border Grid.Column="1"
+                        Background="White"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="2"
+                        Padding="2"
+                        VerticalAlignment="Center">
+                    <Ellipse Width="26" Height="26">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsLightConnected}" Value="True">
+                                        <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                </Border>
+            </Grid>
+
+            <!-- PLC 항목 -->
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="PLC"
+                           Style="{StaticResource BodyTextStyle}"
+                           VerticalAlignment="Center" />
+
+                <Border Grid.Column="1"
+                        Background="White"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="2"
+                        Padding="2"
+                        VerticalAlignment="Center">
+                    <Ellipse Width="26" Height="26">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPlcConnected}" Value="True">
+                                        <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                </Border>
+            </Grid>
+
+        </StackPanel>
+    </Border>
+</UserControl>
