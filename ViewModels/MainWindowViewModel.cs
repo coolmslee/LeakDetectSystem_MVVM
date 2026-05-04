@@ -8,7 +8,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
     /// MainWindow의 ViewModel.
     /// 탭 목록을 관리하고, 애플리케이션 레벨의 명령(종료, 정보 등)을 제공합니다.
     /// </summary>
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, IDisposable
     {
         private readonly IDialogService _dialogService;
         private object? _selectedTab;
@@ -78,6 +78,19 @@ namespace LeakDetectSystem_MVVM.ViewModels
                 _         => SelectedTab
             };
             FooterStatus = $"탭 이동: {viewName}";
+        }
+
+        // ───────────────── IDisposable ─────────────────
+
+        private bool _disposed;
+
+        /// <summary>보유 중인 IDisposable ViewModel을 해제합니다.</summary>
+        public void Dispose()
+        {
+            if (_disposed) return;
+            TitleBar.Dispose();
+            _disposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }

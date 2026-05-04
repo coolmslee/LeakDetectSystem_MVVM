@@ -107,6 +107,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
             if (_disposed) return;
             _timer.Stop();
             _disposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }
