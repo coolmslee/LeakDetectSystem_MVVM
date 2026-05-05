@@ -10,6 +10,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
 
         public StationGroupViewModel StationGroup { get; }
         public MainTopDashboardViewModel Dashboard { get; }
+        public SignalProcessPanelViewModel SignalProcess { get; }
         public ConnectionStatePanelViewModel ConnectionState { get; } = new();
 
         public string StatusText
@@ -28,9 +29,13 @@ namespace LeakDetectSystem_MVVM.ViewModels
         }) { }
 
         public MainTabViewModel(ObservableCollection<CameraConfig> cameras)
+            : this(cameras, null) { }
+
+        public MainTabViewModel(ObservableCollection<CameraConfig> cameras, Action<string>? statusCallback)
         {
-            StationGroup = new StationGroupViewModel(cameras);
-            Dashboard    = new MainTopDashboardViewModel(cameras);
+            StationGroup  = new StationGroupViewModel(cameras);
+            Dashboard     = new MainTopDashboardViewModel(cameras);
+            SignalProcess = new SignalProcessPanelViewModel(statusCallback);
         }
     }
 }

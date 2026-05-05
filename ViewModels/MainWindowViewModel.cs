@@ -44,7 +44,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
             _dialogService = dialogService;
 
             SettingTab = new SettingTabViewModel();
-            MainTab    = new MainTabViewModel(SettingTab.Cameras);
+            MainTab    = new MainTabViewModel(SettingTab.Cameras, msg => FooterStatus = msg);
             TitleBar   = new TitleBarViewModel(msg => FooterStatus = msg, dialogService);
 
             ExitCommand       = new RelayCommand(() => System.Windows.Application.Current.Shutdown());
