@@ -1,0 +1,108 @@
+<UserControl x:Class="LeakDetectSystem_MVVM.Views.Main.Controls.SignalProcessPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:LeakDetectSystem_MVVM.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:SignalProcessPanelViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="52" d:DesignWidth="1000">
+
+    <!--
+        Signal/Process 패널: Main 화면 상단 2번째 줄
+        5개 열 구성 (좌→우):
+          Col 0: MODEL 표시
+          Col 1: QRcode 표시
+          Col 2: 검사진행상태 표시
+          Col 3: 수동검사 버튼
+          Col 4: STOP 버튼
+    -->
+    <Border Background="{StaticResource PanelBackgroundBrush}"
+            BorderBrush="Black"
+            BorderThickness="0,0,0,1">
+        <Grid Height="52">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"   />
+                <ColumnDefinition Width="2*"   />
+                <ColumnDefinition Width="2*"   />
+                <ColumnDefinition Width="1.2*" />
+                <ColumnDefinition Width="1.2*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- ══════════════ Col 0: MODEL ══════════════ -->
+            <Border Grid.Column="0" Style="{StaticResource DashboardCellStyle}" Margin="1,2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*"    />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Style="{StaticResource DashboardCellHeaderStyle}" Padding="6,2">
+                        <TextBlock Text="MODEL" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding ModelName}"
+                               FontSize="14" FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="4,0" />
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ Col 1: QRcode ══════════════ -->
+            <Border Grid.Column="1" Style="{StaticResource DashboardCellStyle}" Margin="1,2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*"    />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Style="{StaticResource DashboardCellHeaderStyle}" Padding="6,2">
+                        <TextBlock Text="QRcode" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding QrCode}"
+                               FontSize="13"
+                               FontFamily="Consolas"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="4,0" />
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ Col 2: 검사진행상태 ══════════════ -->
+            <Border Grid.Column="2" Style="{StaticResource DashboardCellStyle}" Margin="1,2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*"    />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Style="{StaticResource DashboardCellHeaderStyle}" Padding="6,2">
+                        <TextBlock Text="검사진행상태" Style="{StaticResource DashboardHeaderTextStyle}" FontSize="11" />
+                    </Border>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding ProgressText}"
+                               FontSize="14" FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="4,0" />
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ Col 3: 수동검사 버튼 ══════════════ -->
+            <Button Grid.Column="3"
+                    Content="수동검사"
+                    FontSize="14" FontWeight="Bold"
+                    Command="{Binding ManualInspectCommand}"
+                    Style="{StaticResource AccentButtonStyle}"
+                    Margin="4,6" />
+
+            <!-- ══════════════ Col 4: STOP 버튼 ══════════════ -->
+            <Button Grid.Column="4"
+                    Content="STOP"
+                    FontSize="14" FontWeight="Bold"
+                    Background="#FFD32F2F"
+                    Command="{Binding StopCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Margin="4,6" />
+        </Grid>
+    </Border>
+</UserControl>
