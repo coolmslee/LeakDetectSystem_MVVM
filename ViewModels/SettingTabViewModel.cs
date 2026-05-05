@@ -1,12 +1,10 @@
+using System.Collections.ObjectModel;
 using LeakDetectSystem_MVVM.Commands;
+using LeakDetectSystem_MVVM.Models;
 using LeakDetectSystem_MVVM.ViewModels.Base;
 
 namespace LeakDetectSystem_MVVM.ViewModels
 {
-    /// <summary>
-    /// 설정 탭 화면에 대한 ViewModel.
-    /// 장치 연결 설정, 임계값 설정 등 시스템 설정 항목을 관리합니다.
-    /// </summary>
     public class SettingTabViewModel : ViewModelBase
     {
         private string _devicePort = "COM1";
@@ -54,6 +52,15 @@ namespace LeakDetectSystem_MVVM.ViewModels
 
         public IReadOnlyList<int> BaudRateOptions { get; } = new[] { 4800, 9600, 19200, 38400, 57600, 115200 };
 
+        /// <summary>CAM1~CAM4 카메라 설정 (Use + IP). IsConfigured = Use && IP 입력됨</summary>
+        public ObservableCollection<CameraConfig> Cameras { get; } = new()
+        {
+            new CameraConfig { Index = 1 },
+            new CameraConfig { Index = 2 },
+            new CameraConfig { Index = 3 },
+            new CameraConfig { Index = 4 },
+        };
+
         // Commands
         public RelayCommand SaveSettingsCommand { get; }
         public RelayCommand ResetToDefaultCommand { get; }
@@ -61,14 +68,13 @@ namespace LeakDetectSystem_MVVM.ViewModels
 
         public SettingTabViewModel()
         {
-            SaveSettingsCommand = new RelayCommand(SaveSettings, () => !IsSaved);
+            SaveSettingsCommand = new RelayCommand(SaveSettings);
             ResetToDefaultCommand = new RelayCommand(ResetToDefault);
             BrowseSaveDirectoryCommand = new RelayCommand(BrowseSaveDirectory);
         }
 
         private void SaveSettings()
         {
-            // 실제 구현에서는 설정 파일이나 레지스트리에 저장합니다.
             IsSaved = true;
         }
 
@@ -80,12 +86,15 @@ namespace LeakDetectSystem_MVVM.ViewModels
             IsAutoSaveEnabled = false;
             SaveDirectory = string.Empty;
             IsSaved = false;
+            foreach (var cam in Cameras)
+            {
+                cam.Use = false;
+                cam.Ip = string.Empty;
+            }
         }
 
         private void BrowseSaveDirectory()
         {
-            // 실제 구현에서는 IDialogService를 주입받아 폴더 선택 다이얼로그를 열어야 합니다.
-            // 예: SaveDirectory = _dialogService.ShowFolderBrowserDialog();
         }
     }
 }

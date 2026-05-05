@@ -150,7 +150,7 @@
                 </Grid>
             </Border>
 
-            <!-- ══════════════ Col 4: CAM 선택 / 수량초기화 / VPP초기화 / 수동검사 ══════════════ -->
+            <!-- ══════════════ Col 4: CAM 선택(1개) / 수량초기화 / VPP초기화 / 수동검사 ══════════════ -->
             <Border Grid.Column="4" Style="{StaticResource DashboardCellStyle}" Margin="1">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -179,18 +179,14 @@
                     </Border>
 
                     <!-- 컨텐츠 행 -->
-                    <!-- CAM: ComboBox 2개 (CAM1~CAM4 옵션, 현재 2개 노출) -->
+                    <!-- CAM: 설정 완료된 카메라만 옵션으로 표시하는 ComboBox 1개 -->
                     <Border Grid.Row="1" Grid.Column="0"
                             Background="White" BorderBrush="LightGray" BorderThickness="1" Margin="2">
-                        <StackPanel VerticalAlignment="Center" Margin="2">
-                            <ComboBox ItemsSource="{Binding CameraOptions}"
-                                      SelectedItem="{Binding SelectedCamera1}"
-                                      FontSize="13"
-                                      Margin="0,0,0,2" />
-                            <ComboBox ItemsSource="{Binding CameraOptions}"
-                                      SelectedItem="{Binding SelectedCamera2}"
-                                      FontSize="13" />
-                        </StackPanel>
+                        <ComboBox ItemsSource="{Binding AvailableCameras}"
+                                  SelectedItem="{Binding SelectedCamera}"
+                                  FontSize="13"
+                                  VerticalAlignment="Center"
+                                  Margin="2" />
                     </Border>
 
                     <!-- 수량초기화 버튼 -->

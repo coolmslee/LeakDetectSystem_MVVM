@@ -6,111 +6,218 @@
              xmlns:vm="clr-namespace:LeakDetectSystem_MVVM.ViewModels"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:SettingTabViewModel, IsDesignTimeCreatable=True}"
-             d:DesignHeight="400" d:DesignWidth="600">
+             d:DesignHeight="600" d:DesignWidth="600">
 
-    <Grid Background="{StaticResource BackgroundBrush}" Margin="16">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Background="{StaticResource BackgroundBrush}" Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <!-- 타이틀 -->
-        <TextBlock Grid.Row="0"
-                   Text="시스템 설정"
-                   Style="{StaticResource HeaderTextStyle}"
-                   Margin="0,0,0,16" />
+            <!-- 타이틀 -->
+            <TextBlock Grid.Row="0"
+                       Text="시스템 설정"
+                       Style="{StaticResource HeaderTextStyle}"
+                       Margin="0,0,0,16" />
 
-        <!-- 장치 연결 설정 카드 -->
-        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="0,0,0,12">
-            <StackPanel>
-                <TextBlock Text="장치 연결"
-                           Style="{StaticResource SubHeaderTextStyle}"
-                           Margin="0,0,0,10" />
+            <!-- 장치 연결 설정 카드 -->
+            <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="장치 연결"
+                               Style="{StaticResource SubHeaderTextStyle}"
+                               Margin="0,0,0,10" />
 
-                <Grid Margin="0,0,0,8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="COM 포트"
-                               Style="{StaticResource BodyTextStyle}"
-                               VerticalAlignment="Center" />
-                    <TextBox Grid.Column="1"
-                             Text="{Binding DevicePort, UpdateSourceTrigger=PropertyChanged}"
-                             Padding="6,4"
-                             BorderBrush="{StaticResource BorderBrush}"
-                             BorderThickness="1" />
-                </Grid>
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="COM 포트"
+                                   Style="{StaticResource BodyTextStyle}"
+                                   VerticalAlignment="Center" />
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding DevicePort, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="6,4"
+                                 BorderBrush="{StaticResource BorderBrush}"
+                                 BorderThickness="1" />
+                    </Grid>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Baud Rate"
-                               Style="{StaticResource BodyTextStyle}"
-                               VerticalAlignment="Center" />
-                    <ComboBox Grid.Column="1"
-                              ItemsSource="{Binding BaudRateOptions}"
-                              SelectedItem="{Binding BaudRate}"
-                              Padding="6,4" />
-                </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Baud Rate"
+                                   Style="{StaticResource BodyTextStyle}"
+                                   VerticalAlignment="Center" />
+                        <ComboBox Grid.Column="1"
+                                  ItemsSource="{Binding BaudRateOptions}"
+                                  SelectedItem="{Binding BaudRate}"
+                                  Padding="6,4" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 측정 설정 카드 -->
+            <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="측정 설정"
+                               Style="{StaticResource SubHeaderTextStyle}"
+                               Margin="0,0,0,10" />
+
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="기본 임계값 (kPa)"
+                                   Style="{StaticResource BodyTextStyle}"
+                                   VerticalAlignment="Center" />
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding DefaultThreshold, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F1}}"
+                                 Padding="6,4"
+                                 BorderBrush="{StaticResource BorderBrush}"
+                                 BorderThickness="1" />
+                    </Grid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="자동 저장"
+                                   Style="{StaticResource BodyTextStyle}"
+                                   VerticalAlignment="Center" />
+                        <CheckBox Grid.Column="1"
+                                  IsChecked="{Binding IsAutoSaveEnabled}"
+                                  VerticalAlignment="Center" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 카메라 설정 카드 (CAM1~CAM4) -->
+            <Border Grid.Row="3" Style="{StaticResource CardStyle}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="카메라 설정"
+                               Style="{StaticResource SubHeaderTextStyle}"
+                               Margin="0,0,0,10" />
+                    <TextBlock Text="Use = 체크, IP = 입력 시 설정 완료 (Main 화면에 스테이션 표시)"
+                               Style="{StaticResource SecondaryTextStyle}"
+                               Margin="0,0,0,8" />
+
+                    <!-- 헤더 행 -->
+                    <Grid Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="카메라" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" />
+                        <TextBlock Grid.Column="1" Text="Use" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="IP 주소" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" Margin="6,0,0,0"/>
+                    </Grid>
+
+                    <!-- CAM1 -->
+                    <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="CAM1" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="1"
+                                  IsChecked="{Binding Cameras[0].Use}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="2"
+                                 Text="{Binding Cameras[0].Ip, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding Cameras[0].Use}"
+                                 Padding="4,3" Margin="6,0,0,0"
+                                 BorderBrush="{StaticResource BorderBrush}"
+                                 BorderThickness="1" />
+                    </Grid>
+
+                    <!-- CAM2 -->
+                    <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="CAM2" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="1"
+                                  IsChecked="{Binding Cameras[1].Use}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="2"
+                                 Text="{Binding Cameras[1].Ip, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding Cameras[1].Use}"
+                                 Padding="4,3" Margin="6,0,0,0"
+                                 BorderBrush="{StaticResource BorderBrush}"
+                                 BorderThickness="1" />
+                    </Grid>
+
+                    <!-- CAM3 -->
+                    <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="CAM3" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="1"
+                                  IsChecked="{Binding Cameras[2].Use}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="2"
+                                 Text="{Binding Cameras[2].Ip, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding Cameras[2].Use}"
+                                 Padding="4,3" Margin="6,0,0,0"
+                                 BorderBrush="{StaticResource BorderBrush}"
+                                 BorderThickness="1" />
+                    </Grid>
+
+                    <!-- CAM4 -->
+                    <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="CAM4" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="1"
+                                  IsChecked="{Binding Cameras[3].Use}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="2"
+                                 Text="{Binding Cameras[3].Ip, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding Cameras[3].Use}"
+                                 Padding="4,3" Margin="6,0,0,0"
+                                 BorderBrush="{StaticResource BorderBrush}"
+                                 BorderThickness="1" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 하단 버튼 -->
+            <StackPanel Grid.Row="5"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,8,0,0">
+                <Button Content="기본값으로 초기화"
+                        Command="{Binding ResetToDefaultCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Background="{StaticResource InactiveStatusBrush}"
+                        Margin="0,0,8,0" />
+                <Button Content="설정 완료"
+                        Command="{Binding SaveSettingsCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}" />
             </StackPanel>
-        </Border>
-
-        <!-- 측정 설정 카드 -->
-        <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="0,0,0,12">
-            <StackPanel>
-                <TextBlock Text="측정 설정"
-                           Style="{StaticResource SubHeaderTextStyle}"
-                           Margin="0,0,0,10" />
-
-                <Grid Margin="0,0,0,8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="기본 임계값 (kPa)"
-                               Style="{StaticResource BodyTextStyle}"
-                               VerticalAlignment="Center" />
-                    <TextBox Grid.Column="1"
-                             Text="{Binding DefaultThreshold, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F1}}"
-                             Padding="6,4"
-                             BorderBrush="{StaticResource BorderBrush}"
-                             BorderThickness="1" />
-                </Grid>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="자동 저장"
-                               Style="{StaticResource BodyTextStyle}"
-                               VerticalAlignment="Center" />
-                    <CheckBox Grid.Column="1"
-                              IsChecked="{Binding IsAutoSaveEnabled}"
-                              VerticalAlignment="Center" />
-                </Grid>
-            </StackPanel>
-        </Border>
-
-        <!-- 하단 버튼 -->
-        <StackPanel Grid.Row="4"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0,8,0,0">
-            <Button Content="기본값으로 초기화"
-                    Command="{Binding ResetToDefaultCommand}"
-                    Style="{StaticResource PrimaryButtonStyle}"
-                    Background="{StaticResource InactiveStatusBrush}"
-                    Margin="0,0,8,0" />
-            <Button Content="설정 저장"
-                    Command="{Binding SaveSettingsCommand}"
-                    Style="{StaticResource PrimaryButtonStyle}" />
-        </StackPanel>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

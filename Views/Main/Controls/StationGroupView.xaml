@@ -10,16 +10,14 @@
              d:DesignHeight="560" d:DesignWidth="600">
 
     <!--
-        StationGroupView: ST1~ST4 전체 스테이션 영역 컨테이너
-        구성: 2×2 UniformGrid 에 StationCardView 4개를 배치
-        원본(LeakDetectSystem) 기준:
-          MainWindow.xaml 의 ST1/ST2/ST3/ST4 Camera 패널 전체 영역에 대응합니다.
+        StationGroupView: 설정 완료된 카메라 수만큼 스테이션을 동적으로 표시
+        - 1개: 1열
+        - 2~4개: 2열 (UniformGrid Columns 바인딩)
     -->
     <ItemsControl ItemsSource="{Binding Stations}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <!-- 2×2 그리드: ST1 ST2 / ST3 ST4 -->
-                <UniformGrid Columns="2" />
+                <UniformGrid Columns="{Binding GridColumns}" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
