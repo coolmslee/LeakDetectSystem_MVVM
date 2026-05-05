@@ -12,56 +12,22 @@
     <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- 상단 툴바 -->
-        <Border Grid.Row="0"
-                Background="{StaticResource PrimaryBrush}"
-                Padding="12,8">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0"
-                           Text="모니터링 대시보드"
-                           Style="{StaticResource HeaderTextStyle}"
-                           Foreground="{StaticResource TextOnPrimaryBrush}"
-                           VerticalAlignment="Center"
-                           Margin="0" />
-
-                <Button Grid.Column="1"
-                        Content="{Binding MonitoringButtonText}"
-                        Command="{Binding ToggleMonitoringCommand}"
-                        Style="{StaticResource AccentButtonStyle}"
-                        Margin="0,0,8,0" />
-
-                <Button Grid.Column="2"
-                        Content="새로 고침"
-                        Command="{Binding RefreshCommand}"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        Background="{StaticResource PrimaryLightBrush}" />
-            </Grid>
-        </Border>
-
         <!-- 상단 대시보드 (원본 SearchPanel 구성: CAM 선택/검사PASS/수량/연결상태/SEQ/자동시작) -->
-        <controls:MainTopDashboardView Grid.Row="1"
+        <controls:MainTopDashboardView Grid.Row="0"
                                        DataContext="{Binding Dashboard}"
                                        Margin="0" />
 
-        <!-- 스테이션 그룹 뷰 (ST1~ST4) -->
-        <!-- StationGroupView 가 내부적으로 2×2 UniformGrid 로 4개 스테이션을 렌더링합니다. -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Padding="8">
+        <!-- 스테이션 그룹 뷰 (설정 완료된 CAM 수만큼 ST 표시) -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="8">
             <controls:StationGroupView DataContext="{Binding StationGroup}" />
         </ScrollViewer>
 
         <!-- 하단 상태 표시줄 -->
-        <Border Grid.Row="3"
+        <Border Grid.Row="2"
                 Background="{StaticResource PanelBackgroundBrush}"
                 BorderBrush="{StaticResource DividerBrush}"
                 BorderThickness="0,1,0,0"

@@ -4,10 +4,6 @@ using LeakDetectSystem_MVVM.ViewModels.Base;
 
 namespace LeakDetectSystem_MVVM.ViewModels
 {
-    /// <summary>
-    /// MainWindow의 ViewModel.
-    /// 탭 목록을 관리하고, 애플리케이션 레벨의 명령(종료, 정보 등)을 제공합니다.
-    /// </summary>
     public class MainWindowViewModel : ViewModelBase, IDisposable
     {
         private readonly IDialogService _dialogService;
@@ -33,14 +29,10 @@ namespace LeakDetectSystem_MVVM.ViewModels
             set => SetProperty(ref _selectedTab, value);
         }
 
-        // 탭 ViewModels
-        public MainTabViewModel MainTab { get; } = new();
-        public SettingTabViewModel SettingTab { get; } = new();
-
-        // TitleBar ViewModel
+        public SettingTabViewModel SettingTab { get; }
+        public MainTabViewModel MainTab { get; }
         public TitleBarViewModel TitleBar { get; }
 
-        // Commands
         public RelayCommand ExitCommand { get; }
         public RelayCommand ShowAboutCommand { get; }
         public RelayCommand<string> NavigateCommand { get; }
@@ -51,14 +43,14 @@ namespace LeakDetectSystem_MVVM.ViewModels
         {
             _dialogService = dialogService;
 
-            // TitleBar ViewModel – FooterStatus 콜백으로 연결
-            TitleBar = new TitleBarViewModel(msg => FooterStatus = msg);
+            SettingTab = new SettingTabViewModel();
+            MainTab    = new MainTabViewModel(SettingTab.Cameras);
+            TitleBar   = new TitleBarViewModel(msg => FooterStatus = msg, dialogService);
 
-            ExitCommand = new RelayCommand(() => System.Windows.Application.Current.Shutdown());
-            ShowAboutCommand = new RelayCommand(ShowAbout);
-            NavigateCommand = new RelayCommand<string>(NavigateTo);
+            ExitCommand       = new RelayCommand(() => System.Windows.Application.Current.Shutdown());
+            ShowAboutCommand  = new RelayCommand(ShowAbout);
+            NavigateCommand   = new RelayCommand<string>(NavigateTo);
 
-            // 기본 탭 선택
             SelectedTab = MainTab;
         }
 
@@ -80,11 +72,8 @@ namespace LeakDetectSystem_MVVM.ViewModels
             FooterStatus = $"탭 이동: {viewName}";
         }
 
-        // ───────────────── IDisposable ─────────────────
-
         private bool _disposed;
 
-        /// <summary>보유 중인 IDisposable ViewModel을 해제합니다.</summary>
         public void Dispose()
         {
             if (_disposed) return;
