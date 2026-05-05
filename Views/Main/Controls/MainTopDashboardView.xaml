@@ -1,0 +1,342 @@
+<UserControl x:Class="LeakDetectSystem_MVVM.Views.Main.Controls.MainTopDashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:LeakDetectSystem_MVVM.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:MainTopDashboardViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="120" d:DesignWidth="1000">
+
+    <!--
+        MainTopDashboardView: Main 탭 상단 대시보드 (원본 SearchPanel 1:1 구성)
+
+        8개 열 구성 (원본 비율 유지):
+          Col0: 공병검사(PC) / 검사PASS
+          Col1: 물류PASS(PLC) Ellipse
+          Col2: 판정결과
+          Col3: TOTAL / OK / NG / Yeild
+          Col4: CAM선택(×2) / 수량초기화 / VPP초기화 / 수동검사
+          Col5: 연결상태 LIGHT / PLC
+          Col6: SEQ
+          Col7: 자동시작 / 자동정지
+    -->
+    <Border Background="{StaticResource PanelBackgroundBrush}"
+            BorderBrush="Black"
+            BorderThickness="0,1,0,1">
+        <Grid Height="120">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"   />
+                <ColumnDefinition Width="1*"   />
+                <ColumnDefinition Width="1*"   />
+                <ColumnDefinition Width="3*"   />
+                <ColumnDefinition Width="3.5*" />
+                <ColumnDefinition Width="1.2*" />
+                <ColumnDefinition Width="0.8*" />
+                <ColumnDefinition Width="1*"   />
+            </Grid.ColumnDefinitions>
+
+            <!-- ══════════════ Col 0: 공병검사(PC) / 검사 PASS ══════════════ -->
+            <Border Grid.Column="0" Style="{StaticResource DashboardCellStyle}" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*"    />
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Style="{StaticResource DashboardCellHeaderStyle}">
+                        <TextBlock Text="공병검사(PC)" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="1" Background="White" BorderBrush="Black" BorderThickness="1">
+                        <CheckBox Content="검사 PASS"
+                                  IsChecked="{Binding IsInspectPass}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  FontSize="16" />
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ Col 1: 물류PASS(PLC) ══════════════ -->
+            <Border Grid.Column="1" Style="{StaticResource DashboardCellStyle}" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*"    />
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Style="{StaticResource DashboardCellHeaderStyle}">
+                        <TextBlock Text="물류PASS(PLC)" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="1" Background="White" BorderBrush="Black" BorderThickness="1">
+                        <Ellipse Width="40" Height="40"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="Gray" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPlcPass}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ Col 2: 판정결과 ══════════════ -->
+            <Border Grid.Column="2" Style="{StaticResource DashboardCellStyle}" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*"    />
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Style="{StaticResource DashboardCellHeaderStyle}">
+                        <TextBlock Text="판정결과" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="1" Background="#FF2C2C2C" BorderBrush="Black" BorderThickness="1">
+                        <TextBlock Text="{Binding ResultText}"
+                                   Foreground="Lime"
+                                   FontSize="36"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ Col 3: 수량/수율 (TOTAL / OK / NG / Yeild) ══════════════ -->
+            <Border Grid.Column="3" Style="{StaticResource DashboardCellStyle}" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*"    />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 헤더 행 -->
+                    <Border Grid.Row="0" Grid.Column="0" Background="#FF0097FF" Padding="1">
+                        <TextBlock Text="TOTAL" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="1" Background="#FF4EFD00" Padding="1">
+                        <TextBlock Text="OK" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="2" Background="#FFFB0A0A" Padding="1">
+                        <TextBlock Text="NG" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="3" Background="#FF958D03" Padding="1">
+                        <TextBlock Text="Yeild" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+
+                    <!-- 값 행 -->
+                    <Border Grid.Row="1" Grid.Column="0" Background="White" BorderBrush="LightGray" BorderThickness="1" Margin="1">
+                        <TextBlock Text="{Binding TotalCount}" Style="{StaticResource DashboardCountTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="1" Background="White" BorderBrush="LightGray" BorderThickness="1" Margin="1">
+                        <TextBlock Text="{Binding OkCount}" Style="{StaticResource DashboardCountTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="2" Background="White" BorderBrush="LightGray" BorderThickness="1" Margin="1">
+                        <TextBlock Text="{Binding NgCount}" Style="{StaticResource DashboardCountTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="3" Background="White" BorderBrush="LightGray" BorderThickness="1" Margin="1">
+                        <TextBlock Text="{Binding Yield}" Style="{StaticResource DashboardCountTextStyle}" />
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ Col 4: CAM 선택 / 수량초기화 / VPP초기화 / 수동검사 ══════════════ -->
+            <Border Grid.Column="4" Style="{StaticResource DashboardCellStyle}" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*"    />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="1*"   />
+                        <ColumnDefinition Width="1*"   />
+                        <ColumnDefinition Width="1*"   />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 헤더 행 -->
+                    <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource DashboardCellHeaderStyle}" Padding="1">
+                        <TextBlock Text="CAM" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource DashboardCellHeaderStyle}" Padding="1">
+                        <TextBlock Text="수량초기화" Style="{StaticResource DashboardHeaderTextStyle}" FontSize="11" />
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource DashboardCellHeaderStyle}" Padding="1">
+                        <TextBlock Text="VPP초기화" Style="{StaticResource DashboardHeaderTextStyle}" FontSize="11" />
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource DashboardCellHeaderStyle}" Padding="1">
+                        <TextBlock Text="수동검사" Style="{StaticResource DashboardHeaderTextStyle}" FontSize="11" />
+                    </Border>
+
+                    <!-- 컨텐츠 행 -->
+                    <!-- CAM: ComboBox 2개 (CAM1~CAM4 옵션, 현재 2개 노출) -->
+                    <Border Grid.Row="1" Grid.Column="0"
+                            Background="White" BorderBrush="LightGray" BorderThickness="1" Margin="2">
+                        <StackPanel VerticalAlignment="Center" Margin="2">
+                            <ComboBox ItemsSource="{Binding CameraOptions}"
+                                      SelectedItem="{Binding SelectedCamera1}"
+                                      FontSize="13"
+                                      Margin="0,0,0,2" />
+                            <ComboBox ItemsSource="{Binding CameraOptions}"
+                                      SelectedItem="{Binding SelectedCamera2}"
+                                      FontSize="13" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 수량초기화 버튼 -->
+                    <Button Grid.Row="1" Grid.Column="1"
+                            Content="↺"
+                            FontSize="22"
+                            ToolTip="수량 초기화"
+                            Command="{Binding ResetCountCommand}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Margin="3" />
+
+                    <!-- VPP초기화 버튼 -->
+                    <Button Grid.Row="1" Grid.Column="2"
+                            Content="↺"
+                            FontSize="22"
+                            ToolTip="VPP 초기화"
+                            Command="{Binding ResetVppCommand}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Margin="3" />
+
+                    <!-- 수동검사 버튼 -->
+                    <Button Grid.Row="1" Grid.Column="3"
+                            Content="검사"
+                            FontSize="13"
+                            ToolTip="수동 검사"
+                            Command="{Binding ManualInspectCommand}"
+                            Style="{StaticResource AccentButtonStyle}"
+                            Margin="3" />
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ Col 5: 연결상태 (LIGHT / PLC) ══════════════ -->
+            <Border Grid.Column="5" Style="{StaticResource DashboardCellStyle}" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*"    />
+                        <RowDefinition Height="*"    />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="1*"   />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 헤더 -->
+                    <Border Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource DashboardCellHeaderStyle}">
+                        <TextBlock Text="연결상태" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+
+                    <!-- LIGHT 행 -->
+                    <Border Grid.Row="1" Grid.Column="0"
+                            Background="{StaticResource PrimaryBrush}">
+                        <TextBlock Text="LIGHT"
+                                   Foreground="White"
+                                   FontSize="13" FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="1"
+                            Background="White" BorderBrush="LightGray" BorderThickness="1" Margin="1">
+                        <Ellipse Width="22" Height="22"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="Gray" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLightConnected}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                    </Border>
+
+                    <!-- PLC 행 -->
+                    <Border Grid.Row="2" Grid.Column="0"
+                            Background="{StaticResource PrimaryBrush}">
+                        <TextBlock Text="PLC"
+                                   Foreground="White"
+                                   FontSize="13" FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+                    <Border Grid.Row="2" Grid.Column="1"
+                            Background="White" BorderBrush="LightGray" BorderThickness="1" Margin="1">
+                        <Ellipse Width="22" Height="22"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="Gray" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPlcConnected}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ Col 6: SEQ ══════════════ -->
+            <Border Grid.Column="6" Style="{StaticResource DashboardCellStyle}" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*"    />
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Style="{StaticResource DashboardCellHeaderStyle}">
+                        <TextBlock Text="SEQ" Style="{StaticResource DashboardHeaderTextStyle}" />
+                    </Border>
+                    <Border Grid.Row="1" Background="White" BorderBrush="Black" BorderThickness="1">
+                        <TextBlock Text="{Binding SeqNo}"
+                                   FontSize="28" FontWeight="Bold"
+                                   Foreground="Black"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ Col 7: 자동시작 / 자동정지 ══════════════ -->
+            <Border Grid.Column="7" Style="{StaticResource DashboardCellStyle}" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ToggleButton Grid.Row="0"
+                                  Content="자동시작"
+                                  IsChecked="{Binding IsAutoStart}"
+                                  Style="{StaticResource DashboardToggleButtonStyle}"
+                                  FontSize="15" FontWeight="Bold"
+                                  Margin="2,2,2,1" />
+                    <ToggleButton Grid.Row="1"
+                                  Content="자동정지"
+                                  IsChecked="{Binding IsAutoStop}"
+                                  Style="{StaticResource DashboardToggleButtonStyle}"
+                                  FontSize="15" FontWeight="Bold"
+                                  Margin="2,1,2,2" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

@@ -49,10 +49,10 @@
             </Grid>
         </Border>
 
-        <!-- 연결상태/요청신호 패널 -->
-        <controls:ConnectionStatePanelView Grid.Row="1"
-                                           DataContext="{Binding ConnectionState}"
-                                           Margin="8,8,8,0" />
+        <!-- 상단 대시보드 (원본 SearchPanel 구성: CAM 선택/검사PASS/수량/연결상태/SEQ/자동시작) -->
+        <controls:MainTopDashboardView Grid.Row="1"
+                                       DataContext="{Binding Dashboard}"
+                                       Margin="0" />
 
         <!-- 스테이션 그룹 뷰 (ST1~ST4) -->
         <!-- StationGroupView 가 내부적으로 2×2 UniformGrid 로 4개 스테이션을 렌더링합니다. -->

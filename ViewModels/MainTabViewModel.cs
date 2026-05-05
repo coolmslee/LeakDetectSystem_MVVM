@@ -21,6 +21,12 @@ namespace LeakDetectSystem_MVVM.ViewModels
         public StationGroupViewModel StationGroup { get; } = new();
 
         /// <summary>
+        /// Main 탭 상단 대시보드 ViewModel (원본 SearchPanel 구성).
+        /// MainTopDashboardView.xaml 에 DataContext 로 바인딩됩니다.
+        /// </summary>
+        public MainTopDashboardViewModel Dashboard { get; } = new();
+
+        /// <summary>
         /// 연결상태/요청신호 패널 ViewModel.
         /// ConnectionStatePanelView.xaml 에 DataContext 로 바인딩됩니다.
         /// </summary>

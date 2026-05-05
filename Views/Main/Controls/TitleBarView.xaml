@@ -22,7 +22,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <!-- ===== 좌측: 타이틀 + 기능 버튼 ===== -->
+        <!-- ===== 좌측: 타이틀 + MENU (하위 메뉴 구조) ===== -->
         <StackPanel Grid.Column="0"
                     Orientation="Horizontal"
                     VerticalAlignment="Center"
@@ -39,60 +39,25 @@
             <!-- 구분선 -->
             <Rectangle Width="1" Height="28"
                        Fill="{StaticResource PrimaryLightBrush}"
-                       Margin="0,0,12,0" />
+                       Margin="0,0,8,0" />
 
-            <!-- PLC -->
-            <Button Content="PLC"
-                    Command="{Binding OpenPlcCommand}"
-                    Style="{StaticResource TitleBarMenuButtonStyle}"
-                    ToolTip="PLC 설정" />
-
-            <!-- Model -->
-            <Button Content="Model"
-                    Command="{Binding OpenModelCommand}"
-                    Style="{StaticResource TitleBarMenuButtonStyle}"
-                    ToolTip="Model 설정" />
-
-            <!-- Camera -->
-            <Button Content="Camera"
-                    Command="{Binding OpenCameraCommand}"
-                    Style="{StaticResource TitleBarMenuButtonStyle}"
-                    ToolTip="Camera 설정" />
-
-            <!-- Grab -->
-            <Button Content="Grab"
-                    Command="{Binding OpenGrabCommand}"
-                    Style="{StaticResource TitleBarMenuButtonStyle}"
-                    ToolTip="Grab 설정" />
-
-            <!-- Light -->
-            <Button Content="Light"
-                    Command="{Binding OpenLightCommand}"
-                    Style="{StaticResource TitleBarMenuButtonStyle}"
-                    ToolTip="Light 설정" />
-
-            <!-- 구분선 -->
-            <Rectangle Width="1" Height="28"
-                       Fill="{StaticResource PrimaryLightBrush}"
-                       Margin="4,0" />
-
-            <!-- MENU -->
-            <Button Content="MENU"
-                    Command="{Binding OpenMenuCommand}"
-                    Style="{StaticResource TitleBarMenuButtonStyle}"
-                    ToolTip="메뉴 열기" />
-
-            <!-- RFID -->
-            <Button Content="RFID"
-                    Command="{Binding ShowRfidCommand}"
-                    Style="{StaticResource TitleBarMenuButtonStyle}"
-                    ToolTip="RFID 창 열기" />
-
-            <!-- LOG -->
-            <Button Content="LOG"
-                    Command="{Binding ShowLogCommand}"
-                    Style="{StaticResource TitleBarMenuButtonStyle}"
-                    ToolTip="LOG 창 열기" />
+            <!-- MENU (원본 동일 구조: MENU → PLC / Model / Camera / Grab / Light / Log) -->
+            <Menu Background="Transparent"
+                  VerticalAlignment="Center"
+                  Style="{StaticResource TitleBarMenuStyle}">
+                <MenuItem Header="MENU"
+                          Style="{StaticResource TitleBarTopMenuItemStyle}"
+                          FontSize="16" FontWeight="Bold"
+                          Padding="10,6">
+                    <MenuItem Header="PLC"    Command="{Binding OpenPlcCommand}"    Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <MenuItem Header="Model"  Command="{Binding OpenModelCommand}"  Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <MenuItem Header="Camera" Command="{Binding OpenCameraCommand}" Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <MenuItem Header="Grab"   Command="{Binding OpenGrabCommand}"   Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <MenuItem Header="Light"  Command="{Binding OpenLightCommand}"  Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <Separator />
+                    <MenuItem Header="Log"    Command="{Binding ShowLogCommand}"    Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                </MenuItem>
+            </Menu>
         </StackPanel>
 
         <!-- ===== 우측: 날짜/시간 + EXIT ===== -->
