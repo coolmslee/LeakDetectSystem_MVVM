@@ -9,9 +9,40 @@ namespace LeakDetectSystem_MVVM.ViewModels
     {
         private string _devicePort = "COM1";
         private int _baudRate = 9600;
-        private double _defaultThreshold = 110.0;
-        private bool _isAutoSaveEnabled;
+        private string _plcIpAddress = "192.168.0.10";
+        private int _plcPort = 502;
+        private int _plcStationNumber = 1;
+
+        private string _plcHeartBeatAddress = "0";
+        private string _plcBottleRollingAddress = "1";
+        private string _plcTopInspectRequestAddress = "2";
+        private string _plcSideInspectRequestAddress = "3";
+        private string _plcBottleExistsAddress = "10";
+
+        private string _pcHeartBeatAddress = "16";
+        private string _pcVisionReadyAddress = "17";
+        private string _pcTopInspectDoneAddress = "18";
+        private string _pcSideInspectDoneAddress = "19";
+        private string _pcQrRequestAddress = "27";
+
+        private string _modelName = "DEFAULT";
+        private string _modelPath = string.Empty;
         private string _saveDirectory = string.Empty;
+        private string _logPath = string.Empty;
+        private bool _isLogEnabled = true;
+
+        private bool _isImqsEnabled;
+        private string _imqsIpAddress = "192.168.0.20";
+        private int _imqsPort = 5000;
+
+        private bool _isRfidEnabled;
+        private string _rfidPort = "COM3";
+        private int _rfidBaudRate = 9600;
+
+        private bool _isPrinterEnabled;
+        private string _printerIpAddress = "192.168.0.30";
+        private int _printerPort = 9100;
+
         private bool _isSaved;
 
         public string DevicePort
@@ -26,22 +57,166 @@ namespace LeakDetectSystem_MVVM.ViewModels
             set => SetProperty(ref _baudRate, value);
         }
 
-        public double DefaultThreshold
+        public string PlcIpAddress
         {
-            get => _defaultThreshold;
-            set => SetProperty(ref _defaultThreshold, value);
+            get => _plcIpAddress;
+            set => SetProperty(ref _plcIpAddress, value);
         }
 
-        public bool IsAutoSaveEnabled
+        public int PlcPort
         {
-            get => _isAutoSaveEnabled;
-            set => SetProperty(ref _isAutoSaveEnabled, value);
+            get => _plcPort;
+            set => SetProperty(ref _plcPort, value);
+        }
+
+        public int PlcStationNumber
+        {
+            get => _plcStationNumber;
+            set => SetProperty(ref _plcStationNumber, value);
+        }
+
+        public string PlcHeartBeatAddress
+        {
+            get => _plcHeartBeatAddress;
+            set => SetProperty(ref _plcHeartBeatAddress, value);
+        }
+
+        public string PlcBottleRollingAddress
+        {
+            get => _plcBottleRollingAddress;
+            set => SetProperty(ref _plcBottleRollingAddress, value);
+        }
+
+        public string PlcTopInspectRequestAddress
+        {
+            get => _plcTopInspectRequestAddress;
+            set => SetProperty(ref _plcTopInspectRequestAddress, value);
+        }
+
+        public string PlcSideInspectRequestAddress
+        {
+            get => _plcSideInspectRequestAddress;
+            set => SetProperty(ref _plcSideInspectRequestAddress, value);
+        }
+
+        public string PlcBottleExistsAddress
+        {
+            get => _plcBottleExistsAddress;
+            set => SetProperty(ref _plcBottleExistsAddress, value);
+        }
+
+        public string PcHeartBeatAddress
+        {
+            get => _pcHeartBeatAddress;
+            set => SetProperty(ref _pcHeartBeatAddress, value);
+        }
+
+        public string PcVisionReadyAddress
+        {
+            get => _pcVisionReadyAddress;
+            set => SetProperty(ref _pcVisionReadyAddress, value);
+        }
+
+        public string PcTopInspectDoneAddress
+        {
+            get => _pcTopInspectDoneAddress;
+            set => SetProperty(ref _pcTopInspectDoneAddress, value);
+        }
+
+        public string PcSideInspectDoneAddress
+        {
+            get => _pcSideInspectDoneAddress;
+            set => SetProperty(ref _pcSideInspectDoneAddress, value);
+        }
+
+        public string PcQrRequestAddress
+        {
+            get => _pcQrRequestAddress;
+            set => SetProperty(ref _pcQrRequestAddress, value);
+        }
+
+        public string ModelName
+        {
+            get => _modelName;
+            set => SetProperty(ref _modelName, value);
+        }
+
+        public string ModelPath
+        {
+            get => _modelPath;
+            set => SetProperty(ref _modelPath, value);
         }
 
         public string SaveDirectory
         {
             get => _saveDirectory;
             set => SetProperty(ref _saveDirectory, value);
+        }
+
+        public string LogPath
+        {
+            get => _logPath;
+            set => SetProperty(ref _logPath, value);
+        }
+
+        public bool IsLogEnabled
+        {
+            get => _isLogEnabled;
+            set => SetProperty(ref _isLogEnabled, value);
+        }
+
+        public bool IsImqsEnabled
+        {
+            get => _isImqsEnabled;
+            set => SetProperty(ref _isImqsEnabled, value);
+        }
+
+        public string ImqsIpAddress
+        {
+            get => _imqsIpAddress;
+            set => SetProperty(ref _imqsIpAddress, value);
+        }
+
+        public int ImqsPort
+        {
+            get => _imqsPort;
+            set => SetProperty(ref _imqsPort, value);
+        }
+
+        public bool IsRfidEnabled
+        {
+            get => _isRfidEnabled;
+            set => SetProperty(ref _isRfidEnabled, value);
+        }
+
+        public string RfidPort
+        {
+            get => _rfidPort;
+            set => SetProperty(ref _rfidPort, value);
+        }
+
+        public int RfidBaudRate
+        {
+            get => _rfidBaudRate;
+            set => SetProperty(ref _rfidBaudRate, value);
+        }
+
+        public bool IsPrinterEnabled
+        {
+            get => _isPrinterEnabled;
+            set => SetProperty(ref _isPrinterEnabled, value);
+        }
+
+        public string PrinterIpAddress
+        {
+            get => _printerIpAddress;
+            set => SetProperty(ref _printerIpAddress, value);
+        }
+
+        public int PrinterPort
+        {
+            get => _printerPort;
+            set => SetProperty(ref _printerPort, value);
         }
 
         public bool IsSaved
@@ -61,7 +236,6 @@ namespace LeakDetectSystem_MVVM.ViewModels
             new CameraConfig { Index = 4 },
         };
 
-        // Commands
         public RelayCommand SaveSettingsCommand { get; }
         public RelayCommand ResetToDefaultCommand { get; }
         public RelayCommand BrowseSaveDirectoryCommand { get; }
@@ -82,9 +256,40 @@ namespace LeakDetectSystem_MVVM.ViewModels
         {
             DevicePort = "COM1";
             BaudRate = 9600;
-            DefaultThreshold = 110.0;
-            IsAutoSaveEnabled = false;
+            PlcIpAddress = "192.168.0.10";
+            PlcPort = 502;
+            PlcStationNumber = 1;
+
+            PlcHeartBeatAddress = "0";
+            PlcBottleRollingAddress = "1";
+            PlcTopInspectRequestAddress = "2";
+            PlcSideInspectRequestAddress = "3";
+            PlcBottleExistsAddress = "10";
+
+            PcHeartBeatAddress = "16";
+            PcVisionReadyAddress = "17";
+            PcTopInspectDoneAddress = "18";
+            PcSideInspectDoneAddress = "19";
+            PcQrRequestAddress = "27";
+
+            ModelName = "DEFAULT";
+            ModelPath = string.Empty;
             SaveDirectory = string.Empty;
+            LogPath = string.Empty;
+            IsLogEnabled = true;
+
+            IsImqsEnabled = false;
+            ImqsIpAddress = "192.168.0.20";
+            ImqsPort = 5000;
+
+            IsRfidEnabled = false;
+            RfidPort = "COM3";
+            RfidBaudRate = 9600;
+
+            IsPrinterEnabled = false;
+            PrinterIpAddress = "192.168.0.30";
+            PrinterPort = 9100;
+
             IsSaved = false;
             foreach (var cam in Cameras)
             {
