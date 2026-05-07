@@ -7,6 +7,7 @@ namespace LeakDetectSystem_MVVM.Comm.Plc
     {
         private Master? _master;
         private readonly byte _unit = 0;
+        private ushort _transactionId = 1;
 
         public bool IsConnected => _master?.connected == true;
 
@@ -33,7 +34,7 @@ namespace LeakDetectSystem_MVVM.Comm.Plc
             EnsureConnected();
 
             byte[]? values = null;
-            _master!.ReadCoils(address, _unit, address, 1, ref values!);
+            _master!.ReadCoils(NextTransactionId(), _unit, address, 1, ref values!);
             return values != null && values.Length > 0 && (values[0] & 0x01) == 0x01;
         }
 
@@ -42,7 +43,7 @@ namespace LeakDetectSystem_MVVM.Comm.Plc
             EnsureConnected();
 
             byte[]? result = null;
-            _master!.WriteSingleCoils(address, _unit, address, value, ref result!);
+            _master!.WriteSingleCoils(NextTransactionId(), _unit, address, value, ref result!);
         }
 
         public ushort[] ReadHoldingRegisters(ushort startAddress, ushort length)
@@ -50,7 +51,7 @@ namespace LeakDetectSystem_MVVM.Comm.Plc
             EnsureConnected();
 
             byte[]? bytes = null;
-            _master!.ReadHoldingRegister(startAddress, _unit, startAddress, length, ref bytes!);
+            _master!.ReadHoldingRegister(NextTransactionId(), _unit, startAddress, length, ref bytes!);
             if (bytes == null || bytes.Length == 0)
             {
                 return Array.Empty<ushort>();
@@ -78,7 +79,7 @@ namespace LeakDetectSystem_MVVM.Comm.Plc
             }
 
             byte[]? result = null;
-            _master!.WriteMultipleRegister(startAddress, _unit, startAddress, bytes, ref result!);
+            _master!.WriteMultipleRegister(NextTransactionId(), _unit, startAddress, bytes, ref result!);
         }
 
         public static bool TryMapLegacyCoilAddress(string baseAddress, string bitIndex, out ushort mappedAddress)
@@ -114,6 +115,18 @@ namespace LeakDetectSystem_MVVM.Comm.Plc
             }
 
             return ushort.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out result);
+        }
+
+
+        private ushort NextTransactionId()
+        {
+            ushort id = _transactionId++;
+            if (_transactionId == 0)
+            {
+                _transactionId = 1;
+            }
+
+            return id;
         }
 
         private void EnsureConnected()

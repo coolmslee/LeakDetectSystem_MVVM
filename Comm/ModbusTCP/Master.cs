@@ -24,7 +24,7 @@ namespace ModbusTCP
     /// Read coils
     /// Read discrete inputs
     /// Write single coil
-    /// Write multiple cooils
+    /// Write multiple coils
     /// Read holding register
     /// Read input register
     /// Write single register
@@ -75,7 +75,7 @@ namespace ModbusTCP
         public const byte excExceptionTimeout = 255;
         /// <summary>Constant for exception wrong offset.</summary>
         private const byte excExceptionOffset = 128;
-        /// <summary>Constant for exception send failt.</summary>
+        /// <summary>Constant for exception send failed.</summary>
         private const byte excSendFailt = 100;
 
         // ------------------------------------------------------------------------
@@ -163,7 +163,7 @@ namespace ModbusTCP
         /// <summary>Start connection to slave.</summary>
         /// <param name="ip">IP adress of modbus slave.</param>
         /// <param name="port">Port number of modbus slave. Usually port 502 is used.</param>
-        /// <param name="no_sync_connection">Disable sencond connection for synchronous requests</param>
+        /// <param name="no_sync_connection">Disable second connection for synchronous requests</param>
         public void connect(string ip, ushort port, bool no_sync_connection)
         {
             try

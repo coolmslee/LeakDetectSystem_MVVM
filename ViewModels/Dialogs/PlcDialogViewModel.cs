@@ -21,6 +21,9 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 
     public class PlcDialogViewModel : ViewModelBase
     {
+        private const int BitsPerWord = 16;
+        private const int MaxReceiveLogCount = 256;
+
         private readonly ModbusPlcClient _plcClient = new();
 
         private string _startAddress = "0";
@@ -405,8 +408,8 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                     return false;
                 }
 
-                int wordSize = text.Length / 0x10;
-                if ((text.Length % 0x10) > 0)
+                int wordSize = text.Length / BitsPerWord;
+                if ((text.Length % BitsPerWord) > 0)
                 {
                     wordSize++;
                 }
@@ -415,9 +418,9 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                 for (int i = 0; i < wordSize; i++)
                 {
                     int tmp = 0;
-                    for (int j = 0; j < 0x10; j++)
+                    for (int j = 0; j < BitsPerWord; j++)
                     {
-                        int index = text.Length - ((i * 0x10) + j) - 1;
+                        int index = text.Length - ((i * BitsPerWord) + j) - 1;
                         if (index < 0)
                         {
                             break;
@@ -508,14 +511,14 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                 StringBuilder bits = new();
                 foreach (ushort word in values)
                 {
-                    for (int j = 0; j < 0x10; j++)
+                    for (int j = 0; j < BitsPerWord; j++)
                     {
                         if (j > 0 && (j % 4) == 0)
                         {
                             bits.Append(' ');
                         }
 
-                        bits.Append(((word & (1 << (0x0F - j))) > 0) ? '1' : '0');
+                        bits.Append(((word & (1 << ((BitsPerWord - 1) - j))) > 0) ? '1' : '0');
                     }
                 }
 
@@ -551,7 +554,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 
         private void AddReceiveStr(string text)
         {
-            if (ReceiveData.Count > 256)
+            if (ReceiveData.Count > MaxReceiveLogCount)
             {
                 ReceiveData.Clear();
             }
