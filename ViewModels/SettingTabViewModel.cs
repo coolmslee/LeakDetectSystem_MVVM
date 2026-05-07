@@ -25,23 +25,9 @@ namespace LeakDetectSystem_MVVM.ViewModels
         private string _pcSideInspectDoneAddress = "19";
         private string _pcQrRequestAddress = "27";
 
-        private string _modelName = "DEFAULT";
-        private string _modelPath = string.Empty;
-        private string _saveDirectory = string.Empty;
-        private string _logPath = string.Empty;
-        private bool _isLogEnabled = true;
-
-        private bool _isImqsEnabled;
-        private string _imqsIpAddress = "192.168.0.20";
-        private int _imqsPort = 5000;
-
-        private bool _isRfidEnabled;
-        private string _rfidPort = "COM3";
-        private int _rfidBaudRate = 9600;
-
-        private bool _isPrinterEnabled;
-        private string _printerIpAddress = "192.168.0.30";
-        private int _printerPort = 9100;
+        private int _bottleTurnTime = 500;
+        private int _inspectReqTime = 300;
+        private int _inspectEndTime = 200;
 
         private bool _isSaved;
 
@@ -135,88 +121,22 @@ namespace LeakDetectSystem_MVVM.ViewModels
             set => SetProperty(ref _pcQrRequestAddress, value);
         }
 
-        public string ModelName
+        public int BottleTurnTime
         {
-            get => _modelName;
-            set => SetProperty(ref _modelName, value);
+            get => _bottleTurnTime;
+            set => SetProperty(ref _bottleTurnTime, value);
         }
 
-        public string ModelPath
+        public int InspectReqTime
         {
-            get => _modelPath;
-            set => SetProperty(ref _modelPath, value);
+            get => _inspectReqTime;
+            set => SetProperty(ref _inspectReqTime, value);
         }
 
-        public string SaveDirectory
+        public int InspectEndTime
         {
-            get => _saveDirectory;
-            set => SetProperty(ref _saveDirectory, value);
-        }
-
-        public string LogPath
-        {
-            get => _logPath;
-            set => SetProperty(ref _logPath, value);
-        }
-
-        public bool IsLogEnabled
-        {
-            get => _isLogEnabled;
-            set => SetProperty(ref _isLogEnabled, value);
-        }
-
-        public bool IsImqsEnabled
-        {
-            get => _isImqsEnabled;
-            set => SetProperty(ref _isImqsEnabled, value);
-        }
-
-        public string ImqsIpAddress
-        {
-            get => _imqsIpAddress;
-            set => SetProperty(ref _imqsIpAddress, value);
-        }
-
-        public int ImqsPort
-        {
-            get => _imqsPort;
-            set => SetProperty(ref _imqsPort, value);
-        }
-
-        public bool IsRfidEnabled
-        {
-            get => _isRfidEnabled;
-            set => SetProperty(ref _isRfidEnabled, value);
-        }
-
-        public string RfidPort
-        {
-            get => _rfidPort;
-            set => SetProperty(ref _rfidPort, value);
-        }
-
-        public int RfidBaudRate
-        {
-            get => _rfidBaudRate;
-            set => SetProperty(ref _rfidBaudRate, value);
-        }
-
-        public bool IsPrinterEnabled
-        {
-            get => _isPrinterEnabled;
-            set => SetProperty(ref _isPrinterEnabled, value);
-        }
-
-        public string PrinterIpAddress
-        {
-            get => _printerIpAddress;
-            set => SetProperty(ref _printerIpAddress, value);
-        }
-
-        public int PrinterPort
-        {
-            get => _printerPort;
-            set => SetProperty(ref _printerPort, value);
+            get => _inspectEndTime;
+            set => SetProperty(ref _inspectEndTime, value);
         }
 
         public bool IsSaved
@@ -227,7 +147,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
 
         public IReadOnlyList<int> BaudRateOptions { get; } = new[] { 4800, 9600, 19200, 38400, 57600, 115200 };
 
-        /// <summary>CAM1~CAM4 카메라 설정 (Use + IP). IsConfigured = Use && IP 입력됨</summary>
+        /// <summary>CAM1~CAM4 카메라 설정. Setting 탭 UI에서는 제거되었으며 CameraDialog를 통해 관리됩니다.</summary>
         public ObservableCollection<CameraConfig> Cameras { get; } = new()
         {
             new CameraConfig { Index = 1 },
@@ -236,70 +156,39 @@ namespace LeakDetectSystem_MVVM.ViewModels
             new CameraConfig { Index = 4 },
         };
 
-        public RelayCommand SaveSettingsCommand { get; }
-        public RelayCommand ResetToDefaultCommand { get; }
-        public RelayCommand BrowseSaveDirectoryCommand { get; }
+        /// <summary>DIO Input 상태 (0~15), read-only 표시용</summary>
+        public ObservableCollection<bool> DioInputStates { get; } =
+            new(Enumerable.Repeat(false, 16));
+
+        /// <summary>DIO Output 상태 (0~15), ToggleButton 바인딩용</summary>
+        public ObservableCollection<bool> DioOutputStates { get; } =
+            new(Enumerable.Repeat(false, 16));
+
+        public RelayCommand SaveMemoryCommand { get; }
+        public RelayCommand SaveTimesCommand { get; }
+        public RelayCommand<int> ToggleDioOutputCommand { get; }
 
         public SettingTabViewModel()
         {
-            SaveSettingsCommand = new RelayCommand(SaveSettings);
-            ResetToDefaultCommand = new RelayCommand(ResetToDefault);
-            BrowseSaveDirectoryCommand = new RelayCommand(BrowseSaveDirectory);
+            SaveMemoryCommand = new RelayCommand(SaveMemory);
+            SaveTimesCommand = new RelayCommand(SaveTimes);
+            ToggleDioOutputCommand = new RelayCommand<int>(ToggleDioOutput);
         }
 
-        private void SaveSettings()
+        private void SaveMemory()
         {
             IsSaved = true;
         }
 
-        private void ResetToDefault()
+        private void SaveTimes()
         {
-            DevicePort = "COM1";
-            BaudRate = 9600;
-            PlcIpAddress = "192.168.0.10";
-            PlcPort = 502;
-            PlcStationNumber = 1;
-
-            PlcHeartBeatAddress = "0";
-            PlcBottleRollingAddress = "1";
-            PlcTopInspectRequestAddress = "2";
-            PlcSideInspectRequestAddress = "3";
-            PlcBottleExistsAddress = "10";
-
-            PcHeartBeatAddress = "16";
-            PcVisionReadyAddress = "17";
-            PcTopInspectDoneAddress = "18";
-            PcSideInspectDoneAddress = "19";
-            PcQrRequestAddress = "27";
-
-            ModelName = "DEFAULT";
-            ModelPath = string.Empty;
-            SaveDirectory = string.Empty;
-            LogPath = string.Empty;
-            IsLogEnabled = true;
-
-            IsImqsEnabled = false;
-            ImqsIpAddress = "192.168.0.20";
-            ImqsPort = 5000;
-
-            IsRfidEnabled = false;
-            RfidPort = "COM3";
-            RfidBaudRate = 9600;
-
-            IsPrinterEnabled = false;
-            PrinterIpAddress = "192.168.0.30";
-            PrinterPort = 9100;
-
-            IsSaved = false;
-            foreach (var cam in Cameras)
-            {
-                cam.Use = false;
-                cam.Ip = string.Empty;
-            }
+            IsSaved = true;
         }
 
-        private void BrowseSaveDirectory()
+        private void ToggleDioOutput(int index)
         {
+            if (index >= 0 && index < DioOutputStates.Count)
+                DioOutputStates[index] = !DioOutputStates[index];
         }
     }
 }

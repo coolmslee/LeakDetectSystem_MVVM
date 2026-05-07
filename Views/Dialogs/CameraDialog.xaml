@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:LeakDetectSystem_MVVM.ViewModels.Dialogs"
-        Title="Camera 설정" Height="420" Width="440"
+        Title="Camera 설정" Height="460" Width="480"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
     <Window.DataContext>
@@ -19,39 +19,68 @@
 
         <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1" Padding="12">
             <StackPanel>
-                <Grid Margin="0,0,0,6">
+                <!-- CAM1~CAM4 Use + IP -->
+                <Grid Margin="0,0,0,4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="50"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="CAM1 IP" VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding Cam1Ip, UpdateSourceTrigger=PropertyChanged}" Padding="4,3" BorderBrush="Gray" BorderThickness="1"/>
+                    <TextBlock Grid.Column="0" Text="CAM" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="Use" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="IP Address" FontWeight="SemiBold" Margin="6,0,0,0" VerticalAlignment="Center"/>
                 </Grid>
+
                 <Grid Margin="0,0,0,6">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="50"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="CAM2 IP" VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding Cam2Ip, UpdateSourceTrigger=PropertyChanged}" Padding="4,3" BorderBrush="Gray" BorderThickness="1"/>
+                    <TextBlock Grid.Column="0" Text="CAM1" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Column="1" IsChecked="{Binding Cam1Use}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="2" Text="{Binding Cam1Ip, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding Cam1Use}" Margin="6,2,0,2" Padding="4,3" BorderBrush="Gray" BorderThickness="1"/>
                 </Grid>
+
                 <Grid Margin="0,0,0,6">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="50"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="CAM3 IP" VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding Cam3Ip, UpdateSourceTrigger=PropertyChanged}" Padding="4,3" BorderBrush="Gray" BorderThickness="1"/>
+                    <TextBlock Grid.Column="0" Text="CAM2" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Column="1" IsChecked="{Binding Cam2Use}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="2" Text="{Binding Cam2Ip, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding Cam2Use}" Margin="6,2,0,2" Padding="4,3" BorderBrush="Gray" BorderThickness="1"/>
                 </Grid>
+
                 <Grid Margin="0,0,0,6">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="50"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="CAM4 IP" VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding Cam4Ip, UpdateSourceTrigger=PropertyChanged}" Padding="4,3" BorderBrush="Gray" BorderThickness="1"/>
+                    <TextBlock Grid.Column="0" Text="CAM3" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Column="1" IsChecked="{Binding Cam3Use}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="2" Text="{Binding Cam3Ip, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding Cam3Use}" Margin="6,2,0,2" Padding="4,3" BorderBrush="Gray" BorderThickness="1"/>
                 </Grid>
+
+                <Grid Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="CAM4" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Column="1" IsChecked="{Binding Cam4Use}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="2" Text="{Binding Cam4Ip, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding Cam4Use}" Margin="6,2,0,2" Padding="4,3" BorderBrush="Gray" BorderThickness="1"/>
+                </Grid>
+
                 <Separator Margin="0,6"/>
+
                 <Grid Margin="0,0,0,6">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="120"/>
