@@ -1,5 +1,6 @@
 using Microsoft.Win32;
 using System.Windows;
+using LeakDetectSystem_MVVM.ViewModels.Dialogs;
 using LeakDetectSystem_MVVM.Views.Dialogs;
 
 namespace LeakDetectSystem_MVVM.Services
