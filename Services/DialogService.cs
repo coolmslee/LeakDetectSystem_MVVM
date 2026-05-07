@@ -35,8 +35,17 @@ namespace LeakDetectSystem_MVVM.Services
         public void ShowCameraDialog() => new CameraDialog { Owner = GetMainWindow() }.Show();
         public void ShowGrabDialog() => new GrabDialog { Owner = GetMainWindow() }.Show();
         public void ShowLightDialog() => new LightDialog { Owner = GetMainWindow() }.Show();
-        public void ShowLogDialog() => new LogDialog { Owner = GetMainWindow() }.Show();
+        //public void ShowLogDialog() => new LogDialog { Owner = GetMainWindow() }.Show();
+public void ShowLogDialog()
+{
+    var dialog = new LogDialog
+    {
+        Owner = GetMainWindow(),
+        DataContext = new LogDialogViewModel()
+    };
 
+    dialog.Show();
+}
         private static Window? GetMainWindow() => Application.Current?.MainWindow;
     }
 }
