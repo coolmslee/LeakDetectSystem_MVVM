@@ -31,7 +31,16 @@ namespace LeakDetectSystem_MVVM.Services
             return dialog.ShowDialog() == true ? dialog.FileName : null;
         }
 
-        public void ShowPlcDialog() => new PlcDialog { Owner = GetMainWindow() }.Show();
+        public void ShowPlcDialog()
+        {
+            var dialog = new PlcDialog
+            {
+                Owner = GetMainWindow(),
+                DataContext = new PlcDialogViewModel()
+            };
+
+            dialog.Show();
+        }
         public void ShowModelDialog() => new ModelDialog { Owner = GetMainWindow() }.Show();
         public void ShowCameraDialog() => new CameraDialog { Owner = GetMainWindow() }.Show();
         public void ShowGrabDialog() => new GrabDialog { Owner = GetMainWindow() }.Show();
