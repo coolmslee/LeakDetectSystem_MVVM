@@ -6,266 +6,267 @@
              xmlns:vm="clr-namespace:LeakDetectSystem_MVVM.ViewModels"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:SettingTabViewModel, IsDesignTimeCreatable=True}"
-             d:DesignHeight="680" d:DesignWidth="1180">
+             d:DesignHeight="800" d:DesignWidth="1180">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Background="{StaticResource BackgroundBrush}" Margin="12">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
+            <!-- ====== Header ====== -->
             <TextBlock Grid.Row="0"
                        Text="Setting"
                        Style="{StaticResource HeaderTextStyle}"
-                       Margin="2,0,0,10" />
+                       Margin="2,0,0,10"/>
 
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <!-- ====== Row 1: PLC Memory / PC Memory ====== -->
+            <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                <GroupBox Header="PLC Memory / PC Memory" FontWeight="Bold" FontSize="14"
+                          Foreground="{StaticResource TextPrimaryBrush}">
+                    <Grid Margin="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Margin="0,0,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2.2*" />
-                        <ColumnDefinition Width="1.5*" />
-                    </Grid.ColumnDefinitions>
+                        <!-- PLC connection row -->
+                        <Grid Grid.Row="0" Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="COM Port" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding DevicePort, UpdateSourceTrigger=PropertyChanged}" Padding="4,2"/>
+                            <TextBlock Grid.Column="3" Text="Baud" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <ComboBox Grid.Column="4" ItemsSource="{Binding BaudRateOptions}" SelectedItem="{Binding BaudRate}" Padding="4,2"/>
+                            <TextBlock Grid.Column="6" Text="Station" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <TextBox Grid.Column="7" Text="{Binding PlcStationNumber}" Padding="4,2"/>
+                        </Grid>
 
-                    <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,8,0">
-                        <GroupBox Header="PLC / Memory" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
-                            <Grid Margin="6">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+                        <!-- PLC IP row -->
+                        <Grid Grid.Row="1" Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="PLC IP" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcIpAddress, UpdateSourceTrigger=PropertyChanged}" Padding="4,2"/>
+                            <TextBlock Grid.Column="3" Text="Port" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <TextBox Grid.Column="4" Text="{Binding PlcPort}" Padding="4,2"/>
+                        </Grid>
 
-                                <Grid Grid.Row="0" Margin="0,0,0,8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="110" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="60" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="70" />
-                                        <ColumnDefinition Width="70" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="COM Port" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                    <TextBox Grid.Column="1" Text="{Binding DevicePort, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" />
-                                    <TextBlock Grid.Column="3" Text="Baud" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                                    <ComboBox Grid.Column="4" ItemsSource="{Binding BaudRateOptions}" SelectedItem="{Binding BaudRate}" Padding="4,2" />
-                                    <TextBlock Grid.Column="6" Text="Station" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                                    <TextBox Grid.Column="7" Text="{Binding PlcStationNumber}" Padding="4,2" />
-                                </Grid>
+                        <!-- Column header row -->
+                        <Grid Grid.Row="2" Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Signal" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}"/>
+                            <TextBlock Grid.Column="1" Text="PLC Memory" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="PC Memory" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
+                        </Grid>
 
-                                <Grid Grid.Row="1" Margin="0,0,0,10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="110" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="60" />
-                                        <ColumnDefinition Width="100" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="PLC IP" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                    <TextBox Grid.Column="1" Text="{Binding PlcIpAddress, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" />
-                                    <TextBlock Grid.Column="3" Text="Port" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                                    <TextBox Grid.Column="4" Text="{Binding PlcPort}" Padding="4,2" />
-                                </Grid>
+                        <!-- Address mapping rows -->
+                        <Grid Grid.Row="3" Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Heart Beat" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcHeartBeatAddress}" Margin="2" Padding="4,2"/>
+                            <TextBox Grid.Column="2" Text="{Binding PcHeartBeatAddress}" Margin="2" Padding="4,2"/>
+                        </Grid>
 
-                                <Grid Grid.Row="2" Margin="0,0,0,4">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="2.8*" />
-                                        <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="1*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Signal" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" />
-                                    <TextBlock Grid.Column="1" Text="PLC Memory" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center" />
-                                    <TextBlock Grid.Column="2" Text="PC Memory" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center" />
-                                </Grid>
+                        <Grid Grid.Row="4" Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Bottle Rolling / Vision Ready" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcBottleRollingAddress}" Margin="2" Padding="4,2"/>
+                            <TextBox Grid.Column="2" Text="{Binding PcVisionReadyAddress}" Margin="2" Padding="4,2"/>
+                        </Grid>
 
-                                <Grid Grid.Row="3">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="2.8*" />
-                                        <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="1*" />
-                                    </Grid.ColumnDefinitions>
+                        <Grid Grid.Row="5" Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="상부검사 요청 / 완료" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcTopInspectRequestAddress}" Margin="2" Padding="4,2"/>
+                            <TextBox Grid.Column="2" Text="{Binding PcTopInspectDoneAddress}" Margin="2" Padding="4,2"/>
+                        </Grid>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Heart Beat" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="0,2"/>
-                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PlcHeartBeatAddress}" Margin="2" Padding="4,2" />
-                                    <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding PcHeartBeatAddress}" Margin="2" Padding="4,2" />
+                        <Grid Grid.Row="6" Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="측면검사 요청 / 완료" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcSideInspectRequestAddress}" Margin="2" Padding="4,2"/>
+                            <TextBox Grid.Column="2" Text="{Binding PcSideInspectDoneAddress}" Margin="2" Padding="4,2"/>
+                        </Grid>
 
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Bottle Rolling / Vision Ready" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="0,2"/>
-                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding PlcBottleRollingAddress}" Margin="2" Padding="4,2" />
-                                    <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding PcVisionReadyAddress}" Margin="2" Padding="4,2" />
+                        <Grid Grid.Row="7" Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="공병 있음 / QR Data 요청" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcBottleExistsAddress}" Margin="2" Padding="4,2"/>
+                            <TextBox Grid.Column="2" Text="{Binding PcQrRequestAddress}" Margin="2" Padding="4,2"/>
+                        </Grid>
+                    </Grid>
+                </GroupBox>
+            </Border>
 
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="상부검사 요청 / 완료" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="0,2"/>
-                                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding PlcTopInspectRequestAddress}" Margin="2" Padding="4,2" />
-                                    <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding PcTopInspectDoneAddress}" Margin="2" Padding="4,2" />
-
-                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="측면검사 요청 / 완료" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="0,2"/>
-                                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding PlcSideInspectRequestAddress}" Margin="2" Padding="4,2" />
-                                    <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding PcSideInspectDoneAddress}" Margin="2" Padding="4,2" />
-
-                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="공병 있음 / QR Data 요청" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="0,2"/>
-                                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding PlcBottleExistsAddress}" Margin="2" Padding="4,2" />
-                                    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding PcQrRequestAddress}" Margin="2" Padding="4,2" />
-                                </Grid>
-                            </Grid>
-                        </GroupBox>
-                    </Border>
-
-                    <Border Grid.Column="1" Style="{StaticResource CardStyle}">
-                        <GroupBox Header="Camera" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
-                            <Grid Margin="6">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60" />
-                                    <ColumnDefinition Width="45" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="CAM" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" />
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Use" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center" />
-                                <TextBlock Grid.Row="0" Grid.Column="2" Text="IP Address" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" Margin="6,0,0,0" />
-
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="CAM1" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding Cameras[0].Use}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Cameras[0].Ip, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Cameras[0].Use}" Margin="6,2,0,2" Padding="4,2" />
-
-                                <TextBlock Grid.Row="2" Grid.Column="0" Text="CAM2" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding Cameras[1].Use}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Cameras[1].Ip, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Cameras[1].Use}" Margin="6,2,0,2" Padding="4,2" />
-
-                                <TextBlock Grid.Row="3" Grid.Column="0" Text="CAM3" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding Cameras[2].Use}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Cameras[2].Ip, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Cameras[2].Use}" Margin="6,2,0,2" Padding="4,2" />
-
-                                <TextBlock Grid.Row="4" Grid.Column="0" Text="CAM4" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Cameras[3].Use}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Cameras[3].Ip, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Cameras[3].Use}" Margin="6,2,0,2" Padding="4,2" />
-                            </Grid>
-                        </GroupBox>
-                    </Border>
-                </Grid>
-
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1.1*" />
-                        <ColumnDefinition Width="1.1*" />
-                        <ColumnDefinition Width="1.2*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,8,0">
-                        <GroupBox Header="Model" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
-                            <Grid Margin="6">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="90" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Model" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ModelName, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" />
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Path" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ModelPath, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" />
-                            </Grid>
-                        </GroupBox>
-                    </Border>
-
-                    <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="0,0,8,0">
-                        <GroupBox Header="Path / Log" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
-                            <Grid Margin="6">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="90" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Grab Path" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SaveDirectory, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" />
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Log Path" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LogPath, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" />
-                                <CheckBox Grid.Row="2" Grid.Column="1" Content="Log 사용" IsChecked="{Binding IsLogEnabled}" VerticalAlignment="Center" Margin="0,6,0,0" />
-                            </Grid>
-                        </GroupBox>
-                    </Border>
-
-                    <Border Grid.Column="2" Style="{StaticResource CardStyle}">
-                        <GroupBox Header="IMQS / RFID / Printer" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
-                            <Grid Margin="6">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="95" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="80" />
-                                </Grid.ColumnDefinitions>
-
-                                <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Content="IMQS 사용" IsChecked="{Binding IsImqsEnabled}" Margin="0,0,0,4" />
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="IMQS IP" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ImqsIpAddress, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" Margin="0,0,4,0" />
-                                <TextBlock Grid.Row="1" Grid.Column="2" Text="Port" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding ImqsPort}" Padding="4,2" />
-
-                                <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Content="RFID 사용" IsChecked="{Binding IsRfidEnabled}" Margin="0,8,0,4" />
-                                <TextBlock Grid.Row="3" Grid.Column="0" Text="RFID Port" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding RfidPort, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" Margin="0,0,4,0" />
-                                <TextBlock Grid.Row="3" Grid.Column="2" Text="Baud" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                                <ComboBox Grid.Row="3" Grid.Column="3" ItemsSource="{Binding BaudRateOptions}" SelectedItem="{Binding RfidBaudRate}" Padding="4,2" />
-
-                                <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Content="Printer 사용" IsChecked="{Binding IsPrinterEnabled}" Margin="0,8,0,4" />
-                                <TextBlock Grid.Row="5" Grid.Column="0" Text="Printer IP" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding PrinterIpAddress, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" Margin="0,0,4,0" />
-                                <TextBlock Grid.Row="5" Grid.Column="2" Text="Port" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                                <TextBox Grid.Row="5" Grid.Column="3" Text="{Binding PrinterPort}" Padding="4,2" />
-                            </Grid>
-                        </GroupBox>
-                    </Border>
-                </Grid>
-            </Grid>
-
-            <StackPanel Grid.Row="2"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        Margin="0,10,0,0">
-                <Button Content="기본값으로 초기화"
-                        Command="{Binding ResetToDefaultCommand}"
+            <!-- Save button for Memory -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom" Margin="0,0,0,10">
+                <Button Content="Save"
+                        Command="{Binding SaveMemoryCommand}"
                         Style="{StaticResource PrimaryButtonStyle}"
-                        Background="{StaticResource InactiveStatusBrush}"
-                        Margin="0,0,8,0" />
-                <Button Content="설정 저장"
-                        Command="{Binding SaveSettingsCommand}"
-                        Style="{StaticResource PrimaryButtonStyle}" />
+                        Width="80"/>
             </StackPanel>
+
+            <!-- ====== Row 2: Times ====== -->
+            <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                <GroupBox Header="Times" FontWeight="Bold" FontSize="14"
+                          Foreground="{StaticResource TextPrimaryBrush}">
+                    <Grid Margin="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Bottle Turn (ms)" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="0,2"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding BottleTurnTime, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" Margin="0,2,0,2"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="ms" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Inspect Req. (ms)" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="0,2"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding InspectReqTime, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" Margin="0,2,0,2"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="ms" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Inspect End (ms)" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="0,2"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding InspectEndTime, UpdateSourceTrigger=PropertyChanged}" Padding="4,2" Margin="0,2,0,2"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" Text="ms" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                    </Grid>
+                </GroupBox>
+            </Border>
+
+            <!-- Save button for Times -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom" Margin="0,0,0,10">
+                <Button Content="Save"
+                        Command="{Binding SaveTimesCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Width="80"/>
+            </StackPanel>
+
+            <!-- ====== Row 3: DIO Input / DIO Output ====== -->
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- DIO Input (0~15 Ellipse read-only indicators) -->
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,6,0">
+                    <GroupBox Header="DIO Input" FontWeight="Bold" FontSize="14"
+                              Foreground="{StaticResource TextPrimaryBrush}">
+                        <ItemsControl Margin="6" ItemsSource="{Binding DioInputStates}"
+                                      AlternationCount="16">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical" Margin="4" Width="38" HorizontalAlignment="Center">
+                                        <Ellipse Width="20" Height="20" HorizontalAlignment="Center">
+                                            <Ellipse.Style>
+                                                <Style TargetType="Ellipse">
+                                                    <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding}" Value="True">
+                                                            <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Ellipse.Style>
+                                        </Ellipse>
+                                        <TextBlock HorizontalAlignment="Center" FontSize="10"
+                                                   Text="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter},
+                                                          Path=(ItemsControl.AlternationIndex)}"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </GroupBox>
+                </Border>
+
+                <!-- DIO Output (0~15 ToggleButton) -->
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="6,0,0,0">
+                    <GroupBox Header="DIO Output" FontWeight="Bold" FontSize="14"
+                              Foreground="{StaticResource TextPrimaryBrush}">
+                        <ItemsControl Margin="6" ItemsSource="{Binding DioOutputStates}"
+                                      AlternationCount="16">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ToggleButton Style="{StaticResource DioOutputToggleStyle}"
+                                                  IsChecked="{Binding Mode=OneWay}"
+                                                  Content="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter},
+                                                             Path=(ItemsControl.AlternationIndex)}"
+                                                  Tag="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter},
+                                                        Path=(ItemsControl.AlternationIndex)}"
+                                                  Command="{Binding DataContext.ToggleDioOutputCommand,
+                                                            RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter},
+                                                                     Path=(ItemsControl.AlternationIndex)}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </GroupBox>
+                </Border>
+            </Grid>
         </Grid>
     </ScrollViewer>
 </UserControl>
