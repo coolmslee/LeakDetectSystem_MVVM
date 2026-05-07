@@ -52,12 +52,12 @@
             <StackPanel Grid.Row="0"
                         Orientation="Horizontal"
                         Background="{StaticResource PrimaryBrush}">
-                <Button Content="모니터링"
+                <Button Content="Main"
                         Command="{Binding NavigateCommand}"
                         CommandParameter="main"
                         Style="{StaticResource PrimaryButtonStyle}"
                         Margin="2,4" />
-                <Button Content="설정"
+                <Button Content="Setting"
                         Command="{Binding NavigateCommand}"
                         CommandParameter="setting"
                         Style="{StaticResource PrimaryButtonStyle}"
