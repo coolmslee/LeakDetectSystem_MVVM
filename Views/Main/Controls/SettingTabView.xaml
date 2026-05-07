@@ -34,7 +34,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,8,0">
-                        <GroupBox Header=" PLC / Memory " FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
+                        <GroupBox Header="PLC / Memory" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
                             <Grid Margin="6">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -126,7 +126,7 @@
                     </Border>
 
                     <Border Grid.Column="1" Style="{StaticResource CardStyle}">
-                        <GroupBox Header=" Camera " FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
+                        <GroupBox Header="Camera" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
                             <Grid Margin="6">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -173,7 +173,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,8,0">
-                        <GroupBox Header=" Model " FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
+                        <GroupBox Header="Model" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
                             <Grid Margin="6">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -192,7 +192,7 @@
                     </Border>
 
                     <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="0,0,8,0">
-                        <GroupBox Header=" Path / Log " FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
+                        <GroupBox Header="Path / Log" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
                             <Grid Margin="6">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -213,7 +213,7 @@
                     </Border>
 
                     <Border Grid.Column="2" Style="{StaticResource CardStyle}">
-                        <GroupBox Header=" IMQS / RFID / Printer " FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
+                        <GroupBox Header="IMQS / RFID / Printer" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}">
                             <Grid Margin="6">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
