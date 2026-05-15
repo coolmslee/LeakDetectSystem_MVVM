@@ -1,8 +1,6 @@
-using LeakDetectSystem_MVVM.ViewModels.Base;
-
 namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 {
-    public class GrabDialogViewModel : ViewModelBase
+    public class GrabDialogViewModel : DialogViewModelBase
     {
         private int _triggerMode = 0;
         private int _grabTimeout = 5000;

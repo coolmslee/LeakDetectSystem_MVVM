@@ -8,9 +8,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- 색상 리소스 먼저 로드 -->
-                <ResourceDictionary Source="Views/Resources/Colors.xaml" />
-                <!-- 스타일은 색상 리소스를 참조하므로 이후 로드 -->
+                <!-- 스타일 진입점에서 내부 Colors/Styles를 모두 로드 -->
                 <ResourceDictionary Source="Views/Resources/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

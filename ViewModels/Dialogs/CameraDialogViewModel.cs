@@ -1,8 +1,6 @@
-using LeakDetectSystem_MVVM.ViewModels.Base;
-
 namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 {
-    public class CameraDialogViewModel : ViewModelBase
+    public class CameraDialogViewModel : DialogViewModelBase
     {
         private bool _cam1Use;
         private bool _cam2Use;
