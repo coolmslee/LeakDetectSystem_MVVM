@@ -1,6 +1,7 @@
-<Window x:Class="LeakDetectSystem_MVVM.Views.Dialogs.LogDialog"
+<dialogs:DialogWindowBase x:Class="LeakDetectSystem_MVVM.Views.Dialogs.LogDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialogs="clr-namespace:LeakDetectSystem_MVVM.Views.Dialogs"
         Title="LogWindow"
         Height="702" Width="622.456"
         ResizeMode="NoResize"
@@ -58,4 +59,4 @@
             </TabItem>
         </TabControl>
     </Grid>
-</Window>
+</dialogs:DialogWindowBase>

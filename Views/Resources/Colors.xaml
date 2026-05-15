@@ -40,6 +40,8 @@
     <SolidColorBrush x:Key="WarningStatusBrush"   Color="{StaticResource WarningStatusColor}" />
     <SolidColorBrush x:Key="ErrorStatusBrush"     Color="{StaticResource ErrorStatusColor}" />
     <SolidColorBrush x:Key="InactiveStatusBrush"  Color="{StaticResource InactiveStatusColor}" />
+    <SolidColorBrush x:Key="InactiveStatusHoverBrush"  Color="#808B8C" />
+    <SolidColorBrush x:Key="InactiveStatusPressedBrush" Color="#6B7879" />
     <SolidColorBrush x:Key="BackgroundBrush"      Color="{StaticResource BackgroundColor}" />
     <SolidColorBrush x:Key="SurfaceBrush"         Color="{StaticResource SurfaceColor}" />
     <SolidColorBrush x:Key="PanelBackgroundBrush" Color="{StaticResource PanelBackgroundColor}" />

@@ -1,6 +1,7 @@
-<Window x:Class="LeakDetectSystem_MVVM.Views.Dialogs.PlcDialog"
+<dialogs:DialogWindowBase x:Class="LeakDetectSystem_MVVM.Views.Dialogs.PlcDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialogs="clr-namespace:LeakDetectSystem_MVVM.Views.Dialogs"
         Title="PLC 통신"
         Width="1100"
         Height="626"
@@ -204,4 +205,4 @@
             </Grid>
         </Border>
     </Grid>
-</Window>
+</dialogs:DialogWindowBase>

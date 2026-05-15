@@ -1,11 +1,10 @@
-using LeakDetectSystem_MVVM.ViewModels.Base;
-using System;
+using LeakDetectSystem_MVVM.Commands;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 {
-    public class LogDialogViewModel : ViewModelBase
+    public class LogDialogViewModel : DialogViewModelBase
     {
         public ObservableCollection<string> SystemLogs { get; } = new();
         public ObservableCollection<string> AlarmLogs { get; } = new();
@@ -33,21 +32,6 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         {
             if (SelectedTabIndex == 0) SystemLogs.Clear();
             else if (SelectedTabIndex == 1) AlarmLogs.Clear();
-        }
-
-        private sealed class RelayCommand : ICommand
-        {
-            private readonly Action _execute;
-            public RelayCommand(Action execute) => _execute = execute;
-
-            public bool CanExecute(object? parameter) => true;
-            public void Execute(object? parameter) => _execute();
-
-            public event EventHandler? CanExecuteChanged
-            {
-                add => CommandManager.RequerySuggested += value;
-                remove => CommandManager.RequerySuggested -= value;
-            }
         }
     }
 }
