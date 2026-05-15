@@ -23,9 +23,9 @@
                         <ColumnDefinition Width="50"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="CAM" FontWeight="SemiBold" Style="{StaticResource DialogLabelTextStyle}"/>
-                    <TextBlock Grid.Column="1" Text="Use" FontWeight="SemiBold" HorizontalAlignment="Center" Style="{StaticResource DialogLabelTextStyle}"/>
-                    <TextBlock Grid.Column="2" Text="IP Address" FontWeight="SemiBold" Margin="6,0,0,0" Style="{StaticResource DialogLabelTextStyle}"/>
+                    <TextBlock Grid.Column="0" Text="CAM" Style="{StaticResource DialogHeaderLabelTextStyle}"/>
+                    <TextBlock Grid.Column="1" Text="Use" HorizontalAlignment="Center" Style="{StaticResource DialogHeaderLabelTextStyle}"/>
+                    <TextBlock Grid.Column="2" Text="IP Address" Margin="6,0,0,0" Style="{StaticResource DialogHeaderLabelTextStyle}"/>
                 </Grid>
 
                 <Grid Margin="0,0,0,6">
