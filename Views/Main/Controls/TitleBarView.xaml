@@ -40,23 +40,47 @@
                           Padding="10,6">
                     <MenuItem Header="PLC"
                               Command="{Binding OpenPlcCommand}"
-                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                              Foreground="{StaticResource TextPrimaryBrush}"
+                              Background="{StaticResource SurfaceBrush}"
+                              BorderThickness="0"
+                              FontSize="14"
+                              Padding="12,6" />
                     <MenuItem Header="Model"
                               Command="{Binding OpenModelCommand}"
-                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                              Foreground="{StaticResource TextPrimaryBrush}"
+                              Background="{StaticResource SurfaceBrush}"
+                              BorderThickness="0"
+                              FontSize="14"
+                              Padding="12,6" />
                     <MenuItem Header="Camera"
                               Command="{Binding OpenCameraCommand}"
-                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                              Foreground="{StaticResource TextPrimaryBrush}"
+                              Background="{StaticResource SurfaceBrush}"
+                              BorderThickness="0"
+                              FontSize="14"
+                              Padding="12,6" />
                     <MenuItem Header="Grab"
                               Command="{Binding OpenGrabCommand}"
-                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                              Foreground="{StaticResource TextPrimaryBrush}"
+                              Background="{StaticResource SurfaceBrush}"
+                              BorderThickness="0"
+                              FontSize="14"
+                              Padding="12,6" />
                     <MenuItem Header="Light"
                               Command="{Binding OpenLightCommand}"
-                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                              Foreground="{StaticResource TextPrimaryBrush}"
+                              Background="{StaticResource SurfaceBrush}"
+                              BorderThickness="0"
+                              FontSize="14"
+                              Padding="12,6" />
                     <Separator />
                     <MenuItem Header="Log"
                               Command="{Binding ShowLogCommand}"
-                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                              Foreground="{StaticResource TextPrimaryBrush}"
+                              Background="{StaticResource SurfaceBrush}"
+                              BorderThickness="0"
+                              FontSize="14"
+                              Padding="12,6" />
                 </MenuItem>
             </Menu>
         </StackPanel>
