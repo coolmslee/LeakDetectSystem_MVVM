@@ -49,7 +49,7 @@ namespace LeakDetectSystem_MVVM.Services
                 DataContext = new ModelDialogViewModel()
             };
 
-            dialog.Show();
+            dialog.ShowDialog();
         }
 
         public void ShowCameraDialog()
@@ -60,7 +60,7 @@ namespace LeakDetectSystem_MVVM.Services
                 DataContext = new CameraDialogViewModel()
             };
 
-            dialog.Show();
+            dialog.ShowDialog();
         }
 
         public void ShowGrabDialog()
@@ -71,7 +71,7 @@ namespace LeakDetectSystem_MVVM.Services
                 DataContext = new GrabDialogViewModel()
             };
 
-            dialog.Show();
+            dialog.ShowDialog();
         }
 
         public void ShowLightDialog()
@@ -82,7 +82,7 @@ namespace LeakDetectSystem_MVVM.Services
                 DataContext = new LightDialogViewModel()
             };
 
-            dialog.Show();
+            dialog.ShowDialog();
         }
 
         public void ShowLogDialog()
