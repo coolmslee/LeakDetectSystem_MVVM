@@ -1,4 +1,4 @@
-<UserControl x:Class="LeakDetectSystem_MVVM.Views.Main.Controls.TitleBarView"
+﻿<UserControl x:Class="LeakDetectSystem_MVVM.Views.Main.Controls.TitleBarView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,78 +8,73 @@
              d:DataContext="{d:DesignInstance Type=vm:TitleBarViewModel, IsDesignTimeCreatable=True}"
              Height="55"
              Background="{StaticResource PrimaryDarkBrush}">
-
-    <!--
-        TitleBarView: 상단 55px 헤더 영역
-        왼쪽: 타이틀 + 기능 메뉴 버튼 (PLC / Model / Camera / Grab / Light / MENU / RFID / LOG)
-        오른쪽: 현재 날짜/시간 + EXIT 버튼
-    -->
     <Grid>
         <Grid.ColumnDefinitions>
-            <!-- 좌측: 타이틀 + 메뉴 버튼 그룹 -->
             <ColumnDefinition Width="*" />
-            <!-- 우측: 시간 표시 + EXIT -->
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <!-- ===== 좌측: 타이틀 + MENU (하위 메뉴 구조) ===== -->
+        <!-- 좌측: 타이틀 + 메뉴 -->
         <StackPanel Grid.Column="0"
                     Orientation="Horizontal"
                     VerticalAlignment="Center"
                     Margin="8,0">
-
-            <!-- 타이틀 -->
             <TextBlock Text="누설 감지 시스템"
                        Foreground="{StaticResource TextOnPrimaryBrush}"
                        FontSize="16"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="0,0,16,0" />
-
-            <!-- 구분선 -->
             <Rectangle Width="1" Height="28"
                        Fill="{StaticResource PrimaryLightBrush}"
                        Margin="0,0,8,0" />
-
-            <!-- MENU (원본 동일 구조: MENU → PLC / Model / Camera / Grab / Light / Log) -->
             <Menu Background="Transparent"
                   VerticalAlignment="Center"
                   Style="{StaticResource TitleBarMenuStyle}">
                 <MenuItem Header="MENU"
-                          Style="{StaticResource TitleBarTopMenuItemStyle}"
-                          FontSize="16" FontWeight="Bold"
+                          Foreground="{StaticResource TextOnPrimaryBrush}"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          FontSize="16"
+                          FontWeight="Bold"
                           Padding="10,6">
-                    <MenuItem Header="PLC"    Command="{Binding OpenPlcCommand}"    Style="{StaticResource TitleBarSubMenuItemStyle}" />
-                    <MenuItem Header="Model"  Command="{Binding OpenModelCommand}"  Style="{StaticResource TitleBarSubMenuItemStyle}" />
-                    <MenuItem Header="Camera" Command="{Binding OpenCameraCommand}" Style="{StaticResource TitleBarSubMenuItemStyle}" />
-                    <MenuItem Header="Grab"   Command="{Binding OpenGrabCommand}"   Style="{StaticResource TitleBarSubMenuItemStyle}" />
-                    <MenuItem Header="Light"  Command="{Binding OpenLightCommand}"  Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <MenuItem Header="PLC"
+                              Command="{Binding OpenPlcCommand}"
+                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <MenuItem Header="Model"
+                              Command="{Binding OpenModelCommand}"
+                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <MenuItem Header="Camera"
+                              Command="{Binding OpenCameraCommand}"
+                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <MenuItem Header="Grab"
+                              Command="{Binding OpenGrabCommand}"
+                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <MenuItem Header="Light"
+                              Command="{Binding OpenLightCommand}"
+                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
                     <Separator />
-                    <MenuItem Header="Log"    Command="{Binding ShowLogCommand}"    Style="{StaticResource TitleBarSubMenuItemStyle}" />
+                    <MenuItem Header="Log"
+                              Command="{Binding ShowLogCommand}"
+                              Style="{StaticResource TitleBarSubMenuItemStyle}" />
                 </MenuItem>
             </Menu>
         </StackPanel>
 
-        <!-- ===== 우측: 날짜/시간 + EXIT ===== -->
+        <!-- 우측: 날짜/시간 + EXIT -->
         <StackPanel Grid.Column="1"
                     Orientation="Horizontal"
                     VerticalAlignment="Center"
                     Margin="0,0,8,0">
-
-            <!-- 날짜/시간 -->
             <TextBlock Text="{Binding CurrentTime}"
                        Foreground="{StaticResource TextOnPrimaryBrush}"
                        FontSize="13"
                        VerticalAlignment="Center"
                        Margin="0,0,12,0"
                        FontFamily="Consolas" />
-
-            <!-- 구분선 -->
             <Rectangle Width="1" Height="28"
                        Fill="{StaticResource PrimaryLightBrush}"
                        Margin="0,0,8,0" />
-
-            <!-- EXIT -->
             <Button Content="EXIT"
                     Command="{Binding ExitCommand}"
                     Style="{StaticResource TitleBarExitButtonStyle}"

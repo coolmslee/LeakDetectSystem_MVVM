@@ -1,4 +1,4 @@
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace LeakDetectSystem_MVVM.Views.Main.Controls
 {

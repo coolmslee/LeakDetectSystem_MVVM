@@ -10,18 +10,9 @@
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Margin" Value="2,0" />
-        <!--<Style.Triggers>
-            <Trigger Property="IsHighlighted" Value="True">
-                <Setter Property="Background" Value="{StaticResource PrimaryLightBrush}" />
-            </Trigger>
-            <Trigger Property="IsSubmenuOpen" Value="True">
-                <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
-            </Trigger>
-        </Style.Triggers>--> 
     </Style>
 
     <Style x:Key="TitleBarExitButtonStyle" TargetType="Button" BasedOn="{StaticResource TitleBarMenuButtonStyle}">
-        <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
         <Setter Property="Padding" Value="12,6" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Style.Triggers>
@@ -39,25 +30,10 @@
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
-    <Style x:Key="TitleBarTopMenuItemStyle" TargetType="MenuItem">
-        <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="10,6" />
-        <Setter Property="FontSize" Value="12" />
-        <Style.Triggers>
-            <Trigger Property="IsHighlighted" Value="True">
-                <Setter Property="Background" Value="{StaticResource PrimaryLightBrush}" />
-            </Trigger>
-            <Trigger Property="IsSubmenuOpen" Value="True">
-                <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
     <Style x:Key="TitleBarSubMenuItemStyle" TargetType="MenuItem">
         <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
         <Setter Property="Background" Value="White" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="12,6" />
         <Style.Triggers>
