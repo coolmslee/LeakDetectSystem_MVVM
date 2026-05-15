@@ -1,12 +1,10 @@
 using LeakDetectSystem_MVVM.Commands;
 using LeakDetectSystem_MVVM.Comm.Plc;
-using LeakDetectSystem_MVVM.ViewModels.Base;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -19,7 +17,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         Ascii
     }
 
-    public class PlcDialogViewModel : ViewModelBase
+    public class PlcDialogViewModel : DialogViewModelBase
     {
         private const int BitsPerWord = 16;
         private const int MaxReceiveLogCount = 256;
@@ -51,7 +49,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         public PlcDialogViewModel()
         {
             ConnectCommand = new RelayCommand(Connect);
-            ExitCommand = new RelayCommand(CloseWindow);
+            ExitCommand = new RelayCommand(RequestClose);
             ClearReceiveCommand = new RelayCommand(() => ReceiveData.Clear());
             ReadBitCommand = new RelayCommand(ReadBit);
             WriteBitCommand = new RelayCommand(WriteBit);
@@ -248,17 +246,6 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                 IsConnected = false;
                 AddReceiveStr($"[Error] Connect failed: {ex.Message}");
             }
-        }
-
-        private void CloseWindow(object? parameter)
-        {
-            if (parameter is Window window)
-            {
-                window.Close();
-                return;
-            }
-
-            Application.Current?.Windows.OfType<Window>().FirstOrDefault(w => w.DataContext == this)?.Close();
         }
 
         private void ReadBit()

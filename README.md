@@ -244,14 +244,20 @@ private bool CanDoSomething() => !IsBusy;
 
 ### 3. Resources 확장
 
-`Views/Resources/`에 새 ResourceDictionary를 추가하고 `App.xaml`에 등록합니다.
+`Views/Resources/Styles.xaml`을 단일 진입점으로 유지하고, 내부에서 필요한 ResourceDictionary를 merge 합니다.
 
 ```xml
 <!-- App.xaml -->
 <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="Views/Resources/Colors.xaml" />
     <ResourceDictionary Source="Views/Resources/Styles.xaml" />
-    <ResourceDictionary Source="Views/Resources/MyNewDict.xaml" />  <!-- 추가 -->
+</ResourceDictionary.MergedDictionaries>
+```
+
+```xml
+<!-- Views/Resources/Styles.xaml -->
+<ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="Colors.xaml" />
+    <ResourceDictionary Source="Styles/MyNewDict.xaml" />  <!-- 추가 -->
 </ResourceDictionary.MergedDictionaries>
 ```
 

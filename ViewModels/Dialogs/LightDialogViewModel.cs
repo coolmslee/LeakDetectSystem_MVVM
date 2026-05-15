@@ -1,8 +1,6 @@
-using LeakDetectSystem_MVVM.ViewModels.Base;
-
 namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 {
-    public class LightDialogViewModel : ViewModelBase
+    public class LightDialogViewModel : DialogViewModelBase
     {
         private int _channel1 = 100;
         private int _channel2 = 100;

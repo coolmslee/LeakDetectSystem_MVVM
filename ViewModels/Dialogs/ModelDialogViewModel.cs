@@ -1,9 +1,8 @@
-using LeakDetectSystem_MVVM.ViewModels.Base;
 using System.Collections.ObjectModel;
 
 namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 {
-    public class ModelDialogViewModel : ViewModelBase
+    public class ModelDialogViewModel : DialogViewModelBase
     {
         private string _modelName = string.Empty;
         private string _selectedModel = string.Empty;
