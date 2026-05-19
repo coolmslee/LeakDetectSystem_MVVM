@@ -65,12 +65,16 @@
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="{StaticResource NormalStatusBrush}"/>
-                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
             </Trigger>
-            <Trigger Property="IsMouseOver" Value="True">
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="False" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
                 <Setter Property="Background" Value="{StaticResource PrimaryLightBrush}"/>
-                <Setter Property="Foreground" Value="White"/>
-            </Trigger>
+                <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}"/>
+            </MultiTrigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Background" Value="{StaticResource InactiveStatusBrush}" />
                 <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
