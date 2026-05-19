@@ -18,13 +18,13 @@
         <Border.Style>
             <Style TargetType="Border">
                 <!-- 기본: Unknown(회색) -->
-                <Setter Property="Background" Value="{StaticResource InactiveStatusBrush}" />
+                <Setter Property="Background" Value="{DynamicResource InactiveStatusBrush}" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding ResultState}" Value="OK">
-                        <Setter Property="Background" Value="{StaticResource NormalStatusBrush}" />
+                        <Setter Property="Background" Value="{DynamicResource NormalStatusBrush}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding ResultState}" Value="NG">
-                        <Setter Property="Background" Value="{StaticResource ErrorStatusBrush}" />
+                        <Setter Property="Background" Value="{DynamicResource ErrorStatusBrush}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>

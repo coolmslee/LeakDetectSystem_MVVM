@@ -9,7 +9,7 @@
              d:DesignHeight="800" d:DesignWidth="1180">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Background="{StaticResource BackgroundBrush}" Margin="12">
+        <Grid Background="{DynamicResource BackgroundBrush}" Margin="12">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -26,7 +26,7 @@
             <!-- ====== Row 1: PLC Memory / PC Memory ====== -->
             <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="0,0,0,10">
                 <GroupBox Header="PLC Memory / PC Memory" FontWeight="Bold" FontSize="14"
-                          Foreground="{StaticResource TextPrimaryBrush}">
+                          Foreground="{DynamicResource TextPrimaryBrush}">
                     <Grid Margin="6">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -157,7 +157,7 @@
             <!-- ====== Row 2: Times ====== -->
             <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="0,0,0,10">
                 <GroupBox Header="Times" FontWeight="Bold" FontSize="14"
-                          Foreground="{StaticResource TextPrimaryBrush}">
+                          Foreground="{DynamicResource TextPrimaryBrush}">
                     <Grid Margin="6">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -204,7 +204,7 @@
                 <!-- DIO Input (0~15 Ellipse read-only indicators) -->
                 <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,6,0">
                     <GroupBox Header="DIO Input" FontWeight="Bold" FontSize="14"
-                              Foreground="{StaticResource TextPrimaryBrush}">
+                              Foreground="{DynamicResource TextPrimaryBrush}">
                         <ItemsControl Margin="6" ItemsSource="{Binding DioInputStates}"
                                       AlternationCount="16">
                             <ItemsControl.ItemsPanel>
@@ -218,10 +218,10 @@
                                         <Ellipse Width="20" Height="20" HorizontalAlignment="Center">
                                             <Ellipse.Style>
                                                 <Style TargetType="Ellipse">
-                                                    <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}"/>
+                                                    <Setter Property="Fill" Value="{DynamicResource InactiveStatusBrush}"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding}" Value="True">
-                                                            <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}"/>
+                                                            <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -230,7 +230,7 @@
                                         <TextBlock HorizontalAlignment="Center" FontSize="10"
                                                    Text="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter},
                                                           Path=(ItemsControl.AlternationIndex)}"
-                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -241,7 +241,7 @@
                 <!-- DIO Output (0~15 ToggleButton) -->
                 <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="6,0,0,0">
                     <GroupBox Header="DIO Output" FontWeight="Bold" FontSize="14"
-                              Foreground="{StaticResource TextPrimaryBrush}">
+                              Foreground="{DynamicResource TextPrimaryBrush}">
                         <ItemsControl Margin="6" ItemsSource="{Binding DioOutputStates}"
                                       AlternationCount="16">
                             <ItemsControl.ItemsPanel>

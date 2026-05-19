@@ -21,7 +21,7 @@
           Col6: SEQ
           Col7: 자동시작 / 자동정지
     -->
-    <Border Background="{StaticResource PanelBackgroundBrush}"
+    <Border Background="{DynamicResource PanelBackgroundBrush}"
             BorderBrush="Black"
             BorderThickness="0,1,0,1">
         <Grid Height="120">
@@ -75,7 +75,7 @@
                                     <Setter Property="Fill" Value="Gray" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsPlcPass}" Value="True">
-                                            <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                            <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -238,7 +238,7 @@
 
                     <!-- LIGHT 행 -->
                     <Border Grid.Row="1" Grid.Column="0"
-                            Background="{StaticResource PrimaryBrush}">
+                            Background="{DynamicResource PrimaryBrush}">
                         <TextBlock Text="LIGHT"
                                    Foreground="White"
                                    FontSize="13" FontWeight="Bold"
@@ -255,7 +255,7 @@
                                     <Setter Property="Fill" Value="Gray" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsLightConnected}" Value="True">
-                                            <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                            <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -265,7 +265,7 @@
 
                     <!-- PLC 행 -->
                     <Border Grid.Row="2" Grid.Column="0"
-                            Background="{StaticResource PrimaryBrush}">
+                            Background="{DynamicResource PrimaryBrush}">
                         <TextBlock Text="PLC"
                                    Foreground="White"
                                    FontSize="13" FontWeight="Bold"
@@ -282,7 +282,7 @@
                                     <Setter Property="Fill" Value="Gray" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsPlcConnected}" Value="True">
-                                            <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                            <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

@@ -34,7 +34,7 @@
                         <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsPlcConnected}" Value="True">
-                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -50,7 +50,7 @@
                         <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsCameraConnected}" Value="True">
-                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -66,7 +66,7 @@
                         <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsImqsConnected}" Value="True">
-                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -82,7 +82,7 @@
                         <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsRfidConnected}" Value="True">
-                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -107,7 +107,7 @@
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsRequestSignalActive}" Value="True">
                                     <!-- 요청신호 활성: 진행 중임을 나타내는 노란색(경고) 계열로 구분 -->
-                                    <Setter Property="Fill" Value="{StaticResource WarningStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource WarningStatusBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -123,7 +123,7 @@
                         <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsResultSignalActive}" Value="True">
-                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -139,7 +139,7 @@
                         <Style TargetType="Ellipse" BasedOn="{StaticResource ConnectionIndicatorStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsCommunicationActive}" Value="True">
-                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
