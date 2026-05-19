@@ -6,8 +6,8 @@
     </Style>
 
     <Style x:Key="DialogSectionBorderStyle" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="12" />
     </Style>
@@ -24,7 +24,7 @@
 
     <Style x:Key="DialogInputTextBoxStyle" TargetType="TextBox">
         <Setter Property="Padding" Value="4,3" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
@@ -42,8 +42,9 @@
     </Style>
 
     <Style x:Key="DialogSecondaryButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource InactiveStatusBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
+        <Setter Property="Background" Value="{DynamicResource InactiveStatusBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextOnPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Width" Value="80" />
         <Setter Property="Height" Value="30" />
@@ -62,13 +63,13 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource InactiveStatusHoverBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource InactiveStatusHoverBrush}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="{StaticResource InactiveStatusPressedBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource InactiveStatusPressedBrush}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Background" Value="{StaticResource InactiveStatusBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource InactiveStatusBrush}" />
                             <Setter Property="Cursor" Value="Arrow" />
                         </Trigger>
                     </ControlTemplate.Triggers>

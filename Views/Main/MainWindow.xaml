@@ -51,7 +51,7 @@
             <!-- 탭 헤더 버튼 영역 -->
             <StackPanel Grid.Row="0"
                         Orientation="Horizontal"
-                        Background="{StaticResource PrimaryBrush}">
+                        Background="{DynamicResource PrimaryBrush}">
                 <Button Content="Main"
                         Command="{Binding NavigateCommand}"
                         CommandParameter="main"
@@ -71,10 +71,10 @@
 
         <!-- ===== 하단 상태 표시줄 ===== -->
         <StatusBar Grid.Row="2"
-                   Background="{StaticResource PrimaryDarkBrush}">
+                   Background="{DynamicResource PrimaryDarkBrush}">
             <StatusBarItem>
                 <TextBlock Text="{Binding FooterStatus}"
-                           Foreground="{StaticResource TextOnPrimaryBrush}"
+                           Foreground="{DynamicResource TextOnPrimaryBrush}"
                            FontSize="11" />
             </StatusBarItem>
         </StatusBar>

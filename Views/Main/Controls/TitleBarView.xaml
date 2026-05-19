@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:TitleBarViewModel, IsDesignTimeCreatable=True}"
              Height="55"
-             Background="{StaticResource PrimaryDarkBrush}">
+             Background="{DynamicResource PrimaryDarkBrush}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -20,19 +20,19 @@
                     VerticalAlignment="Center"
                     Margin="8,0">
             <TextBlock Text="누설 감지 시스템"
-                       Foreground="{StaticResource TextOnPrimaryBrush}"
+                       Foreground="{DynamicResource TextOnPrimaryBrush}"
                        FontSize="16"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="0,0,16,0" />
             <Rectangle Width="1" Height="28"
-                       Fill="{StaticResource PrimaryLightBrush}"
+                       Fill="{DynamicResource PrimaryLightBrush}"
                        Margin="0,0,8,0" />
             <Menu Background="Transparent"
                   VerticalAlignment="Center"
                   Style="{StaticResource TitleBarMenuStyle}">
                 <MenuItem Header="MENU"
-                          Foreground="{StaticResource TextOnPrimaryBrush}"
+                          Foreground="{DynamicResource TextOnPrimaryBrush}"
                           Background="Transparent"
                           BorderThickness="0"
                           FontSize="16"
@@ -40,44 +40,44 @@
                           Padding="10,6">
                     <MenuItem Header="PLC"
                               Command="{Binding OpenPlcCommand}"
-                              Foreground="{StaticResource TextPrimaryBrush}"
-                              Background="{StaticResource SurfaceBrush}"
+                              Foreground="{DynamicResource TextPrimaryBrush}"
+                              Background="{DynamicResource SurfaceBrush}"
                               BorderThickness="0"
                               FontSize="14"
                               Padding="12,6" />
                     <MenuItem Header="Model"
                               Command="{Binding OpenModelCommand}"
-                              Foreground="{StaticResource TextPrimaryBrush}"
-                              Background="{StaticResource SurfaceBrush}"
+                              Foreground="{DynamicResource TextPrimaryBrush}"
+                              Background="{DynamicResource SurfaceBrush}"
                               BorderThickness="0"
                               FontSize="14"
                               Padding="12,6" />
                     <MenuItem Header="Camera"
                               Command="{Binding OpenCameraCommand}"
-                              Foreground="{StaticResource TextPrimaryBrush}"
-                              Background="{StaticResource SurfaceBrush}"
+                              Foreground="{DynamicResource TextPrimaryBrush}"
+                              Background="{DynamicResource SurfaceBrush}"
                               BorderThickness="0"
                               FontSize="14"
                               Padding="12,6" />
                     <MenuItem Header="Grab"
                               Command="{Binding OpenGrabCommand}"
-                              Foreground="{StaticResource TextPrimaryBrush}"
-                              Background="{StaticResource SurfaceBrush}"
+                              Foreground="{DynamicResource TextPrimaryBrush}"
+                              Background="{DynamicResource SurfaceBrush}"
                               BorderThickness="0"
                               FontSize="14"
                               Padding="12,6" />
                     <MenuItem Header="Light"
                               Command="{Binding OpenLightCommand}"
-                              Foreground="{StaticResource TextPrimaryBrush}"
-                              Background="{StaticResource SurfaceBrush}"
+                              Foreground="{DynamicResource TextPrimaryBrush}"
+                              Background="{DynamicResource SurfaceBrush}"
                               BorderThickness="0"
                               FontSize="14"
                               Padding="12,6" />
                     <Separator />
                     <MenuItem Header="Log"
                               Command="{Binding ShowLogCommand}"
-                              Foreground="{StaticResource TextPrimaryBrush}"
-                              Background="{StaticResource SurfaceBrush}"
+                              Foreground="{DynamicResource TextPrimaryBrush}"
+                              Background="{DynamicResource SurfaceBrush}"
                               BorderThickness="0"
                               FontSize="14"
                               Padding="12,6" />
@@ -91,13 +91,13 @@
                     VerticalAlignment="Center"
                     Margin="0,0,8,0">
             <TextBlock Text="{Binding CurrentTime}"
-                       Foreground="{StaticResource TextOnPrimaryBrush}"
+                       Foreground="{DynamicResource TextOnPrimaryBrush}"
                        FontSize="13"
                        VerticalAlignment="Center"
                        Margin="0,0,12,0"
                        FontFamily="Consolas" />
             <Rectangle Width="1" Height="28"
-                       Fill="{StaticResource PrimaryLightBrush}"
+                       Fill="{DynamicResource PrimaryLightBrush}"
                        Margin="0,0,8,0" />
             <Button Content="EXIT"
                     Command="{Binding ExitCommand}"

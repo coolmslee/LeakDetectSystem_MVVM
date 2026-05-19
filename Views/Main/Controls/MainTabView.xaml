@@ -9,7 +9,7 @@
              d:DataContext="{d:DesignInstance Type=vm:MainTabViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="500" d:DesignWidth="800">
 
-    <Grid Background="{StaticResource BackgroundBrush}">
+    <Grid Background="{DynamicResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -34,8 +34,8 @@
 
         <!-- 하단 상태 표시줄 -->
         <Border Grid.Row="3"
-                Background="{StaticResource PanelBackgroundBrush}"
-                BorderBrush="{StaticResource DividerBrush}"
+                Background="{DynamicResource PanelBackgroundBrush}"
+                BorderBrush="{DynamicResource DividerBrush}"
                 BorderThickness="0,1,0,0"
                 Padding="12,6">
             <TextBlock Text="{Binding StatusText}"

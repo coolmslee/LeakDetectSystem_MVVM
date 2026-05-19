@@ -17,7 +17,7 @@
           Col 3: 수동검사 버튼
           Col 4: STOP 버튼
     -->
-    <Border Background="{StaticResource PanelBackgroundBrush}"
+    <Border Background="{DynamicResource PanelBackgroundBrush}"
             BorderBrush="Black"
             BorderThickness="0,0,0,1">
         <Grid Height="52">

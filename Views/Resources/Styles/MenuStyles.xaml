@@ -1,15 +1,29 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <!-- 타이틀바용 flat Button ControlTemplate -->
+    <ControlTemplate x:Key="TitleBarFlatButtonTemplate" TargetType="Button">
+        <Border x:Name="bd"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Padding="{TemplateBinding Padding}">
+            <ContentPresenter HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              RecognizesAccessKey="True" />
+        </Border>
+    </ControlTemplate>
+
     <Style x:Key="TitleBarMenuButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextOnPrimaryBrush}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="10,6" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Margin" Value="2,0" />
+        <Setter Property="Template" Value="{StaticResource TitleBarFlatButtonTemplate}" />
     </Style>
 
     <Style x:Key="TitleBarExitButtonStyle" TargetType="Button" BasedOn="{StaticResource TitleBarMenuButtonStyle}">
@@ -17,10 +31,10 @@
         <Setter Property="FontWeight" Value="SemiBold" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource ErrorStatusBrush}" />
+                <Setter Property="Background" Value="{DynamicResource ErrorStatusBrush}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{StaticResource ErrorStatusBrush}" />
+                <Setter Property="Background" Value="{DynamicResource ErrorStatusBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>

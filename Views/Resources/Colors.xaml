@@ -22,7 +22,6 @@
     <Color x:Key="PanelBackgroundColor">#ECEFF1</Color>
 
     <!-- ===== Text Colors ===== -->
-    <!-- ===== Text Colors ===== -->
     <Color x:Key="TextPrimaryColor">#212121</Color>
     <Color x:Key="TextSecondaryColor">#757575</Color>
     <Color x:Key="TextOnPrimaryColor">#FFFFFF</Color>
@@ -31,25 +30,25 @@
     <Color x:Key="BorderColor">#BDBDBD</Color>
     <Color x:Key="DividerColor">#E0E0E0</Color>
 
-    <!-- ===== SolidColorBrush 변환 ===== -->
-    <SolidColorBrush x:Key="PrimaryBrush"         Color="{StaticResource PrimaryColor}" />
-    <SolidColorBrush x:Key="PrimaryLightBrush"    Color="{StaticResource PrimaryLightColor}" />
-    <SolidColorBrush x:Key="PrimaryDarkBrush"     Color="{StaticResource PrimaryDarkColor}" />
-    <SolidColorBrush x:Key="AccentBrush"          Color="{StaticResource AccentColor}" />
-    <SolidColorBrush x:Key="AccentLightBrush"     Color="{StaticResource AccentLightColor}" />
-    <SolidColorBrush x:Key="NormalStatusBrush"    Color="{StaticResource NormalStatusColor}" />
-    <SolidColorBrush x:Key="WarningStatusBrush"   Color="{StaticResource WarningStatusColor}" />
-    <SolidColorBrush x:Key="ErrorStatusBrush"     Color="{StaticResource ErrorStatusColor}" />
-    <SolidColorBrush x:Key="InactiveStatusBrush"  Color="{StaticResource InactiveStatusColor}" />
+    <!-- ===== SolidColorBrush 정의 (Colors와 독립적으로 직접 정의하여 parse-time StaticResource 의존 제거) ===== -->
+    <SolidColorBrush x:Key="PrimaryBrush"              Color="#1E3A5F" />
+    <SolidColorBrush x:Key="PrimaryLightBrush"         Color="#2D5A8E" />
+    <SolidColorBrush x:Key="PrimaryDarkBrush"          Color="#0F1F33" />
+    <SolidColorBrush x:Key="AccentBrush"               Color="#00A8CC" />
+    <SolidColorBrush x:Key="AccentLightBrush"          Color="#33C3E0" />
+    <SolidColorBrush x:Key="NormalStatusBrush"         Color="#2ECC71" />
+    <SolidColorBrush x:Key="WarningStatusBrush"        Color="#F39C12" />
+    <SolidColorBrush x:Key="ErrorStatusBrush"          Color="#E74C3C" />
+    <SolidColorBrush x:Key="InactiveStatusBrush"       Color="#95A5A6" />
     <SolidColorBrush x:Key="InactiveStatusHoverBrush"  Color="#808B8C" />
     <SolidColorBrush x:Key="InactiveStatusPressedBrush" Color="#6B7879" />
-    <SolidColorBrush x:Key="BackgroundBrush"      Color="{StaticResource BackgroundColor}" />
-    <SolidColorBrush x:Key="SurfaceBrush"         Color="{StaticResource SurfaceColor}" />
-    <SolidColorBrush x:Key="PanelBackgroundBrush" Color="{StaticResource PanelBackgroundColor}" />
-    <SolidColorBrush x:Key="TextPrimaryBrush"     Color="{StaticResource TextPrimaryColor}" />
-    <SolidColorBrush x:Key="TextSecondaryBrush"   Color="{StaticResource TextSecondaryColor}" />
-    <SolidColorBrush x:Key="TextOnPrimaryBrush"   Color="{StaticResource TextOnPrimaryColor}" />
-    <SolidColorBrush x:Key="BorderBrush"          Color="{StaticResource BorderColor}" />
-    <SolidColorBrush x:Key="DividerBrush"         Color="{StaticResource DividerColor}" />
+    <SolidColorBrush x:Key="BackgroundBrush"           Color="#F5F5F5" />
+    <SolidColorBrush x:Key="SurfaceBrush"              Color="#FFFFFF" />
+    <SolidColorBrush x:Key="PanelBackgroundBrush"      Color="#ECEFF1" />
+    <SolidColorBrush x:Key="TextPrimaryBrush"          Color="#212121" />
+    <SolidColorBrush x:Key="TextSecondaryBrush"        Color="#757575" />
+    <SolidColorBrush x:Key="TextOnPrimaryBrush"        Color="#FFFFFF" />
+    <SolidColorBrush x:Key="CardBorderBrush"           Color="#BDBDBD" />
+    <SolidColorBrush x:Key="DividerBrush"              Color="#E0E0E0" />
 
 </ResourceDictionary>
