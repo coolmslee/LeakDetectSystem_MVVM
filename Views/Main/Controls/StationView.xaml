@@ -34,10 +34,10 @@
                         <Style TargetType="Ellipse" BasedOn="{StaticResource StatusIndicatorStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsLeakDetected}" Value="True">
-                                    <Setter Property="Fill" Value="{StaticResource ErrorStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource ErrorStatusBrush}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsMonitoring}" Value="False">
-                                    <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource InactiveStatusBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -59,7 +59,7 @@
                         <Style TargetType="TextBlock" BasedOn="{StaticResource BodyTextStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsAboveThreshold}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource ErrorStatusBrush}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource ErrorStatusBrush}" />
                                     <Setter Property="FontWeight" Value="Bold" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -75,7 +75,7 @@
                     <Style TargetType="TextBlock" BasedOn="{StaticResource SecondaryTextStyle}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsLeakDetected}" Value="True">
-                                <Setter Property="Foreground" Value="{StaticResource ErrorStatusBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource ErrorStatusBrush}" />
                                 <Setter Property="FontWeight" Value="Bold" />
                             </DataTrigger>
                         </Style.Triggers>

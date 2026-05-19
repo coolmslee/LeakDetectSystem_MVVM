@@ -2,18 +2,18 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style x:Key="DashboardCellStyle" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource PanelBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}" />
         <Setter Property="BorderBrush" Value="Black" />
         <Setter Property="BorderThickness" Value="1" />
     </Style>
 
     <Style x:Key="DashboardCellHeaderStyle" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
         <Setter Property="Padding" Value="2,3" />
     </Style>
 
     <Style x:Key="DashboardHeaderTextStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextOnPrimaryBrush}" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -29,27 +29,41 @@
     </Style>
 
     <Style x:Key="DashboardToggleButtonStyle" TargetType="ToggleButton">
-        <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
+        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextOnPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryDarkBrush}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{StaticResource PrimaryDarkBrush}" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          RecognizesAccessKey="True" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="{StaticResource NormalStatusBrush}" />
-                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+                <Setter Property="Background" Value="{DynamicResource NormalStatusBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsChecked" Value="False" />
                     <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{StaticResource PrimaryLightBrush}" />
-                <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
+                <Setter Property="Background" Value="{DynamicResource PrimaryLightBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextOnPrimaryBrush}" />
             </MultiTrigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="{StaticResource InactiveStatusBrush}" />
-                <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
+                <Setter Property="Background" Value="{DynamicResource InactiveStatusBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextOnPrimaryBrush}" />
                 <Setter Property="Cursor" Value="Arrow" />
             </Trigger>
         </Style.Triggers>

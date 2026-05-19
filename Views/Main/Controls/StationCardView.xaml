@@ -52,13 +52,13 @@
                         <Style TargetType="Ellipse" BasedOn="{StaticResource StatusIndicatorStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ResultState}" Value="NG">
-                                    <Setter Property="Fill" Value="{StaticResource ErrorStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource ErrorStatusBrush}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ResultState}" Value="OK">
-                                    <Setter Property="Fill" Value="{StaticResource NormalStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource NormalStatusBrush}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsMonitoring}" Value="False">
-                                    <Setter Property="Fill" Value="{StaticResource InactiveStatusBrush}" />
+                                    <Setter Property="Fill" Value="{DynamicResource InactiveStatusBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
