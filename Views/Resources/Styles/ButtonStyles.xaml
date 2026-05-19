@@ -4,7 +4,6 @@
     <Style x:Key="PrimaryButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
         <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource PrimaryDarkBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="16,8" />
         <Setter Property="FontSize" Value="13" />
@@ -35,7 +34,6 @@
     <Style x:Key="DisplayModeButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
         <Setter Property="Foreground" Value="{StaticResource TextOnPrimaryBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource PrimaryDarkBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="8,4" />
         <Setter Property="FontSize" Value="11" />
@@ -62,7 +60,6 @@
         <Setter Property="Margin" Value="2"/>
         <Setter Property="Background" Value="{StaticResource InactiveStatusBrush}"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderBrush" Value="{StaticResource PrimaryDarkBrush}" />
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Style.Triggers>
