@@ -112,7 +112,7 @@ namespace LeakDetectSystem_MVVM.Services
             var dialog = new LightDialog
             {
                 Owner = GetMainWindow(),
-                DataContext = new LightDialogViewModel()
+                DataContext = new LightDialogViewModel(this)
             };
 
             dialog.ShowDialog();

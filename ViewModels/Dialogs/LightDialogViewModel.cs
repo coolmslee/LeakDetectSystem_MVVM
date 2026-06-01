@@ -11,11 +11,6 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private readonly IDialogService _dialogService;
         private string _statusMessage = "사용 여부와 밝기를 조정한 뒤 적용을 눌러 반영하세요.";
 
-        public LightDialogViewModel()
-            : this(new DialogService())
-        {
-        }
-
         public LightDialogViewModel(IDialogService dialogService)
         {
             _dialogService = dialogService;
