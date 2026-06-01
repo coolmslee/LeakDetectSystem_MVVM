@@ -5,6 +5,7 @@ namespace LeakDetectSystem_MVVM.Services
         void ShowMessage(string message, string title = "알림");
         bool ShowConfirmation(string message, string title = "확인");
         void ShowError(string message, string title = "오류");
+        void ShowMessageDialog(MessageDialogRequest request, Action<MessageDialogResult, string?>? onCompleted = null);
         string? ShowOpenFileDialog(string filter = "All Files (*.*)|*.*");
         string? ShowSaveFileDialog(string filter = "All Files (*.*)|*.*");
 
