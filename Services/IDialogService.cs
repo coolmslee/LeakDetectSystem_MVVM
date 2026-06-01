@@ -14,5 +14,10 @@ namespace LeakDetectSystem_MVVM.Services
         void ShowGrabDialog();
         void ShowLightDialog();
         void ShowLogDialog();
+        IProgressDialogController ShowProgressDialog(
+            string title = "진행 상태",
+            string message = "작업을 준비하는 중입니다.",
+            bool isIndeterminate = true,
+            double progressValue = 0);
     }
 }
