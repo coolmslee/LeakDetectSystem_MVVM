@@ -1,5 +1,6 @@
 using LeakDetectSystem_MVVM.Commands;
 using LeakDetectSystem_MVVM.Comm.Plc;
+using LeakDetectSystem_MVVM.Models;
 using LeakDetectSystem_MVVM.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,6 +29,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 
         private readonly ModbusPlcClient _plcClient;
         private readonly IDialogService _dialogService;
+        private readonly IPlcConfigService _plcConfigService;
 
         private string _startAddress = "0";
         private string _startLength = "10";
@@ -52,14 +54,15 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private string _seqNo = "-";
 
         public PlcDialogViewModel()
-            : this(new ModbusPlcClient(), new DialogService())
+            : this(new ModbusPlcClient(), new DialogService(), new PlcConfigIniService())
         {
         }
 
-        public PlcDialogViewModel(ModbusPlcClient plcClient, IDialogService dialogService)
+        public PlcDialogViewModel(ModbusPlcClient plcClient, IDialogService dialogService, IPlcConfigService? plcConfigService = null)
         {
             _plcClient = plcClient ?? throw new ArgumentNullException(nameof(plcClient));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+            _plcConfigService = plcConfigService ?? new PlcConfigIniService();
 
             ConnectCommand = new RelayCommand(Connect);
             ClearReceiveCommand = new RelayCommand(() => ReceiveData.Clear());
@@ -68,6 +71,9 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             ReadDataCommand = new RelayCommand(ReadData);
             WriteDataCommand = new RelayCommand(WriteDataToPlc);
             ReadInspectionResultCommand = new RelayCommand(ReadInspectionResult, () => IsConnected);
+            SaveCommand = new RelayCommand(Save);
+
+            LoadFromIni();
         }
 
         public ObservableCollection<string> ReceiveData { get; } = new();
@@ -78,6 +84,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         public ICommand WriteBitCommand { get; }
         public ICommand ReadDataCommand { get; }
         public ICommand WriteDataCommand { get; }
+        public RelayCommand SaveCommand { get; }
         public RelayCommand ReadInspectionResultCommand { get; }
 
         public string StartAddress
