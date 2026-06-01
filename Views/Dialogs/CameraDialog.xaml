@@ -141,22 +141,8 @@
             </StackPanel>
         </Border>
 
-        <StackPanel Grid.Row="2"
-                    Style="{StaticResource DialogFooterPanelStyle}">
-            <Button Content="불러오기"
-                    Margin="0,0,8,0"
-                    Style="{StaticResource DialogSecondaryButtonStyle}"
-                    Command="{Binding LoadCommand}"/>
-
-            <Button Content="저장"
-                    Margin="0,0,8,0"
-                    Style="{StaticResource DialogPrimaryButtonStyle}"
-                    Command="{Binding SaveCommand}"/>
-
-            <Button Content="닫기"
-                    IsCancel="True"
-                    Style="{StaticResource DialogSecondaryButtonStyle}"
-                    Command="{Binding CloseCommand}"/>
+        <StackPanel Grid.Row="2" Style="{StaticResource DialogFooterPanelStyle}">
+            <Button Content="닫기" IsCancel="True" Style="{StaticResource DialogSecondaryButtonStyle}" Command="{Binding CloseCommand}"/>
         </StackPanel>
     </Grid>
 </dialogs:DialogWindowBase>
