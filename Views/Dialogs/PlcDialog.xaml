@@ -3,76 +3,244 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dialogs="clr-namespace:LeakDetectSystem_MVVM.Views.Dialogs"
         Title="PLC 통신"
-        Width="1100"
-        Height="626"
+        Width="1120"
+        Height="660"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
-        Background="#292929">
-    <Grid Margin="6">
+        Background="{DynamicResource SurfaceBrush}">
+
+    <Grid Margin="16">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="600" />
-            <ColumnDefinition Width="500" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="16" />
+            <ColumnDefinition Width="400" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Margin="0,0,6,0">
+        <!-- ===== LEFT: Manual Test + Log + Inspection ===== -->
+        <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="2*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="12" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="12" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="6">
+            <!-- Section title -->
+            <TextBlock Grid.Row="0"
+                       Text="PLC 통신 모니터"
+                       Style="{StaticResource DialogTitleTextStyle}" />
+
+            <!-- Section 3: Receive / Log area -->
+            <Border Grid.Row="1" Style="{StaticResource DialogSectionBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" Margin="0,0,0,6">
+                        <TextBlock Text="수신 로그"
+                                   Style="{StaticResource DialogHeaderLabelTextStyle}"
+                                   VerticalAlignment="Center" />
+                        <Button DockPanel.Dock="Right"
+                                Content="지우기"
+                                Command="{Binding ClearReceiveCommand}"
+                                Style="{StaticResource DialogSecondaryButtonStyle}"
+                                Width="60" Height="24" />
+                    </DockPanel>
+
+                    <ListBox Grid.Row="1"
+                             ItemsSource="{Binding ReceiveData}"
+                             AutomationProperties.Name="수신 로그 목록"
+                             MinHeight="160"
+                             FontFamily="Consolas"
+                             FontSize="11"
+                             Background="{DynamicResource PanelBackgroundBrush}"
+                             BorderBrush="{DynamicResource CardBorderBrush}"
+                             BorderThickness="1"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                </Grid>
+            </Border>
+
+            <!-- Section 2: Manual read/write test panel -->
+            <Border Grid.Row="3" Style="{StaticResource DialogSectionBorderStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" Margin="0,0,0,6">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="1" Text="시작주소" FontSize="20" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" />
-                        <TextBlock Grid.Column="2" Text="크기/결과" FontSize="20" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" />
-                    </Grid>
+                    <TextBlock Grid.Row="0"
+                               Text="수동 R/W 테스트"
+                               Style="{StaticResource DialogHeaderLabelTextStyle}"
+                               Margin="0,0,0,8" />
 
+                    <!-- Address / Length row -->
                     <Grid Grid.Row="1" Margin="0,0,0,6">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="70" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="데이타위치" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Center" />
-                        <TextBox Grid.Column="1" Text="{Binding StartAddress, UpdateSourceTrigger=PropertyChanged}" FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-                        <TextBox Grid.Column="2" Text="{Binding StartLength, UpdateSourceTrigger=PropertyChanged}" FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                        <TextBlock Grid.Column="0"
+                                   Text="시작 주소"
+                                   Style="{StaticResource DialogLabelTextStyle}" />
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding StartAddress, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}" />
+                        <TextBlock Grid.Column="3"
+                                   Text="크기"
+                                   Style="{StaticResource DialogLabelTextStyle}" />
+                        <TextBox Grid.Column="4"
+                                 Text="{Binding StartLength, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}" />
                     </Grid>
 
-                    <Grid Grid.Row="2" Margin="0,0,0,6">
+                    <!-- Display mode -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,6">
+                        <TextBlock Text="표시 형식"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   Width="90"
+                                   VerticalAlignment="Center" />
+                        <RadioButton Content="Bit"
+                                     IsChecked="{Binding IsBitMode}"
+                                     VerticalAlignment="Center"
+                                     Margin="0,0,16,0" />
+                        <RadioButton Content="Hex"
+                                     IsChecked="{Binding IsHexMode}"
+                                     VerticalAlignment="Center"
+                                     Margin="0,0,16,0" />
+                        <RadioButton Content="ASCII"
+                                     IsChecked="{Binding IsAsciiMode}"
+                                     VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <!-- Write data -->
+                    <Grid Grid.Row="3" Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="90" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <RadioButton Grid.Column="0" Content="Bit" IsChecked="{Binding IsBitMode}" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" />
-                        <RadioButton Grid.Column="1" Content="Bin(Hex)" IsChecked="{Binding IsHexMode}" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" />
-                        <RadioButton Grid.Column="2" Content="ASCII" IsChecked="{Binding IsAsciiMode}" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Column="0"
+                                   Text="쓰기 데이터"
+                                   Style="{StaticResource DialogLabelTextStyle}" />
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding WriteData, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}" />
                     </Grid>
 
-                    <Grid Grid.Row="3" Margin="0,0,0,6">
+                    <!-- Action buttons -->
+                    <UniformGrid Grid.Row="4" Rows="1" Columns="4" HorizontalAlignment="Stretch">
+                        <Button Content="Bit 읽기"
+                                Command="{Binding ReadBitCommand}"
+                                Style="{StaticResource DialogSecondaryButtonStyle}"
+                                Width="Auto"
+                                Margin="0,0,6,0" />
+                        <Button Content="Bit 쓰기"
+                                Command="{Binding WriteBitCommand}"
+                                Style="{StaticResource DialogPrimaryButtonStyle}"
+                                Width="Auto"
+                                Margin="0,0,6,0" />
+                        <Button Content="데이터 읽기"
+                                Command="{Binding ReadDataCommand}"
+                                Style="{StaticResource DialogSecondaryButtonStyle}"
+                                Width="Auto"
+                                Margin="0,0,6,0" />
+                        <Button Content="데이터 쓰기"
+                                Command="{Binding WriteDataCommand}"
+                                Style="{StaticResource DialogPrimaryButtonStyle}"
+                                Width="Auto" />
+                    </UniformGrid>
+                </Grid>
+            </Border>
+
+            <!-- Section 4: Inspection / judgment panel -->
+            <Border Grid.Row="5" Style="{StaticResource DialogSectionBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="검사 요청 / 결과"
+                               Style="{StaticResource DialogHeaderLabelTextStyle}"
+                               Margin="0,0,0,8" />
+
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="70" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Data(Bit,Word)" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Center" />
-                        <TextBox Grid.Column="1" Text="{Binding WriteData, UpdateSourceTrigger=PropertyChanged}" FontSize="18" VerticalContentAlignment="Center" />
+                        <TextBlock Grid.Column="0"
+                                   Text="Barcode"
+                                   Style="{StaticResource DialogLabelTextStyle}" />
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding Barcode}"
+                                 IsReadOnly="True"
+                                 AutomationProperties.Name="바코드"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Background="{DynamicResource PanelBackgroundBrush}" />
+                        <TextBlock Grid.Column="3"
+                                   Text="SEQ No."
+                                   Style="{StaticResource DialogLabelTextStyle}" />
+                        <TextBox Grid.Column="4"
+                                 Text="{Binding SeqNo}"
+                                 IsReadOnly="True"
+                                 AutomationProperties.Name="시퀀스 번호"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Background="{DynamicResource PanelBackgroundBrush}" />
+                        <Button Grid.Column="6"
+                                Content="결과 읽기"
+                                Command="{Binding ReadInspectionResultCommand}"
+                                Style="{StaticResource DialogSecondaryButtonStyle}"
+                                Width="72" />
                     </Grid>
+                </Grid>
+            </Border>
+        </Grid>
 
-                    <Grid Grid.Row="4">
+        <!-- ===== RIGHT: Connection settings + footer ===== -->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Section title -->
+            <TextBlock Grid.Row="0"
+                       Text="연결 설정"
+                       Style="{StaticResource DialogTitleTextStyle}" />
+
+            <!-- Section 1: Connection / communication settings -->
+            <Border Grid.Row="1" Style="{StaticResource DialogSectionBorderStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
@@ -81,128 +249,130 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Receive Data" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,4" />
-                        <Button Grid.Row="1" Grid.Column="0" Content="Clear" Command="{Binding ClearReceiveCommand}" FontSize="18" Margin="0,4,8,0" Height="36" />
-                        <ListBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding ReceiveData}" />
+                        <!-- Connection status -->
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="연결 상태"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <Border Grid.Row="0" Grid.Column="1"
+                                Height="22"
+                                Margin="0,0,0,6"
+                                CornerRadius="3"
+                                Background="{Binding ConnectionBrush}" />
+
+                        <Separator Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,8" />
+
+                        <!-- IP -->
+                        <TextBlock Grid.Row="2" Grid.Column="0"
+                                   Text="IP 주소"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <TextBox Grid.Row="2" Grid.Column="1"
+                                 Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Margin="0,0,0,6" />
+
+                        <!-- Port -->
+                        <TextBlock Grid.Row="3" Grid.Column="0"
+                                   Text="포트"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <TextBox Grid.Row="3" Grid.Column="1"
+                                 Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Margin="0,0,0,6" />
+
+                        <Separator Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,8" />
+
+                        <!-- Read Address -->
+                        <TextBlock Grid.Row="5" Grid.Column="0"
+                                   Text="읽기 주소"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <TextBox Grid.Row="5" Grid.Column="1"
+                                 Text="{Binding ReadAddress, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Margin="0,0,0,6" />
+
+                        <!-- Read Length -->
+                        <TextBlock Grid.Row="6" Grid.Column="0"
+                                   Text="읽기 길이"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <TextBox Grid.Row="6" Grid.Column="1"
+                                 Text="{Binding ReadLength, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Margin="0,0,0,6" />
+
+                        <!-- Read Unit -->
+                        <TextBlock Grid.Row="7" Grid.Column="0"
+                                   Text="읽기 단위"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <TextBox Grid.Row="7" Grid.Column="1"
+                                 Text="{Binding ReadUnit, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Margin="0,0,0,6" />
+
+                        <!-- Read Interval -->
+                        <TextBlock Grid.Row="8" Grid.Column="0"
+                                   Text="읽기 주기 (ms)"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   Margin="0,0,0,6" />
+                        <TextBox Grid.Row="8" Grid.Column="1"
+                                 Text="{Binding ReadInterval, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Margin="0,0,0,6" />
+
+                        <!-- Write Addr OCR (공병정보요청) -->
+                        <TextBlock Grid.Row="9" Grid.Column="0"
+                                   Text="공병정보요청 주소"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,6" />
+                        <TextBox Grid.Row="9" Grid.Column="1"
+                                 Text="{Binding WriteAddressOcr, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Margin="0,0,0,6" />
+
+                        <!-- Write Addr 1 (공병정보응답) -->
+                        <TextBlock Grid.Row="10" Grid.Column="0"
+                                   Text="공병정보응답 주소"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,6" />
+                        <TextBox Grid.Row="10" Grid.Column="1"
+                                 Text="{Binding WriteAddress1, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Margin="0,0,0,6" />
+
+                        <!-- Write Addr 2 (Palette) -->
+                        <TextBlock Grid.Row="11" Grid.Column="0"
+                                   Text="Palette 데이터 주소"
+                                   Style="{StaticResource DialogLabelTextStyle}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,6" />
+                        <TextBox Grid.Row="11" Grid.Column="1"
+                                 Text="{Binding WriteAddress2, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DialogInputTextBoxStyle}"
+                                 Margin="0,0,0,6" />
                     </Grid>
-                </Grid>
+                </ScrollViewer>
             </Border>
 
-            <Border Grid.Row="1" Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="6" Margin="0,6,0,0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Grid Grid.Row="0" Margin="0,0,0,8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="2*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Tray" FontWeight="Bold" VerticalAlignment="Center" />
-                        <TextBlock Grid.Column="1" Text="Barcode" FontWeight="Bold" VerticalAlignment="Center" />
-                        <TextBox Grid.Column="1" Text="{Binding Barcode}" IsReadOnly="True" Margin="0,20,0,0" Height="24" VerticalContentAlignment="Center" />
-                        <TextBlock Grid.Column="2" Text="SEQNO" FontWeight="Bold" VerticalAlignment="Center" />
-                        <TextBox Grid.Column="2" Text="{Binding SeqNo}" IsReadOnly="True" Margin="0,20,0,0" Height="24" VerticalContentAlignment="Center" />
-                        <TextBlock Grid.Column="3" Text="외관" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                        <CheckBox Grid.Column="3" Content="Off" IsEnabled="False" Margin="0,20,0,0" HorizontalAlignment="Center" />
-                        <TextBlock Grid.Column="4" Text="RF/LABEL" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                        <CheckBox Grid.Column="4" Content="Off" IsEnabled="False" Margin="0,20,0,0" HorizontalAlignment="Center" />
-                    </Grid>
-
-                    <TextBlock Grid.Row="1" Text="(Legacy Tray/Barcode/Result section placeholder)" Foreground="DimGray" FontStyle="Italic" VerticalAlignment="Center" HorizontalAlignment="Center" />
-
-                    <Button Grid.Row="2" Content="공병정보&#10;결과읽기" IsEnabled="False" FontSize="18" FontWeight="Bold" Height="72" Width="160" HorizontalAlignment="Left" />
-                </Grid>
-            </Border>
+            <!-- Footer: Connect / Close -->
+            <StackPanel Grid.Row="2" Style="{StaticResource DialogFooterPanelStyle}">
+                <Button Content="연결"
+                        Command="{Binding ConnectCommand}"
+                        Style="{StaticResource DialogPrimaryButtonStyle}"
+                        Width="90"
+                        Margin="0,0,8,0" />
+                <Button Content="닫기"
+                        IsCancel="True"
+                        Command="{Binding CloseCommand}"
+                        Style="{StaticResource DialogSecondaryButtonStyle}"
+                        Width="80" />
+            </StackPanel>
         </Grid>
-
-        <Border Grid.Column="1" Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="6">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Status" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,4,4" />
-                <Rectangle Grid.Row="0" Grid.Column="1" Fill="{Binding ConnectionBrush}" Height="32" Margin="0,0,0,4" />
-
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="IP" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Port" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Read Address" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ReadAddress, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Read Length" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ReadLength, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="Read Unit" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ReadUnit, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <TextBlock Grid.Row="6" Grid.Column="0" Text="공병정보요청 Addr." FontSize="18" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding WriteAddressOcr, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <TextBlock Grid.Row="7" Grid.Column="0" Text="공병정보응답 Addr." FontSize="18" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding WriteAddress1, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <TextBlock Grid.Row="8" Grid.Column="0" Text="Palette Data Addr." FontSize="18" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding WriteAddress2, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <TextBlock Grid.Row="9" Grid.Column="0" Text="Write Unit" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding WriteUnit, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <TextBlock Grid.Row="10" Grid.Column="0" Text="Read Interval" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding ReadInterval, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <TextBlock Grid.Row="11" Grid.Column="0" Text="Heart Beat" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding HeartbeatAddress, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-
-                <Grid Grid.Row="14" Grid.ColumnSpan="2" Margin="0,8,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Button Grid.Row="0" Grid.Column="0" Content="Bit정보읽기" Command="{Binding ReadBitCommand}" FontSize="20" FontWeight="Bold" Height="52" Margin="0,0,4,6" />
-                    <Button Grid.Row="0" Grid.Column="1" Content="Bit정보쓰기" Command="{Binding WriteBitCommand}" FontSize="20" FontWeight="Bold" Height="52" Margin="4,0,0,6" />
-                    <Button Grid.Row="1" Grid.Column="0" Content="데이타읽기" Command="{Binding ReadDataCommand}" FontSize="20" FontWeight="Bold" Height="52" Margin="0,0,4,0" />
-                    <Button Grid.Row="1" Grid.Column="1" Content="데이타쓰기" Command="{Binding WriteDataCommand}" FontSize="20" FontWeight="Bold" Height="52" Margin="4,0,0,0" />
-                </Grid>
-
-                <StackPanel Grid.Row="15" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
-                    <Button Content="CONNECT" Command="{Binding ConnectCommand}" FontSize="20" FontWeight="Bold" Width="170" Height="56" Margin="0,0,8,0" />
-                    <Button Content="EXIT" Command="{Binding ExitCommand}" FontSize="20" FontWeight="Bold" Width="120" Height="56" />
-                </StackPanel>
-            </Grid>
-        </Border>
     </Grid>
 </dialogs:DialogWindowBase>
