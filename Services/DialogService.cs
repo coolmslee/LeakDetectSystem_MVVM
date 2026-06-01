@@ -1,7 +1,7 @@
+using LeakDetectSystem_MVVM.ViewModels.Dialogs;
+using LeakDetectSystem_MVVM.Views.Dialogs;
 using Microsoft.Win32;
 using System.Windows;
-using LeakDetectSystem_MVVM.Views.Dialogs;
-using LeakDetectSystem_MVVM.ViewModels.Dialogs;
 
 namespace LeakDetectSystem_MVVM.Services
 {
@@ -95,6 +95,110 @@ namespace LeakDetectSystem_MVVM.Services
             
             dialog.Show();
         }
+
+        public IProgressDialogController ShowProgressDialog(
+            string title = "진행 상태",
+            string message = "작업을 준비하는 중입니다.",
+            bool isIndeterminate = true,
+            double progressValue = 0)
+        {
+            ProgressDialog? dialog = null;
+            ProgressDialogViewModel? viewModel = null;
+
+            InvokeOnUiThread(() =>
+            {
+                viewModel = new ProgressDialogViewModel(title, message, progressValue, isIndeterminate);
+                dialog = new ProgressDialog
+                {
+                    //Owner = GetMainWindow(),
+                    DataContext = viewModel
+                };
+                /////////////////
+                // Only set Owner if MainWindow exists and is not the dialog itself
+                var mainWindow = GetMainWindow();
+                if (mainWindow != null && mainWindow != dialog)
+                {
+                    dialog.Owner = mainWindow;
+                }
+                //////////////////
+                dialog.Show();
+            });
+
+            return new ProgressDialogController(dialog!, viewModel!);
+        }
+
         private static Window? GetMainWindow() => Application.Current?.MainWindow;
+
+        private static void InvokeOnUiThread(Action action)
+        {
+            if (Application.Current?.Dispatcher is not { } dispatcher || dispatcher.CheckAccess())
+            {
+                action();
+                return;
+            }
+
+            dispatcher.Invoke(action);
+        }
+
+        private sealed class ProgressDialogController : IProgressDialogController
+        {
+            private readonly ProgressDialog _dialog;
+            private readonly ProgressDialogViewModel _viewModel;
+            private bool _isClosed;
+
+            public ProgressDialogController(ProgressDialog dialog, ProgressDialogViewModel viewModel)
+            {
+                _dialog = dialog;
+                _viewModel = viewModel;
+                _dialog.Closed += (_, _) => _isClosed = true;
+            }
+
+            public void UpdateMessage(string message)
+            {
+                InvokeOnUiThread(() =>
+                {
+                    if (_isClosed)
+                        return;
+
+                    _viewModel.Message = message;
+                });
+            }
+
+            public void UpdateProgress(double value)
+            {
+                InvokeOnUiThread(() =>
+                {
+                    if (_isClosed)
+                        return;
+
+                    _viewModel.ProgressValue = value;
+                });
+            }
+
+            public void SetIndeterminate(bool isIndeterminate)
+            {
+                InvokeOnUiThread(() =>
+                {
+                    if (_isClosed)
+                        return;
+
+                    _viewModel.IsIndeterminate = isIndeterminate;
+                });
+            }
+
+            public void Close()
+            {
+                InvokeOnUiThread(() =>
+                {
+                    if (_isClosed)
+                        return;
+
+                    _isClosed = true;
+                    _dialog.Close();
+                });
+            }
+
+            public void Dispose() => Close();
+        }
     }
 }
