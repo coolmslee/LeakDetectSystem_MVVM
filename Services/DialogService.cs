@@ -44,7 +44,7 @@ namespace LeakDetectSystem_MVVM.Services
                 Title = title,
                 Header = title,
                 Message = message,
-                Buttons = MessageDialogButtons.Close,
+                Buttons = MessageDialogButtons.OK,
                 DialogType = MessageDialogType.Error
             });
         }
@@ -90,7 +90,7 @@ namespace LeakDetectSystem_MVVM.Services
             var dialog = new CameraDialog
             {
                 Owner = GetMainWindow(),
-                DataContext = new CameraDialogViewModel(new CameraConfigIniService(), this)
+                DataContext = new CameraDialogViewModel()
             };
 
             dialog.ShowDialog();

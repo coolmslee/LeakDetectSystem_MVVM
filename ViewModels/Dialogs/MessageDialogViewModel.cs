@@ -10,12 +10,14 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private string _message;
         private string? _inputText;
         private bool _isInputVisible;
-        private string _primaryButtonText = "확인";
-        private string _secondaryButtonText = "취소";
+        private string _primaryButtonText = string.Empty;
+        private string _secondaryButtonText = string.Empty;
         private bool _isPrimaryButtonVisible = true;
         private bool _isSecondaryButtonVisible;
         private bool _isPrimaryDefault = true;
         private bool _isSecondaryCancel;
+        private MessageDialogResult _primaryResult = MessageDialogResult.OK;
+        private MessageDialogResult _secondaryResult = MessageDialogResult.Cancel;
 
         public MessageDialogViewModel(MessageDialogRequest request)
         {
@@ -119,6 +121,8 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             IsSecondaryButtonVisible = false;
             IsPrimaryDefault = true;
             IsSecondaryCancel = false;
+            _primaryResult = MessageDialogResult.OK;
+            _secondaryResult = MessageDialogResult.Cancel;
 
             switch (buttons)
             {
@@ -127,45 +131,40 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                     SecondaryButtonText = "취소";
                     IsSecondaryButtonVisible = true;
                     IsSecondaryCancel = true;
+                    _primaryResult = MessageDialogResult.OK;
+                    _secondaryResult = MessageDialogResult.Cancel;
                     break;
                 case MessageDialogButtons.ContinueStop:
                     PrimaryButtonText = "계속";
                     SecondaryButtonText = "중지";
                     IsSecondaryButtonVisible = true;
+                    _primaryResult = MessageDialogResult.Continue;
+                    _secondaryResult = MessageDialogResult.Stop;
                     break;
                 case MessageDialogButtons.Close:
                     PrimaryButtonText = "닫기";
                     IsPrimaryDefault = false;
                     IsSecondaryCancel = true;
+                    _primaryResult = MessageDialogResult.Close;
                     break;
                 case MessageDialogButtons.OK:
                 default:
                     PrimaryButtonText = "확인";
                     IsSecondaryCancel = true;
+                    _primaryResult = MessageDialogResult.OK;
                     break;
             }
         }
 
         private void HandlePrimaryAction()
         {
-            Result = PrimaryButtonText switch
-            {
-                "계속" => MessageDialogResult.Continue,
-                "닫기" => MessageDialogResult.Close,
-                _ => MessageDialogResult.OK
-            };
-
+            Result = _primaryResult;
             RequestClose();
         }
 
         private void HandleSecondaryAction()
         {
-            Result = SecondaryButtonText switch
-            {
-                "중지" => MessageDialogResult.Stop,
-                _ => MessageDialogResult.Cancel
-            };
-
+            Result = _secondaryResult;
             RequestClose();
         }
     }
