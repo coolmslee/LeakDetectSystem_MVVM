@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -5,6 +6,14 @@ namespace LeakDetectSystem_MVVM.Models
 {
     public class CameraConfig : INotifyPropertyChanged
     {
+        // 유효 범위 상수
+        public const int ExposureTimeMin = 100;
+        public const int ExposureTimeMax = 1_000_000;
+        public const int GainMin = 0;
+        public const int GainMax = 1000;
+        public const int TimeoutMin = 100;
+        public const int TimeoutMax = 60_000;
+
         private bool _use;
         private string _ip = string.Empty;
         private string _videoFormat = "Mono8";
@@ -56,8 +65,9 @@ namespace LeakDetectSystem_MVVM.Models
             get => _exposureTime;
             set
             {
-                if (_exposureTime == value) return;
-                _exposureTime = value;
+                int clamped = Math.Clamp(value, ExposureTimeMin, ExposureTimeMax);
+                if (_exposureTime == clamped) return;
+                _exposureTime = clamped;
                 OnPropertyChanged();
             }
         }
@@ -67,8 +77,9 @@ namespace LeakDetectSystem_MVVM.Models
             get => _gain;
             set
             {
-                if (_gain == value) return;
-                _gain = value;
+                int clamped = Math.Clamp(value, GainMin, GainMax);
+                if (_gain == clamped) return;
+                _gain = clamped;
                 OnPropertyChanged();
             }
         }
@@ -89,8 +100,9 @@ namespace LeakDetectSystem_MVVM.Models
             get => _timeout;
             set
             {
-                if (_timeout == value) return;
-                _timeout = value;
+                int clamped = Math.Clamp(value, TimeoutMin, TimeoutMax);
+                if (_timeout == clamped) return;
+                _timeout = clamped;
                 OnPropertyChanged();
             }
         }

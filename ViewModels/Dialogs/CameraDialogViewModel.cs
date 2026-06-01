@@ -10,6 +10,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
     {
         private readonly ICameraConfigService _cameraConfigService;
         private CameraConfig? _selectedCamera;
+        private string _validationError = string.Empty;
 
         public CameraDialogViewModel()
             : this(new CameraConfigIniService())
@@ -53,6 +54,20 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             set => SetProperty(ref _selectedCamera, value);
         }
 
+        /// <summary>저장 유효성 검사 오류 메시지. 오류가 없으면 빈 문자열.</summary>
+        public string ValidationError
+        {
+            get => _validationError;
+            private set
+            {
+                if (SetProperty(ref _validationError, value))
+                    OnPropertyChanged(nameof(HasValidationError));
+            }
+        }
+
+        /// <summary>유효성 검사 오류가 있는지 여부.</summary>
+        public bool HasValidationError => !string.IsNullOrEmpty(_validationError);
+
         public RelayCommand LoadCommand { get; }
         public RelayCommand SaveCommand { get; }
 
@@ -67,11 +82,34 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             }
 
             SelectedCamera = Cameras.FirstOrDefault();
+            ValidationError = string.Empty;
         }
 
         private void Save()
         {
+            string? error = ValidateCameras();
+            if (error != null)
+            {
+                ValidationError = error;
+                return;
+            }
+
+            ValidationError = string.Empty;
             _cameraConfigService.Save(Cameras);
+        }
+
+        private string? ValidateCameras()
+        {
+            foreach (var camera in Cameras)
+            {
+                if (!camera.Use)
+                    continue;
+
+                if (string.IsNullOrWhiteSpace(camera.Ip))
+                    return $"{camera.Label}: IP 주소를 입력하세요.";
+            }
+
+            return null;
         }
     }
 }

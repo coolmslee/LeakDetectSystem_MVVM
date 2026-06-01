@@ -142,6 +142,23 @@
         </Border>
 
         <StackPanel Grid.Row="2" Style="{StaticResource DialogFooterPanelStyle}">
+            <TextBlock Text="{Binding ValidationError}"
+                       Foreground="Red"
+                       FontSize="11"
+                       VerticalAlignment="Center"
+                       Margin="0,0,12,0">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasValidationError}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
             <Button Content="불러오기"
                     Margin="0,0,8,0"
                     Style="{StaticResource DialogSecondaryButtonStyle}"
