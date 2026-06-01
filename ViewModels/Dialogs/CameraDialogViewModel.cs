@@ -9,17 +9,19 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
     public class CameraDialogViewModel : DialogViewModelBase
     {
         private readonly ICameraConfigService _cameraConfigService;
+        private readonly IDialogService _dialogService;
         private CameraConfig? _selectedCamera;
         private string _validationError = string.Empty;
 
         public CameraDialogViewModel()
-            : this(new CameraConfigIniService())
+            : this(new CameraConfigIniService(), new DialogService())
         {
         }
 
-        public CameraDialogViewModel(ICameraConfigService cameraConfigService)
+        public CameraDialogViewModel(ICameraConfigService cameraConfigService, IDialogService dialogService)
         {
             _cameraConfigService = cameraConfigService;
+            _dialogService = dialogService;
 
             VideoFormats = new ObservableCollection<string>
             {
@@ -91,6 +93,14 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             if (error != null)
             {
                 ValidationError = error;
+                _dialogService.ShowMessageDialog(new MessageDialogRequest
+                {
+                    Title = "카메라 설정",
+                    Header = "저장할 수 없습니다",
+                    Message = error,
+                    Buttons = MessageDialogButtons.Close,
+                    DialogType = MessageDialogType.Error
+                });
                 return;
             }
 
