@@ -32,10 +32,10 @@
                     <TextBlock Text="누액검사 조명"
                                Style="{StaticResource DialogHeaderLabelTextStyle}"
                                FontSize="14"/>
-                    <TextBlock Margin="0,4,0,0"
+                    <!--<TextBlock Margin="0,4,0,0"
                                Text="기존 LightWindow의 누액검사 조명 영역만 유지하고, 현재 다이얼로그 스타일에 맞춰 간단하게 구성했습니다."
                                Foreground="{DynamicResource TextSecondaryBrush}"
-                               TextWrapping="Wrap"/>
+                               TextWrapping="Wrap"/>-->
                 </StackPanel>
 
                 <Separator Grid.Row="1" Margin="0,0,0,12"/>

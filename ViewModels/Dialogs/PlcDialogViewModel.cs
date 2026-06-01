@@ -23,6 +23,9 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private const int BitsPerWord = 16;
         private const int MaxReceiveLogCount = 256;
 
+        private static readonly Brush ConnectedBrush = CreateFrozenBrush(0x2E, 0xCC, 0x71);
+        private static readonly Brush DisconnectedBrush = CreateFrozenBrush(0xE7, 0x4C, 0x3C);
+
         private readonly ModbusPlcClient _plcClient;
         private readonly IDialogService _dialogService;
 
@@ -59,23 +62,23 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
             ConnectCommand = new RelayCommand(Connect);
-            ExitCommand = new RelayCommand(RequestClose);
             ClearReceiveCommand = new RelayCommand(() => ReceiveData.Clear());
             ReadBitCommand = new RelayCommand(ReadBit);
             WriteBitCommand = new RelayCommand(WriteBit);
             ReadDataCommand = new RelayCommand(ReadData);
             WriteDataCommand = new RelayCommand(WriteDataToPlc);
+            ReadInspectionResultCommand = new RelayCommand(ReadInspectionResult, () => IsConnected);
         }
 
         public ObservableCollection<string> ReceiveData { get; } = new();
 
         public ICommand ConnectCommand { get; }
-        public ICommand ExitCommand { get; }
         public ICommand ClearReceiveCommand { get; }
         public ICommand ReadBitCommand { get; }
         public ICommand WriteBitCommand { get; }
         public ICommand ReadDataCommand { get; }
         public ICommand WriteDataCommand { get; }
+        public RelayCommand ReadInspectionResultCommand { get; }
 
         public string StartAddress
         {
@@ -153,11 +156,12 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                 if (SetProperty(ref _isConnected, value))
                 {
                     OnPropertyChanged(nameof(ConnectionBrush));
+                    ReadInspectionResultCommand?.RaiseCanExecuteChanged();
                 }
             }
         }
 
-        public Brush ConnectionBrush => IsConnected ? Brushes.Lime : Brushes.Red;
+        public Brush ConnectionBrush => IsConnected ? ConnectedBrush : DisconnectedBrush;
 
         public string IpAddress
         {
@@ -396,6 +400,35 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                 _dialogService.ShowError($"데이터 쓰기에 실패했습니다.\n{ex.Message}", "PLC 쓰기 실패");
             }
         }
+
+        private void ReadInspectionResult()
+        {
+            if (!EnsureConnected())
+            {
+                return;
+            }
+
+            if (!TryParseAddress(WriteAddress1, out ushort responseAddress))
+            {
+                AddReceiveStr($"[Error] Invalid inspection response address: {WriteAddress1}");
+                _dialogService.ShowError($"공병정보응답 주소가 올바르지 않습니다: {WriteAddress1}", "PLC 읽기 오류");
+                return;
+            }
+
+            try
+            {
+                ushort[] values = _plcClient.ReadHoldingRegisters(responseAddress, 4);
+                string formatted = FormatReadData(values);
+                AddReceiveStr($"Inspection Result [{responseAddress}]: {formatted}");
+            }
+            catch (Exception ex)
+            {
+                AddReceiveStr($"[Error] Inspection result read failed: {ex.Message}");
+                IsConnected = _plcClient.IsConnected;
+                _dialogService.ShowError($"검사 결과 읽기에 실패했습니다.\n{ex.Message}", "PLC 읽기 실패");
+            }
+        }
+
 
         private bool TryBuildWriteWords(out ushort[] words, out string error)
         {
@@ -653,6 +686,13 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             }
 
             return TryParseAddress(displayAddress, out coilAddress);
+        }
+
+        private static Brush CreateFrozenBrush(byte r, byte g, byte b)
+        {
+            var brush = new SolidColorBrush(Color.FromRgb(r, g, b));
+            brush.Freeze();
+            return brush;
         }
     }
 }
