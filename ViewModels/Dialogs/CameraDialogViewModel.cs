@@ -106,6 +106,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 
             ValidationError = string.Empty;
             _cameraConfigService.Save(Cameras);
+            _dialogService.ShowMessage("카메라 설정이 저장되었습니다.", "카메라 설정");
         }
 
         private string? ValidateCameras()
