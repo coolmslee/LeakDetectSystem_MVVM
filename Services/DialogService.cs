@@ -8,16 +8,49 @@ namespace LeakDetectSystem_MVVM.Services
     public class DialogService : IDialogService
     {
         public void ShowMessage(string message, string title = "알림")
-            => MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+        {
+            ShowMessageDialog(new MessageDialogRequest
+            {
+                Title = title,
+                Header = title,
+                Message = message,
+                Buttons = MessageDialogButtons.OK,
+                DialogType = MessageDialogType.Info
+            });
+        }
 
         public bool ShowConfirmation(string message, string title = "확인")
         {
-            var result = MessageBox.Show(message, title, MessageBoxButton.OKCancel, MessageBoxImage.Question);
-            return result == MessageBoxResult.OK;
+            MessageDialogResult result = MessageDialogResult.None;
+            ShowMessageDialogInternal(
+                new MessageDialogRequest
+                {
+                    Title = title,
+                    Header = title,
+                    Message = message,
+                    Buttons = MessageDialogButtons.OKCancel,
+                    DialogType = MessageDialogType.Question
+                },
+                isModal: true,
+                (dialogResult, _) => result = dialogResult);
+
+            return result == MessageDialogResult.OK;
         }
 
         public void ShowError(string message, string title = "오류")
-            => MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
+        {
+            ShowMessageDialog(new MessageDialogRequest
+            {
+                Title = title,
+                Header = title,
+                Message = message,
+                Buttons = MessageDialogButtons.OK,
+                DialogType = MessageDialogType.Error
+            });
+        }
+
+        public void ShowMessageDialog(MessageDialogRequest request, Action<MessageDialogResult, string?>? onCompleted = null)
+            => ShowMessageDialogInternal(request, isModal: false, onCompleted);
 
         public string? ShowOpenFileDialog(string filter = "All Files (*.*)|*.*")
         {
@@ -128,6 +161,31 @@ namespace LeakDetectSystem_MVVM.Services
         }
 
         private static Window? GetMainWindow() => Application.Current?.MainWindow;
+
+        private void ShowMessageDialogInternal(
+            MessageDialogRequest request,
+            bool isModal,
+            Action<MessageDialogResult, string?>? onCompleted)
+        {
+            ArgumentNullException.ThrowIfNull(request);
+
+            InvokeOnUiThread(() =>
+            {
+                var viewModel = new MessageDialogViewModel(request);
+                var dialog = new MessageDialog
+                {
+                    Owner = GetMainWindow(),
+                    DataContext = viewModel
+                };
+
+                dialog.Closed += (_, _) => onCompleted?.Invoke(viewModel.Result, viewModel.InputText);
+
+                if (isModal)
+                    dialog.ShowDialog();
+                else
+                    dialog.Show();
+            });
+        }
 
         private static void InvokeOnUiThread(Action action)
         {

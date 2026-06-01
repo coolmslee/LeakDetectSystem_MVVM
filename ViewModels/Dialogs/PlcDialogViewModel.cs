@@ -1,5 +1,6 @@
 using LeakDetectSystem_MVVM.Commands;
 using LeakDetectSystem_MVVM.Comm.Plc;
+using LeakDetectSystem_MVVM.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -22,7 +23,8 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private const int BitsPerWord = 16;
         private const int MaxReceiveLogCount = 256;
 
-        private readonly ModbusPlcClient _plcClient = new();
+        private readonly ModbusPlcClient _plcClient;
+        private readonly IDialogService _dialogService;
 
         private string _startAddress = "0";
         private string _startLength = "10";
@@ -47,7 +49,15 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private string _seqNo = "-";
 
         public PlcDialogViewModel()
+            : this(new ModbusPlcClient(), new DialogService())
         {
+        }
+
+        public PlcDialogViewModel(ModbusPlcClient plcClient, IDialogService dialogService)
+        {
+            _plcClient = plcClient ?? throw new ArgumentNullException(nameof(plcClient));
+            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+
             ConnectCommand = new RelayCommand(Connect);
             ExitCommand = new RelayCommand(RequestClose);
             ClearReceiveCommand = new RelayCommand(() => ReceiveData.Clear());
@@ -232,6 +242,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             if (!TryParseUShort(Port, out ushort port))
             {
                 AddReceiveStr($"[Error] Invalid Port: {Port}");
+                _dialogService.ShowError($"포트 값이 올바르지 않습니다: {Port}", "PLC 연결 오류");
                 return;
             }
 
@@ -240,11 +251,16 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                 _plcClient.Connect(IpAddress.Trim(), port);
                 IsConnected = _plcClient.IsConnected;
                 AddReceiveStr($"Connect [{IpAddress}:{port}] => {IsConnected}");
+                if (!IsConnected)
+                {
+                    _dialogService.ShowError("PLC 연결에 실패했습니다. IP/Port를 확인하세요.", "PLC 연결 실패");
+                }
             }
             catch (Exception ex)
             {
                 IsConnected = false;
                 AddReceiveStr($"[Error] Connect failed: {ex.Message}");
+                _dialogService.ShowError($"PLC 연결 중 오류가 발생했습니다.\n{ex.Message}", "PLC 연결 실패");
             }
         }
 
@@ -283,6 +299,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             if (!TryParseLegacyCoilAddress(StartAddress, out ushort address, out string addressDisplay))
             {
                 AddReceiveStr($"[Error] Invalid Start Address for bit write: {StartAddress}");
+                _dialogService.ShowError($"비트 쓰기 주소가 올바르지 않습니다: {StartAddress}", "PLC 쓰기 오류");
                 return;
             }
 
@@ -290,6 +307,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             if (!bitValue)
             {
                 AddReceiveStr($"[Error] Invalid Write Data for bit write: {WriteData}");
+                _dialogService.ShowError($"비트 쓰기 값이 올바르지 않습니다: {WriteData}", "PLC 쓰기 오류");
                 return;
             }
 
@@ -302,6 +320,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             {
                 AddReceiveStr($"[Error] Bit write failed: {ex.Message}");
                 IsConnected = _plcClient.IsConnected;
+                _dialogService.ShowError($"비트 쓰기에 실패했습니다.\n{ex.Message}", "PLC 쓰기 실패");
             }
         }
 
@@ -346,12 +365,22 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             if (!TryParseAddress(StartAddress, out ushort startAddress))
             {
                 AddReceiveStr($"[Error] Invalid Start Address: {StartAddress}");
+                _dialogService.ShowError($"쓰기 시작 주소가 올바르지 않습니다: {StartAddress}", "PLC 쓰기 오류");
                 return;
             }
 
             if (!TryBuildWriteWords(out ushort[] words, out string error))
             {
                 AddReceiveStr($"[Error] {error}");
+                _dialogService.ShowError(error, "PLC 쓰기 오류");
+                return;
+            }
+
+            if (!_dialogService.ShowConfirmation(
+                    $"시작 주소 {startAddress}에 {words.Length}개 워드를 기록합니다. 계속하시겠습니까?",
+                    "PLC 쓰기 확인"))
+            {
+                AddReceiveStr("[Info] PLC write canceled by user.");
                 return;
             }
 
@@ -364,6 +393,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             {
                 AddReceiveStr($"[Error] Data write failed: {ex.Message}");
                 IsConnected = _plcClient.IsConnected;
+                _dialogService.ShowError($"데이터 쓰기에 실패했습니다.\n{ex.Message}", "PLC 쓰기 실패");
             }
         }
 
@@ -536,6 +566,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             }
 
             AddReceiveStr("[Error] PLC is not connected.");
+            _dialogService.ShowError("PLC가 연결되어 있지 않습니다. 먼저 연결을 수행하세요.", "PLC 연결 필요");
             return false;
         }
 

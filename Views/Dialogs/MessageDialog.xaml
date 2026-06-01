@@ -1,0 +1,110 @@
+<dialogs:DialogWindowBase x:Class="LeakDetectSystem_MVVM.Views.Dialogs.MessageDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialogs="clr-namespace:LeakDetectSystem_MVVM.Views.Dialogs"
+        xmlns:services="clr-namespace:LeakDetectSystem_MVVM.Services"
+        Title="{Binding Title}"
+        Height="280"
+        Width="520"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{DynamicResource SurfaceBrush}">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Border CornerRadius="4"
+                    Padding="8,3"
+                    Margin="0,0,8,0"
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource CardBorderBrush}">
+                <TextBlock Text="{Binding DialogTypeText}"
+                           FontWeight="SemiBold">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DialogType}" Value="{x:Static services:MessageDialogType.Warning}">
+                                    <Setter Property="Foreground" Value="#E67E22"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding DialogType}" Value="{x:Static services:MessageDialogType.Error}">
+                                    <Setter Property="Foreground" Value="#E74C3C"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding DialogType}" Value="{x:Static services:MessageDialogType.Question}">
+                                    <Setter Property="Foreground" Value="#2D7FF9"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Border>
+
+            <TextBlock Text="{Binding Header}"
+                       Style="{StaticResource DialogTitleTextStyle}"
+                       Margin="0"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource DialogSectionBorderStyle}">
+            <TextBlock Text="{Binding Message}"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Center"
+                       FontSize="15"
+                       MinHeight="90"
+                       Foreground="{DynamicResource TextPrimaryBrush}"/>
+        </Border>
+
+        <TextBox Grid.Row="2"
+                 Margin="0,10,0,0"
+                 Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource DialogInputTextBoxStyle}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsInputVisible}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <StackPanel Grid.Row="3" Style="{StaticResource DialogFooterPanelStyle}">
+            <Button Content="{Binding SecondaryButtonText}"
+                    Margin="0,0,8,0"
+                    Command="{Binding SecondaryCommand}"
+                    IsCancel="{Binding IsSecondaryCancel}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource DialogSecondaryButtonStyle}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSecondaryButtonVisible}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <Button Content="{Binding PrimaryButtonText}"
+                    Command="{Binding PrimaryCommand}"
+                    IsDefault="{Binding IsPrimaryDefault}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource DialogPrimaryButtonStyle}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsPrimaryButtonVisible}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+    </Grid>
+</dialogs:DialogWindowBase>
