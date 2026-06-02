@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dialogs="clr-namespace:LeakDetectSystem_MVVM.Views.Dialogs"
         Title="Light 설정"
-        Height="500"
+        Height="540"
         Width="540"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
@@ -24,6 +24,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
@@ -38,9 +39,24 @@
                                TextWrapping="Wrap"/>-->
                 </StackPanel>
 
-                <Separator Grid.Row="1" Margin="0,0,0,12"/>
+                <!-- COM Port -->
+                <Grid Grid.Row="1" Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="COM 포트"
+                               Style="{StaticResource DialogLabelTextStyle}"
+                               VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1"
+                             Text="{Binding ComPort, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource DialogInputTextBoxStyle}"/>
+                </Grid>
 
-                <ScrollViewer Grid.Row="2"
+                <Separator Grid.Row="2" Margin="0,0,0,12"/>
+
+                <ScrollViewer Grid.Row="3"
                               VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding Channels}">
                         <ItemsControl.ItemTemplate>
@@ -110,7 +126,7 @@
                     </ItemsControl>
                 </ScrollViewer>
 
-                <TextBlock Grid.Row="3"
+                <TextBlock Grid.Row="4"
                            Margin="0,4,0,0"
                            Text="{Binding StatusMessage}"
                            Foreground="{DynamicResource TextSecondaryBrush}"
@@ -119,9 +135,13 @@
         </Border>
 
         <StackPanel Grid.Row="2" Style="{StaticResource DialogFooterPanelStyle}">
-            <Button Content="적용"
+            <Button Content="저장"
                     Margin="0,0,8,0"
                     Style="{StaticResource DialogPrimaryButtonStyle}"
+                    Command="{Binding SaveCommand}"/>
+            <Button Content="적용"
+                    Margin="0,0,8,0"
+                    Style="{StaticResource DialogSecondaryButtonStyle}"
                     Command="{Binding ApplyCommand}"/>
             <Button Content="닫기"
                     IsCancel="True"
