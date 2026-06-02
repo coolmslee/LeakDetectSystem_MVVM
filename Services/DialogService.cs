@@ -143,10 +143,17 @@ namespace LeakDetectSystem_MVVM.Services
                 viewModel = new ProgressDialogViewModel(title, message, progressValue, isIndeterminate);
                 dialog = new ProgressDialog
                 {
-                    Owner = GetMainWindow(),
+                    //Owner = GetMainWindow(),
                     DataContext = viewModel
                 };
-
+                /////////////////
+                // Only set Owner if MainWindow exists and is not the dialog itself
+                var mainWindow = GetMainWindow();
+                if (mainWindow != null && mainWindow != dialog)
+                {
+                    dialog.Owner = mainWindow;
+                }
+                //////////////////
                 dialog.Show();
             });
 
