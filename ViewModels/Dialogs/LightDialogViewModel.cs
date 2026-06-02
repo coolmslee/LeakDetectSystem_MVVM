@@ -4,6 +4,7 @@ using LeakDetectSystem_MVVM.Services;
 using LeakDetectSystem_MVVM.ViewModels.Base;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 {
@@ -11,8 +12,8 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
     {
         private readonly ILightConfigService _lightConfigService;
         private readonly IDialogService _dialogService;
-        private string _statusMessage = "사용 여부와 밝기를 조정한 뒤 적용을 눌러 반영하세요.";
-        private string _comPort = string.Empty;
+        private string _statusMessage = "컨트롤러를 선택하고 포트/채널 설정을 편집하세요.";
+        private LightControllerSettingViewModel? _selectedController;
 
         public LightDialogViewModel()
             : this(new LightConfigIniService(), new DialogService())
@@ -24,21 +25,32 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             _lightConfigService = lightConfigService;
             _dialogService = dialogService;
 
-            Channels = new ObservableCollection<LightChannelSettingViewModel>
-            {
-                new("CH1", true, 100),
-                new("CH2", true, 100),
-                new("CH3", false, 0),
-                new("CH4", false, 0)
-            };
+            Controllers = new ObservableCollection<LightControllerSettingViewModel>();
 
+            AddControllerCommand = new RelayCommand(AddController);
+            RemoveControllerCommand = new RelayCommand(RemoveSelectedController, () => SelectedController != null && Controllers.Count > 1);
             ApplyCommand = new RelayCommand(Apply);
             SaveCommand = new RelayCommand(Save);
 
             LoadFromIni();
         }
 
-        public ObservableCollection<LightChannelSettingViewModel> Channels { get; }
+        public ObservableCollection<LightControllerSettingViewModel> Controllers { get; }
+
+        public LightControllerSettingViewModel? SelectedController
+        {
+            get => _selectedController;
+            set
+            {
+                if (SetProperty(ref _selectedController, value))
+                {
+                    OnPropertyChanged(nameof(HasSelectedController));
+                    RemoveControllerCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public bool HasSelectedController => SelectedController != null;
 
         public string StatusMessage
         {
@@ -46,12 +58,8 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             private set => SetProperty(ref _statusMessage, value);
         }
 
-        public string ComPort
-        {
-            get => _comPort;
-            set => SetProperty(ref _comPort, value);
-        }
-
+        public RelayCommand AddControllerCommand { get; }
+        public RelayCommand RemoveControllerCommand { get; }
         public RelayCommand ApplyCommand { get; }
         public RelayCommand SaveCommand { get; }
 
@@ -59,48 +67,75 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         {
             try
             {
-                LightConfig cfg = _lightConfigService.Load();
-                ApplyConfigToChannels(cfg);
-                ComPort = cfg.ComPort;
+                ApplyConfig(_lightConfigService.Load());
+                StatusMessage = $"{Controllers.Count}개의 조명 컨트롤러 설정을 불러왔습니다.";
             }
             catch (Exception ex)
             {
+                ApplyConfig(LightConfig.CreateDefault());
                 StatusMessage = $"설정 로드 실패: {ex.Message}";
             }
         }
 
-        private void ApplyConfigToChannels(LightConfig cfg)
+        private void ApplyConfig(LightConfig config)
         {
-            if (Channels.Count < 4)
-                return;
+            Controllers.Clear();
 
-            Channels[0].IsEnabled = cfg.Ch1Enabled;
-            Channels[0].Brightness = cfg.Ch1Brightness;
-            Channels[1].IsEnabled = cfg.Ch2Enabled;
-            Channels[1].Brightness = cfg.Ch2Brightness;
-            Channels[2].IsEnabled = cfg.Ch3Enabled;
-            Channels[2].Brightness = cfg.Ch3Brightness;
-            Channels[3].IsEnabled = cfg.Ch4Enabled;
-            Channels[3].Brightness = cfg.Ch4Brightness;
+            foreach (LightControllerConfig controller in config.Controllers)
+            {
+                Controllers.Add(new LightControllerSettingViewModel(controller));
+            }
+
+            if (Controllers.Count == 0)
+            {
+                Controllers.Add(new LightControllerSettingViewModel(LightControllerConfig.CreateDefault(1)));
+            }
+
+            SelectedController = Controllers.FirstOrDefault();
+            RemoveControllerCommand.RaiseCanExecuteChanged();
+        }
+
+        private void AddController()
+        {
+            int controllerIndex = Controllers.Count + 1;
+            var controller = new LightControllerSettingViewModel(LightControllerConfig.CreateDefault(controllerIndex));
+
+            Controllers.Add(controller);
+            SelectedController = controller;
+            StatusMessage = $"컨트롤러 {controllerIndex}이(가) 추가되었습니다.";
+            RemoveControllerCommand.RaiseCanExecuteChanged();
+        }
+
+        private void RemoveSelectedController()
+        {
+            if (SelectedController == null || Controllers.Count <= 1)
+            {
+                return;
+            }
+
+            int removedIndex = Controllers.IndexOf(SelectedController);
+            Controllers.Remove(SelectedController);
+            SelectedController = Controllers[Math.Max(0, removedIndex - 1)];
+            StatusMessage = "선택한 컨트롤러를 목록에서 제거했습니다.";
+            RemoveControllerCommand.RaiseCanExecuteChanged();
         }
 
         private void Apply()
         {
-            foreach (LightChannelSettingViewModel channel in Channels)
+            foreach (LightControllerSettingViewModel controller in Controllers)
             {
-                channel.Apply();
+                controller.Apply();
             }
 
             StatusMessage = $"마지막 적용: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
-            _dialogService.ShowMessage("누액검사 조명 설정이 적용되었습니다.", "Light 설정");
+            _dialogService.ShowMessage("조명 컨트롤러 설정이 적용되었습니다.", "Light 설정");
         }
 
         private void Save()
         {
             try
             {
-                var cfg = BuildConfig();
-                _lightConfigService.Save(cfg);
+                _lightConfigService.Save(BuildConfig());
                 StatusMessage = $"저장 완료: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
                 _dialogService.ShowMessage("조명 설정이 저장되었습니다.", "Light 설정");
             }
@@ -114,37 +149,92 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         {
             return new LightConfig
             {
-                Ch1Enabled   = Channels[0].IsEnabled,
-                Ch1Brightness = Channels[0].Brightness,
-                Ch2Enabled   = Channels[1].IsEnabled,
-                Ch2Brightness = Channels[1].Brightness,
-                Ch3Enabled   = Channels[2].IsEnabled,
-                Ch3Brightness = Channels[2].Brightness,
-                Ch4Enabled   = Channels[3].IsEnabled,
-                Ch4Brightness = Channels[3].Brightness,
-                ComPort      = ComPort
+                Controllers = Controllers.Select(controller => controller.ToModel()).ToList()
+            };
+        }
+    }
+
+    public class LightControllerSettingViewModel : ViewModelBase
+    {
+        private string _name;
+        private string _comPort;
+        private bool _isEnabled;
+
+        public LightControllerSettingViewModel(LightControllerConfig config)
+        {
+            _name = config.Name;
+            _comPort = config.ComPort;
+            _isEnabled = config.Use;
+
+            Channels = new ObservableCollection<LightChannelSettingViewModel>(
+                config.Channels.Select(channel => new LightChannelSettingViewModel(channel)));
+        }
+
+        public ObservableCollection<LightChannelSettingViewModel> Channels { get; }
+
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value, () => OnPropertyChanged(nameof(DisplayName)));
+        }
+
+        public string ComPort
+        {
+            get => _comPort;
+            set => SetProperty(ref _comPort, value, () => OnPropertyChanged(nameof(SummaryText)));
+        }
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set => SetProperty(ref _isEnabled, value, () => OnPropertyChanged(nameof(SummaryText)));
+        }
+
+        public string DisplayName => string.IsNullOrWhiteSpace(Name) ? "이름 없는 컨트롤러" : Name;
+        public string SummaryText => $"{(string.IsNullOrWhiteSpace(ComPort) ? "포트 미지정" : ComPort)} · {(IsEnabled ? "사용" : "미사용")}";
+
+        public void Apply()
+        {
+            foreach (LightChannelSettingViewModel channel in Channels)
+            {
+                channel.Apply();
+            }
+        }
+
+        public LightControllerConfig ToModel()
+        {
+            return new LightControllerConfig
+            {
+                Name = Name,
+                ComPort = ComPort,
+                Use = IsEnabled,
+                Channels = Channels.Select(channel => channel.ToModel()).ToList()
             };
         }
     }
 
     public class LightChannelSettingViewModel : ViewModelBase
     {
-        private readonly string _channelName;
+        private string _channelName;
         private bool _isEnabled;
         private bool _currentEnabled;
         private int _brightness;
         private int _currentBrightness;
 
-        public LightChannelSettingViewModel(string channelName, bool isEnabled, int brightness)
+        public LightChannelSettingViewModel(LightChannelConfig config)
         {
-            _channelName = channelName;
-            _isEnabled = isEnabled;
-            _brightness = NormalizeBrightness(brightness);
-            _currentEnabled = isEnabled;
-            _currentBrightness = isEnabled ? _brightness : 0;
+            _channelName = config.Name;
+            _isEnabled = config.Use;
+            _brightness = NormalizeBrightness(config.Brightness);
+            _currentEnabled = _isEnabled;
+            _currentBrightness = _isEnabled ? _brightness : 0;
         }
 
-        public string ChannelName => _channelName;
+        public string ChannelName
+        {
+            get => _channelName;
+            set => SetProperty(ref _channelName, value);
+        }
 
         public bool IsEnabled
         {
@@ -159,11 +249,8 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         }
 
         public bool CurrentEnabled => _currentEnabled;
-
         public int CurrentBrightness => _currentBrightness;
-
         public string PendingValueText => IsEnabled ? $"{Brightness:000}" : "OFF";
-
         public string CurrentValueText => CurrentEnabled ? $"현재 {CurrentBrightness:000}" : "현재 OFF";
 
         public void Apply()
@@ -177,6 +264,16 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             {
                 OnPropertyChanged(nameof(CurrentValueText));
             }
+        }
+
+        public LightChannelConfig ToModel()
+        {
+            return new LightChannelConfig
+            {
+                Name = ChannelName,
+                Use = IsEnabled,
+                Brightness = Brightness
+            };
         }
 
         private static int NormalizeBrightness(int value) => Math.Clamp(value, 0, 255);
