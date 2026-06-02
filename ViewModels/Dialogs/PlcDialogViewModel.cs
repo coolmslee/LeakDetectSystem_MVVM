@@ -248,6 +248,61 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             set => SetProperty(ref _seqNo, value);
         }
 
+        private void LoadFromIni()
+        {
+            try
+            {
+                PlcConfig cfg = _plcConfigService.Load();
+                IpAddress        = cfg.IpAddress;
+                Port             = cfg.Port;
+                ReadAddress      = cfg.ReadAddress;
+                ReadLength       = cfg.ReadLength;
+                ReadUnit         = cfg.ReadUnit;
+                WriteAddressOcr  = cfg.WriteAddressOcr;
+                WriteAddress1    = cfg.WriteAddress1;
+                WriteAddress2    = cfg.WriteAddress2;
+                WriteUnit        = cfg.WriteUnit;
+                ReadInterval     = cfg.ReadInterval;
+                HeartbeatAddress = cfg.HeartbeatAddress;
+                if (System.Enum.TryParse<PlcDisplayMode>(cfg.DisplayMode, out PlcDisplayMode mode))
+                {
+                    DisplayMode = mode;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                AddReceiveStr($"[Error] 설정 로드 실패: {ex.Message}");
+            }
+        }
+
+        private void Save()
+        {
+            try
+            {
+                var cfg = new PlcConfig
+                {
+                    IpAddress        = IpAddress,
+                    Port             = Port,
+                    ReadAddress      = ReadAddress,
+                    ReadLength       = ReadLength,
+                    ReadUnit         = ReadUnit,
+                    WriteAddressOcr  = WriteAddressOcr,
+                    WriteAddress1    = WriteAddress1,
+                    WriteAddress2    = WriteAddress2,
+                    WriteUnit        = WriteUnit,
+                    ReadInterval     = ReadInterval,
+                    HeartbeatAddress = HeartbeatAddress,
+                    DisplayMode      = DisplayMode.ToString()
+                };
+                _plcConfigService.Save(cfg);
+                _dialogService.ShowMessage("PLC 설정이 저장되었습니다.", "PLC 설정");
+            }
+            catch (System.Exception ex)
+            {
+                _dialogService.ShowError($"PLC 설정 저장 중 오류가 발생했습니다.\n{ex.Message}", "PLC 설정 오류");
+            }
+        }
+
         private void Connect()
         {
             if (!TryParseUShort(Port, out ushort port))
