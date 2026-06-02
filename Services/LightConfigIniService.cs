@@ -39,33 +39,43 @@ namespace LeakDetectSystem_MVVM.Services
         public void Save(LightConfig config)
         {
             var normalized = NormalizeConfig(config);
+            string tempPath = $"{_filePath}.tmp";
 
-            if (File.Exists(_filePath))
+            if (File.Exists(tempPath))
             {
-                File.Delete(_filePath);
+                File.Delete(tempPath);
             }
 
-            WriteString(RootSection, "ControllerCount", normalized.Controllers.Count.ToString());
+            WriteString(tempPath, RootSection, "ControllerCount", normalized.Controllers.Count.ToString());
 
             for (int controllerIndex = 0; controllerIndex < normalized.Controllers.Count; controllerIndex++)
             {
                 LightControllerConfig controller = normalized.Controllers[controllerIndex];
                 string controllerSection = GetControllerSection(controllerIndex + 1);
 
-                WriteString(controllerSection, "Name", controller.Name);
-                WriteString(controllerSection, "ComPort", controller.ComPort);
-                WriteString(controllerSection, "Use", controller.Use ? "1" : "0");
-                WriteString(controllerSection, "ChannelCount", controller.Channels.Count.ToString());
+                WriteString(tempPath, controllerSection, "Name", controller.Name);
+                WriteString(tempPath, controllerSection, "ComPort", controller.ComPort);
+                WriteString(tempPath, controllerSection, "Use", controller.Use ? "1" : "0");
+                WriteString(tempPath, controllerSection, "ChannelCount", controller.Channels.Count.ToString());
 
                 for (int channelIndex = 0; channelIndex < controller.Channels.Count; channelIndex++)
                 {
                     LightChannelConfig channel = controller.Channels[channelIndex];
                     string channelSection = GetChannelSection(controllerIndex + 1, channelIndex + 1);
 
-                    WriteString(channelSection, "Name", channel.Name);
-                    WriteString(channelSection, "Use", channel.Use ? "1" : "0");
-                    WriteString(channelSection, "Brightness", NormalizeBrightness(channel.Brightness).ToString());
+                    WriteString(tempPath, channelSection, "Name", channel.Name);
+                    WriteString(tempPath, channelSection, "Use", channel.Use ? "1" : "0");
+                    WriteString(tempPath, channelSection, "Brightness", NormalizeBrightness(channel.Brightness).ToString());
                 }
+            }
+
+            if (File.Exists(_filePath))
+            {
+                File.Replace(tempPath, _filePath, null);
+            }
+            else
+            {
+                File.Move(tempPath, _filePath);
             }
         }
 
@@ -76,7 +86,11 @@ namespace LeakDetectSystem_MVVM.Services
             for (int controllerIndex = 1; controllerIndex <= controllerCount; controllerIndex++)
             {
                 string controllerSection = GetControllerSection(controllerIndex);
-                int channelCount = Math.Max(MinimumChannelCount, ReadInt(controllerSection, "ChannelCount", MinimumChannelCount));
+                int channelCount = ReadInt(controllerSection, "ChannelCount", MinimumChannelCount);
+                if (channelCount < MinimumChannelCount)
+                {
+                    channelCount = MinimumChannelCount;
+                }
 
                 var controller = new LightControllerConfig
                 {
@@ -198,6 +212,11 @@ namespace LeakDetectSystem_MVVM.Services
         private void WriteString(string section, string key, string value)
         {
             WritePrivateProfileString(section, key, value, _filePath);
+        }
+
+        private static void WriteString(string filePath, string section, string key, string value)
+        {
+            WritePrivateProfileString(section, key, value, filePath);
         }
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]

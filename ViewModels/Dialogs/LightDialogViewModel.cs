@@ -5,6 +5,7 @@ using LeakDetectSystem_MVVM.ViewModels.Base;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 {
@@ -14,6 +15,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private readonly IDialogService _dialogService;
         private string _statusMessage = "컨트롤러를 선택하고 포트/채널 설정을 편집하세요.";
         private LightControllerSettingViewModel? _selectedController;
+        private int _nextControllerNumber = 1;
 
         public LightDialogViewModel()
             : this(new LightConfigIniService(), new DialogService())
@@ -91,18 +93,19 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                 Controllers.Add(new LightControllerSettingViewModel(LightControllerConfig.CreateDefault(1)));
             }
 
+            _nextControllerNumber = GetNextControllerNumber();
             SelectedController = Controllers.FirstOrDefault();
             RemoveControllerCommand.RaiseCanExecuteChanged();
         }
 
         private void AddController()
         {
-            int controllerIndex = Controllers.Count + 1;
-            var controller = new LightControllerSettingViewModel(LightControllerConfig.CreateDefault(controllerIndex));
+            int controllerNumber = _nextControllerNumber++;
+            var controller = new LightControllerSettingViewModel(LightControllerConfig.CreateDefault(controllerNumber));
 
             Controllers.Add(controller);
             SelectedController = controller;
-            StatusMessage = $"컨트롤러 {controllerIndex}이(가) 추가되었습니다.";
+            StatusMessage = $"컨트롤러 {controllerNumber}이(가) 추가되었습니다.";
             RemoveControllerCommand.RaiseCanExecuteChanged();
         }
 
@@ -151,6 +154,22 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             {
                 Controllers = Controllers.Select(controller => controller.ToModel()).ToList()
             };
+        }
+
+        private int GetNextControllerNumber()
+        {
+            int maxNumber = 0;
+
+            foreach (LightControllerSettingViewModel controller in Controllers)
+            {
+                Match match = Regex.Match(controller.DisplayName, @"Light Controller (\d+)$");
+                if (match.Success && int.TryParse(match.Groups[1].Value, out int number) && number > maxNumber)
+                {
+                    maxNumber = number;
+                }
+            }
+
+            return Math.Max(maxNumber + 1, Controllers.Count + 1);
         }
     }
 
