@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dialogs="clr-namespace:LeakDetectSystem_MVVM.Views.Dialogs"
         Title="Light 설정"
-        Height="540"
-        Width="540"
+        Height="640"
+        Width="900"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Background="{DynamicResource SurfaceBrush}">
@@ -23,111 +23,224 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Margin="0,0,0,12">
-                    <TextBlock Text="누액검사 조명"
+                    <TextBlock Text="컨트롤러 / 포트 기반 조명 설정"
                                Style="{StaticResource DialogHeaderLabelTextStyle}"
                                FontSize="14"/>
-                    <!--<TextBlock Margin="0,4,0,0"
-                               Text="기존 LightWindow의 누액검사 조명 영역만 유지하고, 현재 다이얼로그 스타일에 맞춰 간단하게 구성했습니다."
+                    <TextBlock Margin="0,4,0,0"
+                               Text="컨트롤러별 이름, COM 포트, 사용 여부와 채널 설정을 편집할 수 있습니다."
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                TextWrapping="Wrap"/>-->
                 </StackPanel>
 
-                <!-- COM Port -->
-                <Grid Grid.Row="1" Margin="0,0,0,12">
+                <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="16"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                               Text="COM 포트"
-                               Style="{StaticResource DialogLabelTextStyle}"
-                               VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1"
-                             Text="{Binding ComPort, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource DialogInputTextBoxStyle}"/>
+
+                    <Border Grid.Column="0"
+                            BorderBrush="{DynamicResource CardBorderBrush}"
+                            BorderThickness="1"
+                            Padding="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0"
+                                       Text="컨트롤러 목록"
+                                       Style="{StaticResource DialogHeaderLabelTextStyle}"
+                                       Margin="0,0,0,8"/>
+
+                            <ListBox Grid.Row="1"
+                                     ItemsSource="{Binding Controllers}"
+                                     SelectedItem="{Binding SelectedController}"
+                                     BorderThickness="0"
+                                     Background="Transparent">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="0,0,0,8"
+                                                Padding="10"
+                                                BorderBrush="{DynamicResource CardBorderBrush}"
+                                                BorderThickness="1">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding DisplayName}"
+                                                           Style="{StaticResource DialogHeaderLabelTextStyle}"/>
+                                                <TextBlock Margin="0,4,0,0"
+                                                           Text="{Binding SummaryText}"
+                                                           Style="{StaticResource DialogLabelTextStyle}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Grid Grid.Row="2" Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="8"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0"
+                                        Content="컨트롤러 추가"
+                                        Style="{StaticResource DialogSecondaryButtonStyle}"
+                                        Command="{Binding AddControllerCommand}"/>
+                                <Button Grid.Column="2"
+                                        Content="선택 제거"
+                                        Style="{StaticResource DialogSecondaryButtonStyle}"
+                                        Command="{Binding RemoveControllerCommand}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="2"
+                            BorderBrush="{DynamicResource CardBorderBrush}"
+                            BorderThickness="1"
+                            Padding="10"
+                            IsEnabled="{Binding HasSelectedController}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0" Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
+                                           Text="컨트롤러명"
+                                           Style="{StaticResource DialogLabelTextStyle}"
+                                           VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding SelectedController.Name, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource DialogInputTextBoxStyle}"/>
+
+                                <TextBlock Grid.Column="3"
+                                           Text="사용"
+                                           Style="{StaticResource DialogLabelTextStyle}"
+                                           VerticalAlignment="Center"/>
+                                <CheckBox Grid.Column="4"
+                                          IsChecked="{Binding SelectedController.IsEnabled}"
+                                          VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <Grid Grid.Row="1" Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
+                                           Text="COM 포트"
+                                           Style="{StaticResource DialogLabelTextStyle}"
+                                           VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding SelectedController.ComPort, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource DialogInputTextBoxStyle}"/>
+                            </Grid>
+
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="채널 설정"
+                                           Style="{StaticResource DialogHeaderLabelTextStyle}"
+                                           Margin="0,0,0,8"/>
+
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding SelectedController.Channels}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Margin="0,0,0,10"
+                                                        Padding="10"
+                                                        BorderBrush="{DynamicResource CardBorderBrush}"
+                                                        BorderThickness="1">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto"/>
+                                                            <RowDefinition Height="Auto"/>
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="80"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="80"/>
+                                                            <ColumnDefinition Width="120"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock Grid.Row="0"
+                                                                   Grid.Column="0"
+                                                                   Text="채널명"
+                                                                   Style="{StaticResource DialogLabelTextStyle}"
+                                                                   VerticalAlignment="Center"/>
+                                                        <TextBox Grid.Row="0"
+                                                                 Grid.Column="1"
+                                                                 Margin="8,0,12,0"
+                                                                 Text="{Binding ChannelName, UpdateSourceTrigger=PropertyChanged}"
+                                                                 Style="{StaticResource DialogInputTextBoxStyle}"/>
+                                                        <CheckBox Grid.Row="0"
+                                                                  Grid.Column="2"
+                                                                  IsChecked="{Binding IsEnabled}"
+                                                                  VerticalAlignment="Center"/>
+                                                        <TextBlock Grid.Row="0"
+                                                                   Grid.Column="3"
+                                                                   HorizontalAlignment="Right"
+                                                                   Text="{Binding CurrentValueText}"
+                                                                   Style="{StaticResource DialogLabelTextStyle}"/>
+
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="0"
+                                                                   Margin="0,10,0,0"
+                                                                   Text="밝기"
+                                                                   Style="{StaticResource DialogLabelTextStyle}"
+                                                                   VerticalAlignment="Center"/>
+                                                        <Slider Grid.Row="1"
+                                                                Grid.Column="1"
+                                                                Grid.ColumnSpan="2"
+                                                                Margin="8,10,12,0"
+                                                                Minimum="0"
+                                                                Maximum="255"
+                                                                TickFrequency="5"
+                                                                Value="{Binding Brightness}"
+                                                                IsEnabled="{Binding IsEnabled}"
+                                                                VerticalAlignment="Center"/>
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="3"
+                                                                   Margin="0,10,0,0"
+                                                                   HorizontalAlignment="Right"
+                                                                   Text="{Binding PendingValueText}"
+                                                                   Style="{StaticResource DialogHeaderLabelTextStyle}"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Grid>
+                        </Grid>
+                    </Border>
                 </Grid>
 
-                <Separator Grid.Row="2" Margin="0,0,0,12"/>
-
-                <ScrollViewer Grid.Row="3"
-                              VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding Channels}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Margin="0,0,0,10"
-                                        Padding="10"
-                                        BorderBrush="{DynamicResource CardBorderBrush}"
-                                        BorderThickness="1">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="80"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="90"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <StackPanel Grid.Row="0"
-                                                    Grid.Column="0"
-                                                    Grid.ColumnSpan="2"
-                                                    Orientation="Horizontal"
-                                                    VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding ChannelName}"
-                                                       Style="{StaticResource DialogHeaderLabelTextStyle}"/>
-                                            <CheckBox Margin="12,0,0,0"
-                                                      VerticalAlignment="Center"
-                                                      IsChecked="{Binding IsEnabled}"/>
-                                            <TextBlock Margin="6,0,0,0"
-                                                       Text="사용"
-                                                       Style="{StaticResource DialogLabelTextStyle}"/>
-                                        </StackPanel>
-
-                                        <TextBlock Grid.Row="0"
-                                                   Grid.Column="2"
-                                                   HorizontalAlignment="Right"
-                                                   Text="{Binding CurrentValueText}"
-                                                   Style="{StaticResource DialogLabelTextStyle}"/>
-
-                                        <TextBlock Grid.Row="1"
-                                                   Grid.Column="0"
-                                                   Margin="0,10,0,0"
-                                                   Text="밝기"
-                                                   Style="{StaticResource DialogLabelTextStyle}"/>
-
-                                        <Slider Grid.Row="1"
-                                                Grid.Column="1"
-                                                Margin="12,10,12,0"
-                                                Minimum="0"
-                                                Maximum="255"
-                                                TickFrequency="5"
-                                                Value="{Binding Brightness}"
-                                                IsEnabled="{Binding IsEnabled}"
-                                                VerticalAlignment="Center"/>
-
-                                        <TextBlock Grid.Row="1"
-                                                   Grid.Column="2"
-                                                   Margin="0,10,0,0"
-                                                   HorizontalAlignment="Right"
-                                                   Text="{Binding PendingValueText}"
-                                                   Style="{StaticResource DialogHeaderLabelTextStyle}"/>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-
-                <TextBlock Grid.Row="4"
-                           Margin="0,4,0,0"
+                <TextBlock Grid.Row="2"
+                           Margin="0,10,0,0"
                            Text="{Binding StatusMessage}"
                            Foreground="{DynamicResource TextSecondaryBrush}"
                            TextWrapping="Wrap"/>
