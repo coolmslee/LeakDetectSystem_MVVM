@@ -175,19 +175,37 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         public string Name
         {
             get => _name;
-            set => SetProperty(ref _name, value, () => OnPropertyChanged(nameof(DisplayName)));
+            set
+            {
+                if (SetProperty(ref _name, value))
+                {
+                    OnPropertyChanged(nameof(DisplayName));
+                }
+            }
         }
 
         public string ComPort
         {
             get => _comPort;
-            set => SetProperty(ref _comPort, value, () => OnPropertyChanged(nameof(SummaryText)));
+            set
+            {
+                if (SetProperty(ref _comPort, value))
+                {
+                    OnPropertyChanged(nameof(SummaryText));
+                }
+            }
         }
 
         public bool IsEnabled
         {
             get => _isEnabled;
-            set => SetProperty(ref _isEnabled, value, () => OnPropertyChanged(nameof(SummaryText)));
+            set
+            {
+                if (SetProperty(ref _isEnabled, value))
+                {
+                    OnPropertyChanged(nameof(SummaryText));
+                }
+            }
         }
 
         public string DisplayName => string.IsNullOrWhiteSpace(Name) ? "이름 없는 컨트롤러" : Name;

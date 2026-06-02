@@ -123,7 +123,6 @@ namespace LeakDetectSystem_MVVM.Services
 
         private void ApplyLegacyChannel(LightChannelConfig channel, string keyPrefix, bool defaultUse, int defaultBrightness)
         {
-            channel.Name = channel.Name;
             channel.Use = ReadBool(RootSection, $"{keyPrefix}Enabled", defaultUse);
             channel.Brightness = NormalizeBrightness(ReadInt(RootSection, $"{keyPrefix}Brightness", defaultBrightness));
         }
