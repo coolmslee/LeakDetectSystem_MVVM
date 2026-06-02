@@ -1,5 +1,6 @@
 using LeakDetectSystem_MVVM.Commands;
 using LeakDetectSystem_MVVM.Comm.Plc;
+using LeakDetectSystem_MVVM.Models;
 using LeakDetectSystem_MVVM.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,6 +29,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 
         private readonly ModbusPlcClient _plcClient;
         private readonly IDialogService _dialogService;
+        private readonly IPlcConfigService _plcConfigService;
 
         private string _startAddress = "0";
         private string _startLength = "10";
@@ -52,14 +54,15 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private string _seqNo = "-";
 
         public PlcDialogViewModel()
-            : this(new ModbusPlcClient(), new DialogService())
+            : this(new ModbusPlcClient(), new DialogService(), new PlcConfigIniService())
         {
         }
 
-        public PlcDialogViewModel(ModbusPlcClient plcClient, IDialogService dialogService)
+        public PlcDialogViewModel(ModbusPlcClient plcClient, IDialogService dialogService, IPlcConfigService? plcConfigService = null)
         {
             _plcClient = plcClient ?? throw new ArgumentNullException(nameof(plcClient));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+            _plcConfigService = plcConfigService ?? new PlcConfigIniService();
 
             ConnectCommand = new RelayCommand(Connect);
             ClearReceiveCommand = new RelayCommand(() => ReceiveData.Clear());
@@ -68,6 +71,9 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             ReadDataCommand = new RelayCommand(ReadData);
             WriteDataCommand = new RelayCommand(WriteDataToPlc);
             ReadInspectionResultCommand = new RelayCommand(ReadInspectionResult, () => IsConnected);
+            SaveCommand = new RelayCommand(Save);
+
+            LoadFromIni();
         }
 
         public ObservableCollection<string> ReceiveData { get; } = new();
@@ -78,6 +84,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         public ICommand WriteBitCommand { get; }
         public ICommand ReadDataCommand { get; }
         public ICommand WriteDataCommand { get; }
+        public RelayCommand SaveCommand { get; }
         public RelayCommand ReadInspectionResultCommand { get; }
 
         public string StartAddress
@@ -239,6 +246,61 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         {
             get => _seqNo;
             set => SetProperty(ref _seqNo, value);
+        }
+
+        private void LoadFromIni()
+        {
+            try
+            {
+                PlcConfig cfg = _plcConfigService.Load();
+                IpAddress        = cfg.IpAddress;
+                Port             = cfg.Port;
+                ReadAddress      = cfg.ReadAddress;
+                ReadLength       = cfg.ReadLength;
+                ReadUnit         = cfg.ReadUnit;
+                WriteAddressOcr  = cfg.WriteAddressOcr;
+                WriteAddress1    = cfg.WriteAddress1;
+                WriteAddress2    = cfg.WriteAddress2;
+                WriteUnit        = cfg.WriteUnit;
+                ReadInterval     = cfg.ReadInterval;
+                HeartbeatAddress = cfg.HeartbeatAddress;
+                if (System.Enum.TryParse<PlcDisplayMode>(cfg.DisplayMode, out PlcDisplayMode mode))
+                {
+                    DisplayMode = mode;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                AddReceiveStr($"[Error] 설정 로드 실패: {ex.Message}");
+            }
+        }
+
+        private void Save()
+        {
+            try
+            {
+                var cfg = new PlcConfig
+                {
+                    IpAddress        = IpAddress,
+                    Port             = Port,
+                    ReadAddress      = ReadAddress,
+                    ReadLength       = ReadLength,
+                    ReadUnit         = ReadUnit,
+                    WriteAddressOcr  = WriteAddressOcr,
+                    WriteAddress1    = WriteAddress1,
+                    WriteAddress2    = WriteAddress2,
+                    WriteUnit        = WriteUnit,
+                    ReadInterval     = ReadInterval,
+                    HeartbeatAddress = HeartbeatAddress,
+                    DisplayMode      = DisplayMode.ToString()
+                };
+                _plcConfigService.Save(cfg);
+                _dialogService.ShowMessage("PLC 설정이 저장되었습니다.", "PLC 설정");
+            }
+            catch (System.Exception ex)
+            {
+                _dialogService.ShowError($"PLC 설정 저장 중 오류가 발생했습니다.\n{ex.Message}", "PLC 설정 오류");
+            }
         }
 
         private void Connect()
