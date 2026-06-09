@@ -31,7 +31,7 @@
                     <TextBlock Text="컨트롤러 / 포트 기반 조명 설정"
                                Style="{StaticResource DialogHeaderLabelTextStyle}"
                                FontSize="14"/>
-                    <--<TextBlock Margin="0,4,0,0"
+                    <!--<TextBlock Margin="0,4,0,0"
                                Text="컨트롤러별 이름, COM 포트, 사용 여부와 채널 설정을 편집할 수 있습니다."
                                Foreground="{DynamicResource TextSecondaryBrush}"
                                TextWrapping="Wrap"/>-->
