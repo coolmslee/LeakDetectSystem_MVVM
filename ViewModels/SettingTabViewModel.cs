@@ -10,6 +10,8 @@ namespace LeakDetectSystem_MVVM.ViewModels
     public class SettingTabViewModel : ViewModelBase
     {
         private readonly ISetParameterConfigService _setParameterConfigService;
+        private readonly IPlcConfigService _plcConfigService;
+        private readonly ILightConfigService _lightConfigService;
 
         private string _plcIpAddress = "192.168.0.10";
         private string _plcPort = "502";
@@ -199,6 +201,8 @@ namespace LeakDetectSystem_MVVM.ViewModels
             ISetParameterConfigService setParameterConfigService)
         {
             _setParameterConfigService = setParameterConfigService;
+            _plcConfigService = plcConfigService;
+            _lightConfigService = lightConfigService;
 
             var loaded = cameraConfigService.Load();
             Cameras = loaded.Count > 0
@@ -217,6 +221,20 @@ namespace LeakDetectSystem_MVVM.ViewModels
             SaveTimesCommand = new RelayCommand(SaveTimes);
             ToggleDioOutputCommand = new RelayCommand<int>(ToggleDioOutput);
             ToggleLightCommand = new RelayCommand<SettingLightChannelViewModel>(ToggleLight);
+        }
+
+        /// <summary>PLC 설정이 변경되었을 때 INI에서 다시 읽어 UI에 반영합니다.</summary>
+        public void ReloadPlcConfig()
+        {
+            var plcConfig = _plcConfigService.Load();
+            PlcIpAddress = plcConfig.IpAddress;
+            PlcPort = plcConfig.Port;
+        }
+
+        /// <summary>조명 설정이 변경되었을 때 INI에서 다시 읽어 UI에 반영합니다.</summary>
+        public void ReloadLightConfig()
+        {
+            LoadLightChannels(_lightConfigService.Load());
         }
 
         private void LoadLightChannels(LightConfig config)

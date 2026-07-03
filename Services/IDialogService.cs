@@ -12,11 +12,11 @@ namespace LeakDetectSystem_MVVM.Services
         string? ShowOpenFileDialog(string filter = "All Files (*.*)|*.*");
         string? ShowSaveFileDialog(string filter = "All Files (*.*)|*.*");
 
-        void ShowPlcDialog();
+        void ShowPlcDialog(Action? onSaved = null);
         void ShowModelDialog();
         void ShowCameraDialog(ObservableCollection<CameraConfig>? cameras = null);
         void ShowGrabDialog();
-        void ShowLightDialog();
+        void ShowLightDialog(Action? onSaved = null);
         void ShowLogDialog();
         IProgressDialogController ShowProgressDialog(
             string title = "진행 상태",
