@@ -12,6 +12,8 @@ namespace LeakDetectSystem_MVVM.ViewModels
         private readonly Action<string>? _statusCallback;
         private readonly IDialogService? _dialogService;
         private readonly ObservableCollection<CameraConfig>? _cameras;
+        private readonly Action? _onPlcSaved;
+        private readonly Action? _onLightSaved;
         private readonly DispatcherTimer _timer;
         private string _currentTime = string.Empty;
 
@@ -40,10 +42,16 @@ namespace LeakDetectSystem_MVVM.ViewModels
 
         public TitleBarViewModel(Action<string>? statusCallback, IDialogService? dialogService,
             ObservableCollection<CameraConfig>? cameras)
+            : this(statusCallback, dialogService, cameras, null, null) { }
+
+        public TitleBarViewModel(Action<string>? statusCallback, IDialogService? dialogService,
+            ObservableCollection<CameraConfig>? cameras, Action? onPlcSaved, Action? onLightSaved)
         {
             _statusCallback = statusCallback;
             _dialogService = dialogService;
             _cameras = cameras;
+            _onPlcSaved = onPlcSaved;
+            _onLightSaved = onLightSaved;
 
             CurrentTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
@@ -60,11 +68,11 @@ namespace LeakDetectSystem_MVVM.ViewModels
             ShowLogCommand    = new RelayCommand(() => { _dialogService?.ShowLogDialog();    ReportStatus("LOG 창 열기"); });
             ShowRfidCommand   = new RelayCommand(() => ReportStatus("RFID 창 열기"));
             OpenMenuCommand   = new RelayCommand(() => ReportStatus("MENU 열기"));
-            OpenPlcCommand    = new RelayCommand(() => { _dialogService?.ShowPlcDialog();    ReportStatus("PLC 설정 열기"); });
+            OpenPlcCommand    = new RelayCommand(() => { _dialogService?.ShowPlcDialog(_onPlcSaved);    ReportStatus("PLC 설정 열기"); });
             OpenModelCommand  = new RelayCommand(() => { _dialogService?.ShowModelDialog();  ReportStatus("Model 설정 열기"); });
             OpenCameraCommand = new RelayCommand(() => { _dialogService?.ShowCameraDialog(_cameras); ReportStatus("Camera 설정 열기"); });
             OpenGrabCommand   = new RelayCommand(() => { _dialogService?.ShowGrabDialog();   ReportStatus("Grab 설정 열기"); });
-            OpenLightCommand  = new RelayCommand(() => { _dialogService?.ShowLightDialog();  ReportStatus("Light 설정 열기"); });
+            OpenLightCommand  = new RelayCommand(() => { _dialogService?.ShowLightDialog(_onLightSaved);  ReportStatus("Light 설정 열기"); });
         }
 
         private void ReportStatus(string message) => _statusCallback?.Invoke(message);

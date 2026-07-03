@@ -65,6 +65,9 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         public RelayCommand ApplyCommand { get; }
         public RelayCommand SaveCommand { get; }
 
+        /// <summary>조명 설정이 성공적으로 저장되었을 때 발생합니다.</summary>
+        public event Action? Saved;
+
         private void LoadFromIni()
         {
             try
@@ -141,6 +144,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                 _lightConfigService.Save(BuildConfig());
                 StatusMessage = $"저장 완료: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
                 _dialogService.ShowMessage("조명 설정이 저장되었습니다.", "Light 설정");
+                Saved?.Invoke();
             }
             catch (Exception ex)
             {
