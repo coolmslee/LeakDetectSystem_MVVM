@@ -39,6 +39,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <!-- PLC IP row (read-only: PLC 통신 메뉴에서 설정) -->
@@ -111,13 +112,25 @@
                                 <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
                             </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="제품 있음" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcProductPresentAddress}" Margin="2" Padding="4,2"/>
+                        </Grid>
+
+                        <Grid Grid.Row="5" Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Bottle Rolling" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
                             <TextBox Grid.Column="1" Text="{Binding PlcBottleRollingAddress}" Margin="2" Padding="4,2"/>
                             <TextBlock Grid.Column="3" Text="Vision Ready" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
                             <TextBox Grid.Column="4" Text="{Binding PcVisionReadyAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
-                        <Grid Grid.Row="5" Margin="0,2">
+                        <Grid Grid.Row="6" Margin="0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
@@ -131,7 +144,7 @@
                             <TextBox Grid.Column="4" Text="{Binding PcInspectDoneAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
-                        <Grid Grid.Row="6" Margin="0,2">
+                        <Grid Grid.Row="7" Margin="0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
@@ -145,7 +158,7 @@
                             <TextBox Grid.Column="4" Text="{Binding PcReset1AckAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
-                        <Grid Grid.Row="7" Margin="0,2">
+                        <Grid Grid.Row="8" Margin="0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
@@ -159,7 +172,7 @@
                             <TextBox Grid.Column="4" Text="{Binding PcReset2ReqAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
-                        <Grid Grid.Row="8" Margin="0,2">
+                        <Grid Grid.Row="9" Margin="0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
