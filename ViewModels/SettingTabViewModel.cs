@@ -11,17 +11,22 @@ namespace LeakDetectSystem_MVVM.ViewModels
         private string _plcIpAddress = "192.168.0.10";
         private string _plcPort = "502";
 
+        private string _plcStartAddress = "M2500";
+        private string _pcStartAddress = "M2550";
+
         private string _plcHeartBeatAddress = "0";
         private string _plcBottleRollingAddress = "1";
-        private string _plcTopInspectRequestAddress = "2";
-        private string _plcSideInspectRequestAddress = "3";
+        private string _plcInspectRequestAddress = "2";
+        private string _plcReset1ReqAddress = "3";
+        private string _plcReset2AckAddress = "4";
         private string _plcBottleExistsAddress = "10";
 
         private string _pcHeartBeatAddress = "16";
         private string _pcVisionReadyAddress = "17";
-        private string _pcTopInspectDoneAddress = "18";
-        private string _pcSideInspectDoneAddress = "19";
-        private string _pcQrRequestAddress = "27";
+        private string _pcInspectDoneAddress = "18";
+        private string _pcReset1AckAddress = "19";
+        private string _pcReset2ReqAddress = "20";
+        private string _pcBottleDataReqAddress = "27";
 
         private int _bottleTurnTime = 500;
         private int _inspectReqTime = 300;
@@ -43,6 +48,18 @@ namespace LeakDetectSystem_MVVM.ViewModels
             private set => SetProperty(ref _plcPort, value);
         }
 
+        public string PlcStartAddress
+        {
+            get => _plcStartAddress;
+            set => SetProperty(ref _plcStartAddress, value);
+        }
+
+        public string PcStartAddress
+        {
+            get => _pcStartAddress;
+            set => SetProperty(ref _pcStartAddress, value);
+        }
+
         public string PlcHeartBeatAddress
         {
             get => _plcHeartBeatAddress;
@@ -55,16 +72,22 @@ namespace LeakDetectSystem_MVVM.ViewModels
             set => SetProperty(ref _plcBottleRollingAddress, value);
         }
 
-        public string PlcTopInspectRequestAddress
+        public string PlcInspectRequestAddress
         {
-            get => _plcTopInspectRequestAddress;
-            set => SetProperty(ref _plcTopInspectRequestAddress, value);
+            get => _plcInspectRequestAddress;
+            set => SetProperty(ref _plcInspectRequestAddress, value);
         }
 
-        public string PlcSideInspectRequestAddress
+        public string PlcReset1ReqAddress
         {
-            get => _plcSideInspectRequestAddress;
-            set => SetProperty(ref _plcSideInspectRequestAddress, value);
+            get => _plcReset1ReqAddress;
+            set => SetProperty(ref _plcReset1ReqAddress, value);
+        }
+
+        public string PlcReset2AckAddress
+        {
+            get => _plcReset2AckAddress;
+            set => SetProperty(ref _plcReset2AckAddress, value);
         }
 
         public string PlcBottleExistsAddress
@@ -85,22 +108,28 @@ namespace LeakDetectSystem_MVVM.ViewModels
             set => SetProperty(ref _pcVisionReadyAddress, value);
         }
 
-        public string PcTopInspectDoneAddress
+        public string PcInspectDoneAddress
         {
-            get => _pcTopInspectDoneAddress;
-            set => SetProperty(ref _pcTopInspectDoneAddress, value);
+            get => _pcInspectDoneAddress;
+            set => SetProperty(ref _pcInspectDoneAddress, value);
         }
 
-        public string PcSideInspectDoneAddress
+        public string PcReset1AckAddress
         {
-            get => _pcSideInspectDoneAddress;
-            set => SetProperty(ref _pcSideInspectDoneAddress, value);
+            get => _pcReset1AckAddress;
+            set => SetProperty(ref _pcReset1AckAddress, value);
         }
 
-        public string PcQrRequestAddress
+        public string PcReset2ReqAddress
         {
-            get => _pcQrRequestAddress;
-            set => SetProperty(ref _pcQrRequestAddress, value);
+            get => _pcReset2ReqAddress;
+            set => SetProperty(ref _pcReset2ReqAddress, value);
+        }
+
+        public string PcBottleDataReqAddress
+        {
+            get => _pcBottleDataReqAddress;
+            set => SetProperty(ref _pcBottleDataReqAddress, value);
         }
 
         public int BottleTurnTime
