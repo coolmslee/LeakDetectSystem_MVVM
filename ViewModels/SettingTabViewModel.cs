@@ -19,7 +19,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
         private string _plcInspectRequestAddress = "2";
         private string _plcReset1ReqAddress = "3";
         private string _plcReset2AckAddress = "4";
-        private string _plcBottleExistsAddress = "10";
+        private string _plcBottleExistsAddress = "5";
 
         private string _pcHeartBeatAddress = "16";
         private string _pcVisionReadyAddress = "17";
