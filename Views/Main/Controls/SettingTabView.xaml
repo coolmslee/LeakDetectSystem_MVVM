@@ -167,8 +167,8 @@
                                 <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="제품 있음" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding PlcBottleExistsAddress}" Margin="2" Padding="4,2"/>
+                            <TextBlock Grid.Column="0" Text="Bottle Data Ack" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcBottleDataAckAddress}" Margin="2" Padding="4,2"/>
                             <TextBlock Grid.Column="3" Text="Bottle Data Req" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
                             <TextBox Grid.Column="4" Text="{Binding PcBottleDataReqAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
