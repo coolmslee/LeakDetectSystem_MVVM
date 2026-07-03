@@ -15,6 +15,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- ====== Header ====== -->
@@ -36,31 +37,10 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <!-- PLC connection row -->
-                        <Grid Grid.Row="0" Margin="0,0,0,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="160"/>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="COM Port" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding DevicePort, UpdateSourceTrigger=PropertyChanged}" Padding="4,2"/>
-                            <TextBlock Grid.Column="3" Text="Baud" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                            <ComboBox Grid.Column="4" ItemsSource="{Binding BaudRateOptions}" SelectedItem="{Binding BaudRate}" Padding="4,2"/>
-                            <TextBlock Grid.Column="6" Text="Station" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                            <TextBox Grid.Column="7" Text="{Binding PlcStationNumber}" Padding="4,2"/>
-                        </Grid>
-
-                        <!-- PLC IP row -->
-                        <Grid Grid.Row="1" Margin="0,0,0,10">
+                        <!-- PLC IP row (read-only: PLC 통신 메뉴에서 설정) -->
+                        <Grid Grid.Row="0" Margin="0,0,0,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="110"/>
                                 <ColumnDefinition Width="160"/>
@@ -69,13 +49,15 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="PLC IP" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding PlcIpAddress, UpdateSourceTrigger=PropertyChanged}" Padding="4,2"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcIpAddress, Mode=OneWay}" Padding="4,2"
+                                     IsReadOnly="True" Background="{DynamicResource PanelBackgroundBrush}"/>
                             <TextBlock Grid.Column="3" Text="Port" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                            <TextBox Grid.Column="4" Text="{Binding PlcPort}" Padding="4,2"/>
+                            <TextBox Grid.Column="4" Text="{Binding PlcPort, Mode=OneWay}" Padding="4,2"
+                                     IsReadOnly="True" Background="{DynamicResource PanelBackgroundBrush}"/>
                         </Grid>
 
                         <!-- Column header row -->
-                        <Grid Grid.Row="2" Margin="0,0,0,4">
+                        <Grid Grid.Row="1" Margin="0,0,0,4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="220"/>
                                 <ColumnDefinition Width="120"/>
@@ -87,7 +69,7 @@
                         </Grid>
 
                         <!-- Address mapping rows -->
-                        <Grid Grid.Row="3" Margin="0,2">
+                        <Grid Grid.Row="2" Margin="0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="220"/>
                                 <ColumnDefinition Width="120"/>
@@ -98,7 +80,7 @@
                             <TextBox Grid.Column="2" Text="{Binding PcHeartBeatAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
-                        <Grid Grid.Row="4" Margin="0,2">
+                        <Grid Grid.Row="3" Margin="0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="220"/>
                                 <ColumnDefinition Width="120"/>
@@ -109,7 +91,7 @@
                             <TextBox Grid.Column="2" Text="{Binding PcVisionReadyAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
-                        <Grid Grid.Row="5" Margin="0,2">
+                        <Grid Grid.Row="4" Margin="0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="220"/>
                                 <ColumnDefinition Width="120"/>
@@ -120,7 +102,7 @@
                             <TextBox Grid.Column="2" Text="{Binding PcTopInspectDoneAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
-                        <Grid Grid.Row="6" Margin="0,2">
+                        <Grid Grid.Row="5" Margin="0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="220"/>
                                 <ColumnDefinition Width="120"/>
@@ -131,7 +113,7 @@
                             <TextBox Grid.Column="2" Text="{Binding PcSideInspectDoneAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
-                        <Grid Grid.Row="7" Margin="0,2">
+                        <Grid Grid.Row="6" Margin="0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="220"/>
                                 <ColumnDefinition Width="120"/>
@@ -194,16 +176,16 @@
                         Width="80"/>
             </StackPanel>
 
-            <!-- ====== Row 3: DIO Input / DIO Output ====== -->
-            <Grid Grid.Row="3">
+            <!-- ====== Row 3: PLC Memory / PC Memory (DIO) ====== -->
+            <Grid Grid.Row="3" Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- DIO Input (0~15 Ellipse read-only indicators) -->
+                <!-- PLC Memory (0~15 Ellipse read-only indicators) -->
                 <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,6,0">
-                    <GroupBox Header="DIO Input" FontWeight="Bold" FontSize="14"
+                    <GroupBox Header="PLC Memory" FontWeight="Bold" FontSize="14"
                               Foreground="{DynamicResource TextPrimaryBrush}">
                         <ItemsControl Margin="6" ItemsSource="{Binding DioInputStates}"
                                       AlternationCount="16">
@@ -238,9 +220,9 @@
                     </GroupBox>
                 </Border>
 
-                <!-- DIO Output (0~15 ToggleButton) -->
+                <!-- PC Memory (0~15 ToggleButton) -->
                 <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="6,0,0,0">
-                    <GroupBox Header="DIO Output" FontWeight="Bold" FontSize="14"
+                    <GroupBox Header="PC Memory" FontWeight="Bold" FontSize="14"
                               Foreground="{DynamicResource TextPrimaryBrush}">
                         <ItemsControl Margin="6" ItemsSource="{Binding DioOutputStates}"
                                       AlternationCount="16">
@@ -267,6 +249,60 @@
                     </GroupBox>
                 </Border>
             </Grid>
+
+            <!-- ====== Row 4: 조명 제어 ====== -->
+            <Border Grid.Row="4" Style="{StaticResource CardStyle}">
+                <GroupBox Header="조명 제어" FontWeight="Bold" FontSize="14"
+                          Foreground="{DynamicResource TextPrimaryBrush}">
+                    <Grid Margin="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Column header -->
+                        <Grid Grid.Row="0" Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="채널" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}"/>
+                            <TextBlock Grid.Column="1" Text="밝기" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="On/Off" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Channel rows -->
+                        <ItemsControl Grid.Row="1" ItemsSource="{Binding LightChannels}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="80"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding DisplayName}"
+                                                   Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding BrightnessText}"
+                                                   Style="{StaticResource BodyTextStyle}"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <ToggleButton Grid.Column="2"
+                                                      HorizontalAlignment="Center"
+                                                      Style="{StaticResource DioOutputToggleStyle}"
+                                                      Width="52" Height="24"
+                                                      IsChecked="{Binding IsOn, Mode=OneWay}"
+                                                      Content="{Binding StatusText}"
+                                                      Command="{Binding DataContext.ToggleLightCommand,
+                                                                RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                      CommandParameter="{Binding}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </GroupBox>
+            </Border>
         </Grid>
     </ScrollViewer>
 </UserControl>
