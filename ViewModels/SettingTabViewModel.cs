@@ -21,12 +21,12 @@ namespace LeakDetectSystem_MVVM.ViewModels
         private string _plcReset2AckAddress = "4";
         private string _plcBottleExistsAddress = "5";
 
-        private string _pcHeartBeatAddress = "16";
-        private string _pcVisionReadyAddress = "17";
-        private string _pcInspectDoneAddress = "18";
-        private string _pcReset1AckAddress = "19";
-        private string _pcReset2ReqAddress = "20";
-        private string _pcBottleDataReqAddress = "27";
+        private string _pcHeartBeatAddress = "0";
+        private string _pcVisionReadyAddress = "1";
+        private string _pcInspectDoneAddress = "2";
+        private string _pcReset1AckAddress = "3";
+        private string _pcReset2ReqAddress = "4";
+        private string _pcBottleDataReqAddress = "5";
 
         private int _bottleTurnTime = 500;
         private int _inspectReqTime = 300;
