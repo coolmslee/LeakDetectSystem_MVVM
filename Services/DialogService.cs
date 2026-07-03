@@ -66,12 +66,16 @@ namespace LeakDetectSystem_MVVM.Services
             return dialog.ShowDialog() == true ? dialog.FileName : null;
         }
 
-        public void ShowPlcDialog()
+        public void ShowPlcDialog(Action? onSaved = null)
         {
+            var viewModel = new PlcDialogViewModel();
+            if (onSaved != null)
+                viewModel.Saved += onSaved;
+
             var dialog = new PlcDialog
             {
                 Owner = GetMainWindow(),
-                DataContext = new PlcDialogViewModel()
+                DataContext = viewModel
             };
 
             dialog.Show();
@@ -109,12 +113,16 @@ namespace LeakDetectSystem_MVVM.Services
             dialog.ShowDialog();
         }
 
-        public void ShowLightDialog()
+        public void ShowLightDialog(Action? onSaved = null)
         {
+            var viewModel = new LightDialogViewModel(new LightConfigIniService(), this);
+            if (onSaved != null)
+                viewModel.Saved += onSaved;
+
             var dialog = new LightDialog
             {
                 Owner = GetMainWindow(),
-                DataContext = new LightDialogViewModel(new LightConfigIniService(), this)
+                DataContext = viewModel
             };
 
             dialog.ShowDialog();

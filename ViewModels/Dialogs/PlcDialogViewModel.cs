@@ -87,6 +87,9 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         public RelayCommand SaveCommand { get; }
         public RelayCommand ReadInspectionResultCommand { get; }
 
+        /// <summary>PLC 설정이 성공적으로 저장되었을 때 발생합니다.</summary>
+        public event Action? Saved;
+
         public string StartAddress
         {
             get => _startAddress;
@@ -296,6 +299,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                 };
                 _plcConfigService.Save(cfg);
                 _dialogService.ShowMessage("PLC 설정이 저장되었습니다.", "PLC 설정");
+                Saved?.Invoke();
             }
             catch (System.Exception ex)
             {

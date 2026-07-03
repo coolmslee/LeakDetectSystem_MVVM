@@ -185,7 +185,7 @@ namespace LeakDetectSystem_MVVM.Services
             return new LightConfig { Controllers = normalizedControllers };
         }
 
-        private static int NormalizeBrightness(int value) => Math.Clamp(value, 0, 255);
+        private static int NormalizeBrightness(int value) => Math.Clamp(value, 0, 480);
 
         private static string GetControllerSection(int controllerIndex) => $"LIGHT_CONTROLLER_{controllerIndex}";
         private static string GetChannelSection(int controllerIndex, int channelIndex) => $"LIGHT_CONTROLLER_{controllerIndex}_CHANNEL_{channelIndex}";

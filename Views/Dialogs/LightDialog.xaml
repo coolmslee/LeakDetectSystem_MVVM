@@ -218,7 +218,7 @@
                                                                 Grid.ColumnSpan="2"
                                                                 Margin="8,10,12,0"
                                                                 Minimum="0"
-                                                                Maximum="255"
+                                                                Maximum="480"
                                                                 TickFrequency="5"
                                                                 Value="{Binding Brightness}"
                                                                 IsEnabled="{Binding IsEnabled}"
