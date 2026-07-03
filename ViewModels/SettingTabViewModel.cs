@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using LeakDetectSystem_MVVM.Commands;
 using LeakDetectSystem_MVVM.Models;
+using LeakDetectSystem_MVVM.Services;
 using LeakDetectSystem_MVVM.ViewModels.Base;
 
 namespace LeakDetectSystem_MVVM.ViewModels
@@ -148,13 +149,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
         public IReadOnlyList<int> BaudRateOptions { get; } = new[] { 4800, 9600, 19200, 38400, 57600, 115200 };
 
         /// <summary>CAM1~CAM4 카메라 설정. Setting 탭 UI에서는 제거되었으며 CameraDialog를 통해 관리됩니다.</summary>
-        public ObservableCollection<CameraConfig> Cameras { get; } = new()
-        {
-            new CameraConfig { Index = 1 },
-            new CameraConfig { Index = 2 },
-            new CameraConfig { Index = 3 },
-            new CameraConfig { Index = 4 },
-        };
+        public ObservableCollection<CameraConfig> Cameras { get; }
 
         /// <summary>DIO Input 상태 (0~15), read-only 표시용</summary>
         public ObservableCollection<bool> DioInputStates { get; } =
@@ -168,8 +163,16 @@ namespace LeakDetectSystem_MVVM.ViewModels
         public RelayCommand SaveTimesCommand { get; }
         public RelayCommand<int> ToggleDioOutputCommand { get; }
 
-        public SettingTabViewModel()
+        public SettingTabViewModel() : this(new CameraConfigIniService()) { }
+
+        public SettingTabViewModel(ICameraConfigService cameraConfigService)
         {
+            var loaded = cameraConfigService.Load();
+            Cameras = loaded.Count > 0
+                ? new ObservableCollection<CameraConfig>(loaded)
+                : new ObservableCollection<CameraConfig>(
+                    Enumerable.Range(1, 4).Select(i => new CameraConfig { Index = i }));
+
             SaveMemoryCommand = new RelayCommand(SaveMemory);
             SaveTimesCommand = new RelayCommand(SaveTimes);
             ToggleDioOutputCommand = new RelayCommand<int>(ToggleDioOutput);
