@@ -37,10 +37,12 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <!-- PLC IP row (read-only: PLC 통신 메뉴에서 설정) -->
-                        <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid Grid.Row="0" Margin="0,0,0,6">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="110"/>
                                 <ColumnDefinition Width="160"/>
@@ -56,72 +58,119 @@
                                      IsReadOnly="True" Background="{DynamicResource PanelBackgroundBrush}"/>
                         </Grid>
 
-                        <!-- Column header row -->
-                        <Grid Grid.Row="1" Margin="0,0,0,4">
+                        <!-- Start address row -->
+                        <Grid Grid.Row="1" Margin="0,0,0,10">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="140"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Start Address" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcStartAddress}" Margin="2" Padding="4,2"/>
+                            <TextBlock Grid.Column="3" Text="PC Memory" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="4" Text="{Binding PcStartAddress}" Margin="2" Padding="4,2"/>
+                        </Grid>
+
+                        <!-- Column header row -->
+                        <Grid Grid.Row="2" Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Signal" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}"/>
-                            <TextBlock Grid.Column="1" Text="PLC Memory" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="PC Memory" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="0" Text="PLC Memory" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}"/>
+                            <TextBlock Grid.Column="1" Text="Address" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="PC Memory" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}"/>
+                            <TextBlock Grid.Column="4" Text="Address" FontWeight="SemiBold" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
                         </Grid>
 
                         <!-- Address mapping rows -->
-                        <Grid Grid.Row="2" Margin="0,2">
+                        <Grid Grid.Row="3" Margin="0,2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Heart Beat" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
                             <TextBox Grid.Column="1" Text="{Binding PlcHeartBeatAddress}" Margin="2" Padding="4,2"/>
-                            <TextBox Grid.Column="2" Text="{Binding PcHeartBeatAddress}" Margin="2" Padding="4,2"/>
-                        </Grid>
-
-                        <Grid Grid.Row="3" Margin="0,2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="220"/>
-                                <ColumnDefinition Width="120"/>
-                                <ColumnDefinition Width="120"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Bottle Rolling / Vision Ready" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding PlcBottleRollingAddress}" Margin="2" Padding="4,2"/>
-                            <TextBox Grid.Column="2" Text="{Binding PcVisionReadyAddress}" Margin="2" Padding="4,2"/>
+                            <TextBlock Grid.Column="3" Text="Heart Beat" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="4" Text="{Binding PcHeartBeatAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
                         <Grid Grid.Row="4" Margin="0,2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="상부검사 요청 / 완료" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding PlcTopInspectRequestAddress}" Margin="2" Padding="4,2"/>
-                            <TextBox Grid.Column="2" Text="{Binding PcTopInspectDoneAddress}" Margin="2" Padding="4,2"/>
+                            <TextBlock Grid.Column="0" Text="Bottle Rolling" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcBottleRollingAddress}" Margin="2" Padding="4,2"/>
+                            <TextBlock Grid.Column="3" Text="Vision Ready" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="4" Text="{Binding PcVisionReadyAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
                         <Grid Grid.Row="5" Margin="0,2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="측면검사 요청 / 완료" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding PlcSideInspectRequestAddress}" Margin="2" Padding="4,2"/>
-                            <TextBox Grid.Column="2" Text="{Binding PcSideInspectDoneAddress}" Margin="2" Padding="4,2"/>
+                            <TextBlock Grid.Column="0" Text="검사 요청" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcInspectRequestAddress}" Margin="2" Padding="4,2"/>
+                            <TextBlock Grid.Column="3" Text="검사 완료" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="4" Text="{Binding PcInspectDoneAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
 
                         <Grid Grid.Row="6" Margin="0,2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="120"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="공병 있음 / QR Data 요청" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="0" Text="Reset1 Req" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcReset1ReqAddress}" Margin="2" Padding="4,2"/>
+                            <TextBlock Grid.Column="3" Text="Reset1 Ack" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="4" Text="{Binding PcReset1AckAddress}" Margin="2" Padding="4,2"/>
+                        </Grid>
+
+                        <Grid Grid.Row="7" Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Reset2 Ack" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlcReset2AckAddress}" Margin="2" Padding="4,2"/>
+                            <TextBlock Grid.Column="3" Text="Reset2 Req" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="4" Text="{Binding PcReset2ReqAddress}" Margin="2" Padding="4,2"/>
+                        </Grid>
+
+                        <Grid Grid.Row="8" Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="제품 있음" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
                             <TextBox Grid.Column="1" Text="{Binding PlcBottleExistsAddress}" Margin="2" Padding="4,2"/>
-                            <TextBox Grid.Column="2" Text="{Binding PcQrRequestAddress}" Margin="2" Padding="4,2"/>
+                            <TextBlock Grid.Column="3" Text="Bottle Data Req" Style="{StaticResource BodyTextStyle}" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="4" Text="{Binding PcBottleDataReqAddress}" Margin="2" Padding="4,2"/>
                         </Grid>
                     </Grid>
                 </GroupBox>
