@@ -1,5 +1,7 @@
+using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using LeakDetectSystem_MVVM.Commands;
+using LeakDetectSystem_MVVM.Models;
 using LeakDetectSystem_MVVM.Services;
 using LeakDetectSystem_MVVM.ViewModels.Base;
 
@@ -9,6 +11,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
     {
         private readonly Action<string>? _statusCallback;
         private readonly IDialogService? _dialogService;
+        private readonly ObservableCollection<CameraConfig>? _cameras;
         private readonly DispatcherTimer _timer;
         private string _currentTime = string.Empty;
 
@@ -33,9 +36,14 @@ namespace LeakDetectSystem_MVVM.ViewModels
         public TitleBarViewModel(Action<string>? statusCallback) : this(statusCallback, null) { }
 
         public TitleBarViewModel(Action<string>? statusCallback, IDialogService? dialogService)
+            : this(statusCallback, dialogService, null) { }
+
+        public TitleBarViewModel(Action<string>? statusCallback, IDialogService? dialogService,
+            ObservableCollection<CameraConfig>? cameras)
         {
             _statusCallback = statusCallback;
             _dialogService = dialogService;
+            _cameras = cameras;
 
             CurrentTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
@@ -54,7 +62,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
             OpenMenuCommand   = new RelayCommand(() => ReportStatus("MENU 열기"));
             OpenPlcCommand    = new RelayCommand(() => { _dialogService?.ShowPlcDialog();    ReportStatus("PLC 설정 열기"); });
             OpenModelCommand  = new RelayCommand(() => { _dialogService?.ShowModelDialog();  ReportStatus("Model 설정 열기"); });
-            OpenCameraCommand = new RelayCommand(() => { _dialogService?.ShowCameraDialog(); ReportStatus("Camera 설정 열기"); });
+            OpenCameraCommand = new RelayCommand(() => { _dialogService?.ShowCameraDialog(_cameras); ReportStatus("Camera 설정 열기"); });
             OpenGrabCommand   = new RelayCommand(() => { _dialogService?.ShowGrabDialog();   ReportStatus("Grab 설정 열기"); });
             OpenLightCommand  = new RelayCommand(() => { _dialogService?.ShowLightDialog();  ReportStatus("Light 설정 열기"); });
         }
