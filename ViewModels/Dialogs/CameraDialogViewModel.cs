@@ -18,7 +18,8 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         {
         }
 
-        public CameraDialogViewModel(ICameraConfigService cameraConfigService, IDialogService dialogService)
+        public CameraDialogViewModel(ICameraConfigService cameraConfigService, IDialogService dialogService,
+            ObservableCollection<CameraConfig>? sharedCameras = null)
         {
             _cameraConfigService = cameraConfigService;
             _dialogService = dialogService;
@@ -32,12 +33,19 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                 "BGR8"
             };
 
-            Cameras = new ObservableCollection<CameraConfig>(_cameraConfigService.Load());
-
-            if (Cameras.Count == 0)
+            if (sharedCameras != null)
             {
-                Cameras = new ObservableCollection<CameraConfig>(
-                    Enumerable.Range(1, 4).Select(i => new CameraConfig { Index = i }));
+                Cameras = sharedCameras;
+            }
+            else
+            {
+                Cameras = new ObservableCollection<CameraConfig>(_cameraConfigService.Load());
+
+                if (Cameras.Count == 0)
+                {
+                    Cameras = new ObservableCollection<CameraConfig>(
+                        Enumerable.Range(1, 4).Select(i => new CameraConfig { Index = i }));
+                }
             }
 
             SelectedCamera = Cameras.FirstOrDefault();

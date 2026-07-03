@@ -1,3 +1,6 @@
+using System.Collections.ObjectModel;
+using LeakDetectSystem_MVVM.Models;
+
 namespace LeakDetectSystem_MVVM.Services
 {
     public interface IDialogService
@@ -11,7 +14,7 @@ namespace LeakDetectSystem_MVVM.Services
 
         void ShowPlcDialog();
         void ShowModelDialog();
-        void ShowCameraDialog();
+        void ShowCameraDialog(ObservableCollection<CameraConfig>? cameras = null);
         void ShowGrabDialog();
         void ShowLightDialog();
         void ShowLogDialog();

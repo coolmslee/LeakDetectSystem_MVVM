@@ -1,6 +1,8 @@
+using LeakDetectSystem_MVVM.Models;
 using LeakDetectSystem_MVVM.ViewModels.Dialogs;
 using LeakDetectSystem_MVVM.Views.Dialogs;
 using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace LeakDetectSystem_MVVM.Services
@@ -85,12 +87,12 @@ namespace LeakDetectSystem_MVVM.Services
             dialog.ShowDialog();
         }
 
-        public void ShowCameraDialog()
+        public void ShowCameraDialog(ObservableCollection<CameraConfig>? cameras = null)
         {
             var dialog = new CameraDialog
             {
                 Owner = GetMainWindow(),
-                DataContext = new CameraDialogViewModel()
+                DataContext = new CameraDialogViewModel(new CameraConfigIniService(), this, cameras)
             };
 
             dialog.ShowDialog();
