@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using LeakDetectSystem_MVVM.Commands;
 using LeakDetectSystem_MVVM.Models;
 using LeakDetectSystem_MVVM.Services;
@@ -8,6 +9,8 @@ namespace LeakDetectSystem_MVVM.ViewModels
 {
     public class SettingTabViewModel : ViewModelBase
     {
+        private readonly ISetParameterConfigService _setParameterConfigService;
+
         private string _plcIpAddress = "192.168.0.10";
         private string _plcPort = "502";
 
@@ -15,11 +18,12 @@ namespace LeakDetectSystem_MVVM.ViewModels
         private string _pcStartAddress = "M2550";
 
         private string _plcHeartBeatAddress = "0";
-        private string _plcBottleRollingAddress = "1";
-        private string _plcInspectRequestAddress = "2";
-        private string _plcReset1ReqAddress = "3";
-        private string _plcReset2AckAddress = "4";
-        private string _plcBottleDataAckAddress = "5";
+        private string _plcProductPresentAddress = "1";
+        private string _plcBottleRollingAddress = "2";
+        private string _plcInspectRequestAddress = "3";
+        private string _plcReset1ReqAddress = "4";
+        private string _plcReset2AckAddress = "5";
+        private string _plcBottleDataAckAddress = "6";
 
         private string _pcHeartBeatAddress = "0";
         private string _pcVisionReadyAddress = "1";
@@ -64,6 +68,12 @@ namespace LeakDetectSystem_MVVM.ViewModels
         {
             get => _plcHeartBeatAddress;
             set => SetProperty(ref _plcHeartBeatAddress, value);
+        }
+
+        public string PlcProductPresentAddress
+        {
+            get => _plcProductPresentAddress;
+            set => SetProperty(ref _plcProductPresentAddress, value);
         }
 
         public string PlcBottleRollingAddress
@@ -176,13 +186,20 @@ namespace LeakDetectSystem_MVVM.ViewModels
         public RelayCommand<SettingLightChannelViewModel> ToggleLightCommand { get; }
 
         public SettingTabViewModel()
-            : this(new CameraConfigIniService(), new PlcConfigIniService(), new LightConfigIniService()) { }
+            : this(
+                new CameraConfigIniService(),
+                new PlcConfigIniService(),
+                new LightConfigIniService(),
+                new SetParameterIniService()) { }
 
         public SettingTabViewModel(
             ICameraConfigService cameraConfigService,
             IPlcConfigService plcConfigService,
-            ILightConfigService lightConfigService)
+            ILightConfigService lightConfigService,
+            ISetParameterConfigService setParameterConfigService)
         {
+            _setParameterConfigService = setParameterConfigService;
+
             var loaded = cameraConfigService.Load();
             Cameras = loaded.Count > 0
                 ? new ObservableCollection<CameraConfig>(loaded)
@@ -194,6 +211,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
             _plcPort = plcConfig.Port;
 
             LoadLightChannels(lightConfigService.Load());
+            ApplySetParameterConfig(_setParameterConfigService.Load());
 
             SaveMemoryCommand = new RelayCommand(SaveMemory);
             SaveTimesCommand = new RelayCommand(SaveTimes);
@@ -211,12 +229,74 @@ namespace LeakDetectSystem_MVVM.ViewModels
 
         private void SaveMemory()
         {
-            IsSaved = true;
+            SaveAndReloadSetParameter();
         }
 
         private void SaveTimes()
         {
-            IsSaved = true;
+            SaveAndReloadSetParameter();
+        }
+
+        private void SaveAndReloadSetParameter()
+        {
+            try
+            {
+                _setParameterConfigService.Save(BuildSetParameterConfig());
+                ApplySetParameterConfig(_setParameterConfigService.Load());
+                IsSaved = true;
+            }
+            catch (Exception ex)
+            {
+                IsSaved = false;
+                Debug.WriteLine($"SetParameter save failed: {ex}");
+            }
+        }
+
+        private SetParameterConfig BuildSetParameterConfig()
+        {
+            return new SetParameterConfig
+            {
+                PlcStartAddress = PlcStartAddress,
+                PcStartAddress = PcStartAddress,
+                PlcHeartBeatAddress = PlcHeartBeatAddress,
+                PlcProductPresentAddress = PlcProductPresentAddress,
+                PlcBottleRollingAddress = PlcBottleRollingAddress,
+                PlcInspectRequestAddress = PlcInspectRequestAddress,
+                PlcReset1ReqAddress = PlcReset1ReqAddress,
+                PlcReset2AckAddress = PlcReset2AckAddress,
+                PlcBottleDataAckAddress = PlcBottleDataAckAddress,
+                PcHeartBeatAddress = PcHeartBeatAddress,
+                PcVisionReadyAddress = PcVisionReadyAddress,
+                PcInspectDoneAddress = PcInspectDoneAddress,
+                PcReset1AckAddress = PcReset1AckAddress,
+                PcReset2ReqAddress = PcReset2ReqAddress,
+                PcBottleDataReqAddress = PcBottleDataReqAddress,
+                BottleTurnTime = BottleTurnTime,
+                InspectReqTime = InspectReqTime,
+                InspectEndTime = InspectEndTime
+            };
+        }
+
+        private void ApplySetParameterConfig(SetParameterConfig config)
+        {
+            PlcStartAddress = config.PlcStartAddress;
+            PcStartAddress = config.PcStartAddress;
+            PlcHeartBeatAddress = config.PlcHeartBeatAddress;
+            PlcProductPresentAddress = config.PlcProductPresentAddress;
+            PlcBottleRollingAddress = config.PlcBottleRollingAddress;
+            PlcInspectRequestAddress = config.PlcInspectRequestAddress;
+            PlcReset1ReqAddress = config.PlcReset1ReqAddress;
+            PlcReset2AckAddress = config.PlcReset2AckAddress;
+            PlcBottleDataAckAddress = config.PlcBottleDataAckAddress;
+            PcHeartBeatAddress = config.PcHeartBeatAddress;
+            PcVisionReadyAddress = config.PcVisionReadyAddress;
+            PcInspectDoneAddress = config.PcInspectDoneAddress;
+            PcReset1AckAddress = config.PcReset1AckAddress;
+            PcReset2ReqAddress = config.PcReset2ReqAddress;
+            PcBottleDataReqAddress = config.PcBottleDataReqAddress;
+            BottleTurnTime = config.BottleTurnTime;
+            InspectReqTime = config.InspectReqTime;
+            InspectEndTime = config.InspectEndTime;
         }
 
         private void ToggleDioOutput(int index)
