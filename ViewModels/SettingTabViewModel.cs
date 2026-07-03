@@ -19,7 +19,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
         private string _plcInspectRequestAddress = "2";
         private string _plcReset1ReqAddress = "3";
         private string _plcReset2AckAddress = "4";
-        private string _plcBottleExistsAddress = "5";
+        private string _plcBottleDataAckAddress = "5";
 
         private string _pcHeartBeatAddress = "0";
         private string _pcVisionReadyAddress = "1";
@@ -90,10 +90,10 @@ namespace LeakDetectSystem_MVVM.ViewModels
             set => SetProperty(ref _plcReset2AckAddress, value);
         }
 
-        public string PlcBottleExistsAddress
+        public string PlcBottleDataAckAddress
         {
-            get => _plcBottleExistsAddress;
-            set => SetProperty(ref _plcBottleExistsAddress, value);
+            get => _plcBottleDataAckAddress;
+            set => SetProperty(ref _plcBottleDataAckAddress, value);
         }
 
         public string PcHeartBeatAddress
