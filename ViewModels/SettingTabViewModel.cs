@@ -230,7 +230,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
             }
         }
 
-        public string DisplayName => $"{ControllerName} – {ChannelName}";
+        public string DisplayName => $"{ControllerName} - {ChannelName}";
         public string BrightnessText => $"{Brightness:000}";
         public string StatusText => IsOn ? "ON" : "OFF";
     }
