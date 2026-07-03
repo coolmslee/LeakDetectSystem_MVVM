@@ -92,7 +92,7 @@ namespace LeakDetectSystem_MVVM.Services
             var dialog = new CameraDialog
             {
                 Owner = GetMainWindow(),
-                DataContext = new CameraDialogViewModel(new CameraConfigIniService(), new DialogService(), cameras)
+                DataContext = new CameraDialogViewModel(new CameraConfigIniService(), this, cameras)
             };
 
             dialog.ShowDialog();
