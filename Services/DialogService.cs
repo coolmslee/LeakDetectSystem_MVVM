@@ -66,6 +66,29 @@ namespace LeakDetectSystem_MVVM.Services
             return dialog.ShowDialog() == true ? dialog.FileName : null;
         }
 
+        public string? ShowInputDialog(string message, string title = "입력", string? defaultValue = null)
+        {
+            string? inputResult = null;
+            ShowMessageDialogInternal(
+                new MessageDialogRequest
+                {
+                    Title = title,
+                    Header = title,
+                    Message = message,
+                    Buttons = MessageDialogButtons.OKCancel,
+                    DialogType = MessageDialogType.Question,
+                    IsInputVisible = true,
+                    InputText = defaultValue
+                },
+                isModal: true,
+                (result, inputText) =>
+                {
+                    if (result == MessageDialogResult.OK)
+                        inputResult = inputText;
+                });
+            return inputResult;
+        }
+
         public void ShowPlcDialog(Action? onSaved = null)
         {
             var viewModel = new PlcDialogViewModel();
@@ -85,7 +108,7 @@ namespace LeakDetectSystem_MVVM.Services
             var dialog = new ModelDialog
             {
                 Owner = GetMainWindow(),
-                DataContext = new ModelDialogViewModel()
+                DataContext = new ModelDialogViewModel(new ModelConfigIniService(), new CameraConfigIniService(), this)
             };
 
             dialog.ShowDialog();
