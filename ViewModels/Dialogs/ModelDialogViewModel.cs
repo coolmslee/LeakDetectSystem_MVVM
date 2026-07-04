@@ -13,6 +13,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private readonly IModelConfigService _modelConfigService;
         private readonly IDialogService _dialogService;
         private ModelConfig? _selectedModel;
+        private string? _activeModelName;
 
         public ModelDialogViewModel()
             : this(new ModelConfigIniService(), new CameraConfigIniService(), new DialogService())
@@ -38,7 +39,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             EditModelCommand = new RelayCommand(EditModel, () => HasSelectedModel);
             DeleteModelCommand = new RelayCommand(DeleteModel, () => HasSelectedModel);
             SaveCommand = new RelayCommand(Save);
-            BrowseModelCommand = new RelayCommand(BrowseModel, () => HasSelectedModel);
+            ApplyModelCommand = new RelayCommand(ApplyModel, () => HasSelectedModel);
 
             LoadModels();
         }
@@ -58,18 +59,24 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
                     OnPropertyChanged(nameof(HasSelectedModel));
                     EditModelCommand.RaiseCanExecuteChanged();
                     DeleteModelCommand.RaiseCanExecuteChanged();
-                    BrowseModelCommand.RaiseCanExecuteChanged();
+                    ApplyModelCommand.RaiseCanExecuteChanged();
                 }
             }
         }
 
         public bool HasSelectedModel => _selectedModel != null;
 
+        public string? ActiveModelName
+        {
+            get => _activeModelName;
+            private set => SetProperty(ref _activeModelName, value);
+        }
+
         public RelayCommand AddModelCommand { get; }
         public RelayCommand EditModelCommand { get; }
         public RelayCommand DeleteModelCommand { get; }
         public RelayCommand SaveCommand { get; }
-        public RelayCommand BrowseModelCommand { get; }
+        public RelayCommand ApplyModelCommand { get; }
 
         private void LoadModels()
         {
@@ -77,6 +84,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             foreach (var model in _modelConfigService.Load())
                 Models.Add(model);
 
+            ActiveModelName = _modelConfigService.LoadActiveModelName();
             SelectedModel = Models.FirstOrDefault();
         }
 
@@ -119,29 +127,17 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private void Save()
         {
             _modelConfigService.Save(Models);
-            _dialogService.ShowMessage("모델 설정이 저장되고 즉시 적용되었습니다.", "모델 설정");
+            LoadModels();
+            _dialogService.ShowMessage("모델 설정이 저장되었습니다.", "모델 설정");
         }
 
-        private void BrowseModel()
+        private void ApplyModel()
         {
             if (_selectedModel == null) return;
 
-            string? filePath = _dialogService.ShowOpenFileDialog("VPP 파일 (*.vpp)|*.vpp|모든 파일 (*.*)|*.*");
-            if (filePath == null) return;
-
-            string nameFromFile = System.IO.Path.GetFileNameWithoutExtension(filePath);
-
-            bool isDefaultName = string.IsNullOrWhiteSpace(_selectedModel.ModelName)
-                || _selectedModel.ModelName.StartsWith("Model_", StringComparison.Ordinal);
-
-            if (!isDefaultName)
-            {
-                bool confirmed = _dialogService.ShowConfirmation(
-                    $"모델명을 '{nameFromFile}'(으)로 변경하시겠습니까?", "모델명 변경");
-                if (!confirmed) return;
-            }
-
-            _selectedModel.ModelName = nameFromFile;
+            _modelConfigService.SaveActiveModelName(_selectedModel.ModelName);
+            ActiveModelName = _selectedModel.ModelName;
+            _dialogService.ShowMessage($"'{_selectedModel.ModelName}' 모델이 적용되었습니다.", "모델 적용");
         }
     }
 }

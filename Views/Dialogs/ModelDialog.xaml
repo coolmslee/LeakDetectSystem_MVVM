@@ -80,7 +80,7 @@
                                 Content="선택"
                                 Width="70"
                                 Style="{StaticResource DialogSecondaryButtonStyle}"
-                                Command="{Binding BrowseModelCommand}"/>
+                                Command="{Binding ApplyModelCommand}"/>
                     </Grid>
 
                     <!-- CAM 영역 -->
