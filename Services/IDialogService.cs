@@ -12,6 +12,8 @@ namespace LeakDetectSystem_MVVM.Services
         string? ShowOpenFileDialog(string filter = "All Files (*.*)|*.*");
         string? ShowSaveFileDialog(string filter = "All Files (*.*)|*.*");
 
+        string? ShowInputDialog(string message, string title = "입력", string? defaultValue = null);
+
         void ShowPlcDialog(Action? onSaved = null);
         void ShowModelDialog();
         void ShowCameraDialog(ObservableCollection<CameraConfig>? cameras = null);
