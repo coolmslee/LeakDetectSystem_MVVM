@@ -107,7 +107,7 @@ namespace LeakDetectSystem_MVVM.Services
             var dialog = new GrabDialog
             {
                 Owner = GetMainWindow(),
-                DataContext = new GrabDialogViewModel()
+                DataContext = new GrabDialogViewModel(new GrabConfigIniService(), this)
             };
 
             dialog.ShowDialog();
