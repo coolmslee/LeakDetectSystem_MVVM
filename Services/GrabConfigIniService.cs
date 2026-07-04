@@ -9,6 +9,7 @@ namespace LeakDetectSystem_MVVM.Services
     public class GrabConfigIniService : IGrabConfigService
     {
         private const string Section = "GRAB";
+        private const int MaxIniValueLength = 255;
         private readonly string _filePath;
 
         public GrabConfigIniService(string? filePath = null)
@@ -48,7 +49,7 @@ namespace LeakDetectSystem_MVVM.Services
 
         private string ReadString(string section, string key, string defaultValue)
         {
-            var sb = new StringBuilder(255);
+            var sb = new StringBuilder(MaxIniValueLength);
             GetPrivateProfileString(section, key, defaultValue, sb, sb.Capacity, _filePath);
             return sb.ToString();
         }

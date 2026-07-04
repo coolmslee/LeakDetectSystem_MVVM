@@ -14,7 +14,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         private bool _imageSave = true;
         private string _selectedImageExtension = "BMP";
         private int _hddSettingSpace = 10;
-        private string _statusMessage = "설정을 불러오는 중입니다.";
+        private string _statusMessage = string.Empty;
 
         public GrabDialogViewModel()
             : this(new GrabConfigIniService(), new DialogService())
@@ -37,7 +37,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         public int Interval
         {
             get => _interval;
-            set => SetProperty(ref _interval, Math.Max(1, value));
+            set => SetProperty(ref _interval, value);
         }
 
         public bool ImageSave
@@ -57,7 +57,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
         public int HddSettingSpace
         {
             get => _hddSettingSpace;
-            set => SetProperty(ref _hddSettingSpace, Math.Max(1, value));
+            set => SetProperty(ref _hddSettingSpace, value);
         }
 
         public string StatusMessage
@@ -88,15 +88,21 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 
         private void SaveGrabSettings()
         {
+            bool adjusted = NormalizeInputsForSave();
             SaveConfiguration();
-            StatusMessage = $"Grab 설정 저장/적용 완료: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+            StatusMessage = adjusted
+                ? $"Grab 설정 저장/적용 완료(최소값 보정): {DateTime.Now:yyyy-MM-dd HH:mm:ss}"
+                : $"Grab 설정 저장/적용 완료: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
             _dialogService.ShowMessage("Grab 설정이 저장되고 즉시 적용되었습니다.", "Grab 설정");
         }
 
         private void SaveHddSettings()
         {
+            bool adjusted = NormalizeInputsForSave();
             SaveConfiguration();
-            StatusMessage = $"HDD 설정 저장/적용 완료: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+            StatusMessage = adjusted
+                ? $"HDD 설정 저장/적용 완료(최소값 보정): {DateTime.Now:yyyy-MM-dd HH:mm:ss}"
+                : $"HDD 설정 저장/적용 완료: {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
             _dialogService.ShowMessage("HDD 설정이 저장되고 즉시 적용되었습니다.", "HDD Setting");
         }
 
@@ -116,6 +122,32 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             return string.Equals(extension?.Trim(), "JPEG", StringComparison.OrdinalIgnoreCase)
                 ? "JPEG"
                 : "BMP";
+        }
+
+        private bool NormalizeInputsForSave()
+        {
+            bool adjusted = false;
+
+            if (Interval < 1)
+            {
+                Interval = 1;
+                adjusted = true;
+            }
+
+            if (HddSettingSpace < 1)
+            {
+                HddSettingSpace = 1;
+                adjusted = true;
+            }
+
+            string normalizedExtension = NormalizeImageExtension(SelectedImageExtension);
+            if (!string.Equals(normalizedExtension, SelectedImageExtension, StringComparison.Ordinal))
+            {
+                SelectedImageExtension = normalizedExtension;
+                adjusted = true;
+            }
+
+            return adjusted;
         }
     }
 }

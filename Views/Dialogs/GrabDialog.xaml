@@ -92,7 +92,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
-                               Text="HDD Setting Space (GB)"
+                               Text="HDD Space (GB)"
                                VerticalAlignment="Center"
                                Style="{StaticResource DialogLabelTextStyle}"/>
                     <TextBox Grid.Column="1"
