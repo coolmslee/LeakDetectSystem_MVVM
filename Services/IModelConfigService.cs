@@ -7,5 +7,7 @@ namespace LeakDetectSystem_MVVM.Services
     {
         List<ModelConfig> Load();
         void Save(IEnumerable<ModelConfig> models);
+        string? LoadActiveModelName();
+        void SaveActiveModelName(string modelName);
     }
 }

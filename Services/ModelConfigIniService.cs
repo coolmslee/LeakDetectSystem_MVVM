@@ -12,6 +12,8 @@ namespace LeakDetectSystem_MVVM.Services
         private const string ModelsSection = "MODELS";
         private const string CountKey = "Count";
         private const string ModelKeyPrefix = "Model";
+        private const string ActiveSection = "ACTIVE";
+        private const string ActiveKey = "ActiveModel";
         private const int MaxIniValueLength = 512;
         private readonly string _filePath;
 
@@ -45,6 +47,17 @@ namespace LeakDetectSystem_MVVM.Services
             }
 
             return result;
+        }
+
+        public string? LoadActiveModelName()
+        {
+            string value = ReadString(ActiveSection, ActiveKey, string.Empty);
+            return string.IsNullOrWhiteSpace(value) ? null : value;
+        }
+
+        public void SaveActiveModelName(string modelName)
+        {
+            WriteString(ActiveSection, ActiveKey, modelName);
         }
 
         public void Save(IEnumerable<ModelConfig> models)

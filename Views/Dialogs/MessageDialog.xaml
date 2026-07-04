@@ -55,7 +55,6 @@
                        TextWrapping="Wrap"
                        VerticalAlignment="Center"
                        FontSize="15"
-                       MinHeight="90"
                        Foreground="{DynamicResource TextPrimaryBrush}"/>
         </Border>
 
