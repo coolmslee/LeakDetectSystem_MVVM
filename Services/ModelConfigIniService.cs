@@ -18,7 +18,9 @@ namespace LeakDetectSystem_MVVM.Services
         public ModelConfigIniService(string? filePath = null)
         {
             _filePath = filePath ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs", "Model.ini");
-            Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
+            string? directoryPath = Path.GetDirectoryName(_filePath);
+            if (!string.IsNullOrWhiteSpace(directoryPath))
+                Directory.CreateDirectory(directoryPath);
         }
 
         public List<ModelConfig> Load()

@@ -127,8 +127,21 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
             if (_selectedModel == null) return;
 
             string? filePath = _dialogService.ShowOpenFileDialog("VPP 파일 (*.vpp)|*.vpp|모든 파일 (*.*)|*.*");
-            if (filePath != null)
-                _selectedModel.ModelName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+            if (filePath == null) return;
+
+            string nameFromFile = System.IO.Path.GetFileNameWithoutExtension(filePath);
+
+            bool isDefaultName = string.IsNullOrWhiteSpace(_selectedModel.ModelName)
+                || _selectedModel.ModelName.StartsWith("Model_", StringComparison.Ordinal);
+
+            if (!isDefaultName)
+            {
+                bool confirmed = _dialogService.ShowConfirmation(
+                    $"모델명을 '{nameFromFile}'(으)로 변경하시겠습니까?", "모델명 변경");
+                if (!confirmed) return;
+            }
+
+            _selectedModel.ModelName = nameFromFile;
         }
     }
 }
