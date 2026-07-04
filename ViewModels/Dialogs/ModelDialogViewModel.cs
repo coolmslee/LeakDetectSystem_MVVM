@@ -126,8 +126,11 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 
         private void Save()
         {
+            string? previousName = _selectedModel?.ModelName;
             _modelConfigService.Save(Models);
             LoadModels();
+            if (previousName != null)
+                SelectedModel = Models.FirstOrDefault(m => m.ModelName == previousName) ?? SelectedModel;
             _dialogService.ShowMessage("모델 설정이 저장되었습니다.", "모델 설정");
         }
 
