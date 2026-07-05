@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -27,13 +28,18 @@
                                          DataContext="{Binding SignalProcess}"
                                          Margin="0" />
 
+        <!-- 연결상태/요청신호/통신 상태 패널 (PLC●|카메라●|IMQS●|RFID●) -->
+        <controls:ConnectionStatePanelView Grid.Row="2"
+                                           DataContext="{Binding ConnectionState}"
+                                           Margin="0" />
+
         <!-- 스테이션 그룹 뷰 (설정 완료된 CAM 수만큼 ST 표시) -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Padding="8">
+        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" Padding="8">
             <controls:StationGroupView DataContext="{Binding StationGroup}" />
         </ScrollViewer>
 
         <!-- 하단 상태 표시줄 -->
-        <Border Grid.Row="3"
+        <Border Grid.Row="4"
                 Background="{DynamicResource PanelBackgroundBrush}"
                 BorderBrush="{DynamicResource DividerBrush}"
                 BorderThickness="0,1,0,0"
