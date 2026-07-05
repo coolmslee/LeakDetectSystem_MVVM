@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using LeakDetectSystem_MVVM.Commands;
 using LeakDetectSystem_MVVM.Models;
+using LeakDetectSystem_MVVM.Services;
 using LeakDetectSystem_MVVM.ViewModels.Base;
 
 namespace LeakDetectSystem_MVVM.ViewModels
@@ -10,6 +11,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
     public class MainTopDashboardViewModel : ViewModelBase
     {
         private readonly ObservableCollection<CameraConfig> _cameras;
+        private readonly IDialogService? _dialogService;
 
         // ─── 검사 PASS (PC) ───
         private bool _isInspectPass;
@@ -64,6 +66,8 @@ namespace LeakDetectSystem_MVVM.ViewModels
         public RelayCommand ResetCountCommand { get; }
         public RelayCommand ResetVppCommand { get; }
         public RelayCommand ManualInspectCommand { get; }
+        public RelayCommand AutoStartCommand { get; }
+        public RelayCommand AutoStopCommand { get; }
 
         // ─── 기본 생성자 (디자인 타임 / 테스트용) ───
         public MainTopDashboardViewModel() : this(new ObservableCollection<CameraConfig>
@@ -75,12 +79,18 @@ namespace LeakDetectSystem_MVVM.ViewModels
         }) { }
 
         public MainTopDashboardViewModel(ObservableCollection<CameraConfig> cameras)
+            : this(cameras, null) { }
+
+        public MainTopDashboardViewModel(ObservableCollection<CameraConfig> cameras, IDialogService? dialogService)
         {
-            _cameras = cameras;
+            _cameras       = cameras;
+            _dialogService = dialogService;
 
             ResetCountCommand    = new RelayCommand(ResetCount);
             ResetVppCommand      = new RelayCommand(ResetVpp);
             ManualInspectCommand = new RelayCommand(ManualInspect);
+            AutoStartCommand     = new RelayCommand(OnAutoStart);
+            AutoStopCommand      = new RelayCommand(OnAutoStop);
 
             foreach (var cam in _cameras)
                 cam.PropertyChanged += OnCameraPropertyChanged;
@@ -129,5 +139,32 @@ namespace LeakDetectSystem_MVVM.ViewModels
 
         private void ResetVpp() { }
         private void ManualInspect() { }
+
+        private void OnAutoStart()
+        {
+            var reasons = new List<string>();
+            if (!IsPlcConnected)   reasons.Add("PLC가 연결되어 있지 않습니다.");
+            if (!IsLightConnected) reasons.Add("조명 컨트롤러가 연결되어 있지 않습니다.");
+
+            if (reasons.Count > 0)
+            {
+                var message = "자동시작이 불가합니다:\n\n" + string.Join("\n", reasons);
+                if (_dialogService != null)
+                    _dialogService.ShowError(message, "자동시작 오류");
+                else
+                    System.Windows.MessageBox.Show(message, "자동시작 오류",
+                        System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                return;
+            }
+
+            IsAutoStart = true;
+            IsAutoStop  = false;
+        }
+
+        private void OnAutoStop()
+        {
+            IsAutoStart = false;
+            IsAutoStop  = true;
+        }
     }
 }

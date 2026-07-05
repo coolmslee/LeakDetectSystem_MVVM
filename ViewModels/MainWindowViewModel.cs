@@ -44,7 +44,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
             _dialogService = dialogService;
 
             SettingTab = new SettingTabViewModel();
-            MainTab    = new MainTabViewModel(SettingTab.Cameras, msg => FooterStatus = msg);
+            MainTab    = new MainTabViewModel(SettingTab.Cameras, msg => FooterStatus = msg, dialogService);
             TitleBar   = new TitleBarViewModel(msg => FooterStatus = msg, dialogService, SettingTab.Cameras,
                 SettingTab.ReloadPlcConfig, SettingTab.ReloadLightConfig);
 
@@ -79,6 +79,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
         {
             if (_disposed) return;
             TitleBar.Dispose();
+            MainTab.Dispose();
             _disposed = true;
             GC.SuppressFinalize(this);
         }
