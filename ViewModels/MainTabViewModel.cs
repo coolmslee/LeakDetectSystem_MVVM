@@ -47,6 +47,13 @@ namespace LeakDetectSystem_MVVM.ViewModels
             Dashboard     = new MainTopDashboardViewModel(cameras, dialogService);
             SignalProcess = new SignalProcessPanelViewModel(statusCallback, dialogService);
 
+            // Dashboard의 물류PASS 변경을 SignalProcess에 전파
+            Dashboard.PropertyChanged += OnDashboardPropertyChanged;
+
+            // ConnectionState의 카메라 연결 변경을 SignalProcess에 전파
+            // (SyncCameraConnectionState 호출 전에 구독해야 초기값이 반영됩니다)
+            ConnectionState.PropertyChanged += OnConnectionStatePropertyChanged;
+
             // 카메라 설정 변경 구독 – ConnectionState 동기화
             foreach (var cam in _cameras)
                 cam.PropertyChanged += OnCameraPropertyChanged;
@@ -55,12 +62,6 @@ namespace LeakDetectSystem_MVVM.ViewModels
             // 초기 상태 동기화
             SyncCameraConnectionState();
             SignalProcess.IsPlcPass = Dashboard.IsPlcPass;
-
-            // Dashboard의 물류PASS 변경을 SignalProcess에 전파
-            Dashboard.PropertyChanged += OnDashboardPropertyChanged;
-
-            // ConnectionState의 카메라 연결 변경을 SignalProcess에 전파
-            ConnectionState.PropertyChanged += OnConnectionStatePropertyChanged;
         }
 
         // 카메라 설정(IsConfigured) 변경 시 연결 상태 재계산
@@ -83,11 +84,11 @@ namespace LeakDetectSystem_MVVM.ViewModels
 
         /// <summary>
         /// 카메라가 1대 이상 설정(Use=true, IP 입력)되어 있으면 카메라 연결 상태를 true로 표시합니다.
+        /// SignalProcess.IsCameraConnected는 OnConnectionStatePropertyChanged를 통해 전파됩니다.
         /// </summary>
         private void SyncCameraConnectionState()
         {
             ConnectionState.IsCameraConnected = _cameras.Any(c => c.IsConfigured);
-            SignalProcess.IsCameraConnected   = ConnectionState.IsCameraConnected;
         }
 
         private void OnDashboardPropertyChanged(object? sender, PropertyChangedEventArgs e)
