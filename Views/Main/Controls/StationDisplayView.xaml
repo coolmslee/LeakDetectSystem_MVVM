@@ -9,11 +9,9 @@
              d:DesignHeight="200" d:DesignWidth="280">
 
     <!--
-        StationDisplayView: CogDisplay 이미지 표시 영역 + LIVE / 1:1 / FIT 버튼 영역
-        원본(LeakDetectSystem) 기준:
-          - <cog:CogDisplay x:Name="CogDisplay_ST1" /> 자리 → Border Placeholder 로 대체
-          - Cognex VisionPro(CogDisplay) 의존성 없이 빌드 가능
-          - 실제 도입 시 Placeholder Border 를 <cog:CogDisplay> 로 교체
+        StationDisplayView: Cognex CogDisplay 이미지 표시 영역 + LIVE / 1:1 / FIT 버튼 영역.
+        CogDisplay 는 WinForms 컨트롤이므로 WindowsFormsHost 로 감싸 WPF 에 통합합니다.
+        CogDisplay 인스턴스는 StationDisplayView.xaml.cs 코드비하인드에서 생성 및 초기화합니다.
     -->
     <Grid>
         <Grid.RowDefinitions>
@@ -21,37 +19,35 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- ── CogDisplay Placeholder ────────────────────────────────────── -->
-        <!-- 원본 대응 위치: <cog:CogDisplay x:Name="CogDisplay_ST{n}" />   -->
+        <!-- ── CogDisplay 표시 영역 (WindowsFormsHost) ─────────────────── -->
         <Border Grid.Row="0"
-                Background="#1A1A2E"
                 BorderBrush="{DynamicResource CardBorderBrush}"
                 BorderThickness="1"
-                MinHeight="150"
                 ClipToBounds="True">
             <Grid>
-                <!-- 스테이션 이름 레이블 (좌상단) -->
+                <!--
+                    WindowsFormsHost 에 CogDisplay 를 삽입합니다.
+                    x:Name="CogDisplayHost" 는 코드비하인드에서 참조합니다.
+                -->
+                <WindowsFormsHost x:Name="CogDisplayHost"
+                                  MinHeight="150" />
+
+                <!-- 스테이션 이름 레이블 (좌상단) – CogDisplay 위에 오버레이 -->
                 <TextBlock Text="{Binding StationName}"
                            Foreground="#FFFFFF"
                            FontSize="13"
                            FontWeight="Bold"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
-                           Margin="8,6" />
+                           Margin="8,6"
+                           IsHitTestVisible="False" />
 
-                <!-- CogDisplay 자리 안내 텍스트 -->
-                <TextBlock Text="[ CogDisplay ]"
-                           Foreground="#4A6FA5"
-                           FontSize="11"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Opacity="0.5" />
-
-                <!-- 압력값 표시 (하단) -->
+                <!-- 압력값 표시 (하단 오버레이) -->
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Bottom"
-                            Margin="8,0,0,6">
+                            Margin="8,0,0,6"
+                            IsHitTestVisible="False">
                     <TextBlock Text="P: "
                                Foreground="#AAAAAA"
                                FontSize="10" />
@@ -75,13 +71,14 @@
                     </TextBlock>
                 </StackPanel>
 
-                <!-- LIVE 표시 뱃지 (우상단, IsLive=True 일 때만 표시) -->
+                <!-- LIVE 표시 뱃지 (우상단) -->
                 <Border HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         Margin="0,4,4,0"
                         Background="#CC0000"
                         CornerRadius="3"
-                        Padding="4,2">
+                        Padding="4,2"
+                        IsHitTestVisible="False">
                     <Border.Style>
                         <Style TargetType="Border">
                             <Setter Property="Visibility" Value="Collapsed" />
@@ -101,7 +98,6 @@
         </Border>
 
         <!-- ── 표시 모드 버튼: LIVE / 1:1 / FIT ─────────────────────────── -->
-        <!-- 원본 대응: CogDisplay 하단 LIVE/FIT/+/-/1:1 버튼 영역          -->
         <StackPanel Grid.Row="1"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
@@ -119,6 +115,7 @@
                     </Style>
                 </Button.Style>
             </Button>
+
             <Button Content="1:1"
                     Command="{Binding OneToOneCommand}"
                     Margin="2,0">
@@ -132,6 +129,7 @@
                     </Style>
                 </Button.Style>
             </Button>
+
             <Button Content="FIT"
                     Command="{Binding FitCommand}"
                     Margin="2,0">

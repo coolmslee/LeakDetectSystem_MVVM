@@ -1,3 +1,4 @@
+using System;
 using LeakDetectSystem_MVVM.Models;
 using LeakDetectSystem_MVVM.ViewModels.Base;
 

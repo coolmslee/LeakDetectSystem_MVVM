@@ -1,3 +1,4 @@
+using System;
 using LeakDetectSystem_MVVM.Models;
 using LeakDetectSystem_MVVM.ViewModels.Dialogs;
 using LeakDetectSystem_MVVM.Views.Dialogs;
@@ -200,7 +201,7 @@ namespace LeakDetectSystem_MVVM.Services
             bool isModal,
             Action<MessageDialogResult, string?>? onCompleted)
         {
-            ArgumentNullException.ThrowIfNull(request);
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
             InvokeOnUiThread(() =>
             {

@@ -1,18 +1,24 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using LeakDetectSystem_MVVM.Commands;
 using LeakDetectSystem_MVVM.Models;
+using LeakDetectSystem_MVVM.Services;
 using LeakDetectSystem_MVVM.ViewModels.Base;
 
 namespace LeakDetectSystem_MVVM.ViewModels
 {
-    public class StationGroupViewModel : ViewModelBase
+    public class StationGroupViewModel : ViewModelBase, IDisposable
     {
         private readonly ObservableCollection<CameraConfig> _cameras;
         private StationCardViewModel? _selectedStation;
+        private readonly List<ICognexCameraService> _cameraServices = new List<ICognexCameraService>();
+        private bool _disposed;
 
-        public ObservableCollection<StationCardViewModel> Stations { get; } = new();
+        public ObservableCollection<StationCardViewModel> Stations { get; } = new ObservableCollection<StationCardViewModel>();
 
         public StationCardViewModel? SelectedStation
         {
@@ -65,10 +71,30 @@ namespace LeakDetectSystem_MVVM.ViewModels
 
         private void RebuildStations()
         {
+            // 기존 서비스 및 VM 정리
+            foreach (var vm in Stations)
+                vm.Dispose();
             Stations.Clear();
+
+            foreach (var svc in _cameraServices)
+                svc.Dispose();
+            _cameraServices.Clear();
+
             foreach (var cam in _cameras.Where(c => c.IsConfigured))
             {
-                Stations.Add(new StationCardViewModel
+                // 카메라 서비스 생성 및 연결 시도
+                var service = new CognexCameraService();
+                try
+                {
+                    service.Connect(cam);
+                }
+                catch (Exception)
+                {
+                    // 연결 실패 시에도 VM 은 추가 (미연결 상태로 표시)
+                }
+                _cameraServices.Add(service);
+
+                var stationVm = new StationCardViewModel
                 {
                     StationId = cam.Index,
                     StationName = $"ST{cam.Index}",
@@ -76,9 +102,28 @@ namespace LeakDetectSystem_MVVM.ViewModels
                     Threshold = 110.0,
                     ResultState = StationResultState.Unknown,
                     IsLive = true,
-                });
+                    CameraService = service,
+                };
+                Stations.Add(stationVm);
             }
+
+            SelectedStation = Stations.FirstOrDefault();
             OnPropertyChanged(nameof(GridColumns));
+        }
+
+        public void Dispose()
+        {
+            if (_disposed) return;
+            _disposed = true;
+
+            foreach (var vm in Stations)
+                vm.Dispose();
+
+            foreach (var svc in _cameraServices)
+                svc.Dispose();
+            _cameraServices.Clear();
+
+            GC.SuppressFinalize(this);
         }
     }
 }

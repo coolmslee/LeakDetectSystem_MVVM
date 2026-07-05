@@ -65,7 +65,7 @@ namespace LeakDetectSystem_MVVM.Models
             get => _exposureTime;
             set
             {
-                int clamped = Math.Clamp(value, ExposureTimeMin, ExposureTimeMax);
+                int clamped = Clamp(value, ExposureTimeMin, ExposureTimeMax);
                 if (_exposureTime == clamped) return;
                 _exposureTime = clamped;
                 OnPropertyChanged();
@@ -77,7 +77,7 @@ namespace LeakDetectSystem_MVVM.Models
             get => _gain;
             set
             {
-                int clamped = Math.Clamp(value, GainMin, GainMax);
+                int clamped = Clamp(value, GainMin, GainMax);
                 if (_gain == clamped) return;
                 _gain = clamped;
                 OnPropertyChanged();
@@ -100,7 +100,7 @@ namespace LeakDetectSystem_MVVM.Models
             get => _timeout;
             set
             {
-                int clamped = Math.Clamp(value, TimeoutMin, TimeoutMax);
+                int clamped = Clamp(value, TimeoutMin, TimeoutMax);
                 if (_timeout == clamped) return;
                 _timeout = clamped;
                 OnPropertyChanged();
@@ -113,5 +113,8 @@ namespace LeakDetectSystem_MVVM.Models
 
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        private static int Clamp(int value, int min, int max)
+            => value < min ? min : value > max ? max : value;
     }
 }
