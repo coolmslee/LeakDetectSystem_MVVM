@@ -321,13 +321,15 @@
                     </Grid.RowDefinitions>
                     <ToggleButton Grid.Row="0"
                                   Content="자동시작"
-                                  IsChecked="{Binding IsAutoStart}"
+                                  IsChecked="{Binding IsAutoStart, Mode=OneWay}"
+                                  Command="{Binding AutoStartCommand}"
                                   Style="{StaticResource DashboardToggleButtonStyle}"
                                   FontSize="15" FontWeight="Bold"
                                   Margin="2,2,2,1" />
                     <ToggleButton Grid.Row="1"
                                   Content="자동정지"
-                                  IsChecked="{Binding IsAutoStop}"
+                                  IsChecked="{Binding IsAutoStop, Mode=OneWay}"
+                                  Command="{Binding AutoStopCommand}"
                                   Style="{StaticResource DashboardToggleButtonStyle}"
                                   FontSize="15" FontWeight="Bold"
                                   Margin="2,1,2,2" />

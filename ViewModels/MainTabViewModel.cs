@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using LeakDetectSystem_MVVM.Models;
+using LeakDetectSystem_MVVM.Services;
 using LeakDetectSystem_MVVM.ViewModels.Base;
 
 namespace LeakDetectSystem_MVVM.ViewModels
@@ -32,10 +34,36 @@ namespace LeakDetectSystem_MVVM.ViewModels
             : this(cameras, null) { }
 
         public MainTabViewModel(ObservableCollection<CameraConfig> cameras, Action<string>? statusCallback)
+            : this(cameras, statusCallback, null) { }
+
+        public MainTabViewModel(ObservableCollection<CameraConfig> cameras, Action<string>? statusCallback,
+            IDialogService? dialogService)
         {
             StationGroup  = new StationGroupViewModel(cameras);
-            Dashboard     = new MainTopDashboardViewModel(cameras);
-            SignalProcess = new SignalProcessPanelViewModel(statusCallback);
+            Dashboard     = new MainTopDashboardViewModel(cameras, dialogService);
+            SignalProcess = new SignalProcessPanelViewModel(statusCallback, dialogService);
+
+            // 초기 상태 동기화
+            SignalProcess.IsPlcPass        = Dashboard.IsPlcPass;
+            SignalProcess.IsCameraConnected = ConnectionState.IsCameraConnected;
+
+            // Dashboard의 물류PASS 변경을 SignalProcess에 전파
+            Dashboard.PropertyChanged += OnDashboardPropertyChanged;
+
+            // ConnectionState의 카메라 연결 변경을 SignalProcess에 전파
+            ConnectionState.PropertyChanged += OnConnectionStatePropertyChanged;
+        }
+
+        private void OnDashboardPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainTopDashboardViewModel.IsPlcPass))
+                SignalProcess.IsPlcPass = Dashboard.IsPlcPass;
+        }
+
+        private void OnConnectionStatePropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ConnectionStatePanelViewModel.IsCameraConnected))
+                SignalProcess.IsCameraConnected = ConnectionState.IsCameraConnected;
         }
     }
 }
