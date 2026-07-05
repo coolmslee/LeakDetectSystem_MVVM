@@ -21,6 +21,11 @@ namespace LeakDetectSystem_MVVM.Services
     /// </summary>
     public sealed class CognexCameraService : ICognexCameraService
     {
+        // ── 상수 ─────────────────────────────────────────────────────────────
+
+        /// <summary>VisionPro 9.x GigE 그래버의 IP 주소 속성 키</summary>
+        private const string IpAddressAttributeKey = "IP_Address";
+
         // ── 필드 ─────────────────────────────────────────────────────────────
 
         private ICogFrameGrabber? _frameGrabber;
@@ -63,12 +68,12 @@ namespace LeakDetectSystem_MVVM.Services
             _stationIndex = config.Index;
 
             // ── 1. 사용 가능한 GigE 프레임 그래버 열거 ──
-            List<ICogFrameGrabber> grabbers = CogFrameGrabberGigE.CreateAll();
-            if (grabbers == null || grabbers.Count == 0)
+            List<ICogFrameGrabber> availableGrabbers = CogFrameGrabberGigE.CreateAll();
+            if (availableGrabbers == null || availableGrabbers.Count == 0)
                 throw new Exception($"CAM{config.Index}: 연결 가능한 GigE 카메라가 없습니다. VisionPro GigE 드라이버 설치를 확인하십시오.");
 
             // ── 2. IP 주소로 대상 그래버 탐색 ──
-            _frameGrabber = FindGrabberByIp(grabbers, config.Ip);
+            _frameGrabber = FindGrabberByIp(availableGrabbers, config.Ip);
             if (_frameGrabber == null)
                 throw new Exception($"CAM{config.Index}: IP {config.Ip} 에 해당하는 카메라를 찾을 수 없습니다.");
 
@@ -112,10 +117,7 @@ namespace LeakDetectSystem_MVVM.Services
         {
             EnsureConnected();
 
-            int triggerBit;
-            bool completed;
-
-            ICogImage image = _acqFifo!.Acquire(out triggerBit, out completed);
+            ICogImage image = _acqFifo!.Acquire(out _, out _);
             if (image == null)
                 throw new Exception($"CAM{_stationIndex}: 이미지 획득에 실패했습니다.");
 
@@ -220,8 +222,8 @@ namespace LeakDetectSystem_MVVM.Services
             {
                 try
                 {
-                    // VisionPro 9.x GigE 그래버는 Attributes 딕셔너리에 IP_Address를 포함합니다.
-                    object? attr = grabber.Attributes["IP_Address"];
+                    // VisionPro 9.x GigE 그래버는 Attributes 딕셔너리에 IP 주소를 포함합니다.
+                    object? attr = grabber.Attributes[IpAddressAttributeKey];
                     if (attr != null && string.Equals(attr.ToString(), ipAddress, StringComparison.OrdinalIgnoreCase))
                         return grabber;
                 }

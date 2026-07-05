@@ -88,9 +88,11 @@ namespace LeakDetectSystem_MVVM.ViewModels
                 {
                     service.Connect(cam);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // 연결 실패 시에도 VM 은 추가 (미연결 상태로 표시)
+                    // 연결 실패 시 로그 출력 후 미연결 상태로 계속
+                    System.Diagnostics.Debug.WriteLine(
+                        $"[StationGroupViewModel] CAM{cam.Index} ({cam.Ip}) 연결 실패: {ex.Message}");
                 }
                 _cameraServices.Add(service);
 

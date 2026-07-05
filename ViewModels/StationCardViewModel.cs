@@ -261,12 +261,9 @@ namespace LeakDetectSystem_MVVM.ViewModels
             if (_disposed) return;
             _disposed = true;
 
+            // 이벤트 구독만 해제 — 서비스의 실제 Dispose는 StationGroupViewModel 이 담당합니다.
             if (CameraService != null)
-            {
                 CameraService.ImageAcquired -= OnCameraImageAcquired;
-                CameraService.Dispose();
-                CameraService = null;
-            }
 
             GC.SuppressFinalize(this);
         }

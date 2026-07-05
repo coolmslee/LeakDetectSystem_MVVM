@@ -91,6 +91,7 @@ namespace LeakDetectSystem_MVVM.Views.Main.Controls
 
             if (_cogDisplay != null)
             {
+                CogDisplayHost.Child = null;
                 _cogDisplay.Dispose();
                 _cogDisplay = null;
             }
