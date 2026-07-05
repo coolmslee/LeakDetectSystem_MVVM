@@ -2,14 +2,16 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>9.0</LangVersion>
     <UseWPF>true</UseWPF>
-    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>LeakDetectSystem_MVVM</RootNamespace>
     <AssemblyName>LeakDetectSystem_MVVM</AssemblyName>
     <ApplicationIcon />
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 <ItemGroup>
     <!-- .NET Framework 호환성 패키지 추가 -->
@@ -61,6 +63,31 @@
     </Reference>
     <Reference Include="ECS_LightController">
       <HintPath>..\..\..\..\..\..\0.Project\Slurry_VisionSystem_250806\VisionSystem\bin\x64\Debug\ECS_LightController.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!--
+    Cognex VisionPro 9.x DLL 참조.
+    VisionPro가 기본 경로에 설치되어 있지 않은 경우
+    HintPath 를 실제 설치 경로로 변경하십시오.
+    기본 설치 경로: C:\Program Files\Cognex\VisionPro\
+  -->
+  <ItemGroup>
+    <Reference Include="Cognex.VisionPro">
+      <HintPath>C:\Program Files\Cognex\VisionPro\Cognex.VisionPro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cognex.VisionPro.Display">
+      <HintPath>C:\Program Files\Cognex\VisionPro\Cognex.VisionPro.Display.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cognex.VisionPro.ToolBlock">
+      <HintPath>C:\Program Files\Cognex\VisionPro\Cognex.VisionPro.ToolBlock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cognex.VisionPro.ImageFile">
+      <HintPath>C:\Program Files\Cognex\VisionPro\Cognex.VisionPro.ImageFile.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
 

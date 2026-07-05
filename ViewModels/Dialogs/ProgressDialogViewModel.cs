@@ -1,3 +1,5 @@
+using System;
+
 namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 {
     public class ProgressDialogViewModel : DialogViewModelBase
@@ -53,6 +55,7 @@ namespace LeakDetectSystem_MVVM.ViewModels.Dialogs
 
         public string ProgressDisplay => IsIndeterminate ? "진행 중..." : $"{ProgressValue:0}%";
 
-        private static double ClampProgress(double value) => Math.Clamp(value, 0, 100);
+        private static double ClampProgress(double value)
+            => value < 0.0 ? 0.0 : value > 100.0 ? 100.0 : value;
     }
 }

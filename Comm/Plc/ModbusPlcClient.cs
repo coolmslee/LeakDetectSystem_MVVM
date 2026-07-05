@@ -1,4 +1,5 @@
 using ModbusTCP;
+using System;
 using System.Globalization;
 
 namespace LeakDetectSystem_MVVM.Comm.Plc
@@ -111,7 +112,7 @@ namespace LeakDetectSystem_MVVM.Comm.Plc
             value = value.Trim();
             if (value.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
             {
-                return ushort.TryParse(value[2..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out result);
+                return ushort.TryParse(value.Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out result);
             }
 
             return ushort.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out result);
