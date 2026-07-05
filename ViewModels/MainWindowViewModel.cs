@@ -79,6 +79,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
         {
             if (_disposed) return;
             TitleBar.Dispose();
+            MainTab.Dispose();
             _disposed = true;
             GC.SuppressFinalize(this);
         }

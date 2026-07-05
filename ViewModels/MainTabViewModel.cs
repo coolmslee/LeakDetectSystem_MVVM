@@ -6,9 +6,10 @@ using LeakDetectSystem_MVVM.ViewModels.Base;
 
 namespace LeakDetectSystem_MVVM.ViewModels
 {
-    public class MainTabViewModel : ViewModelBase
+    public class MainTabViewModel : ViewModelBase, IDisposable
     {
         private string _statusText = "모니터링 대기 중";
+        private bool _disposed;
 
         public StationGroupViewModel StationGroup { get; }
         public MainTopDashboardViewModel Dashboard { get; }
@@ -44,7 +45,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
             SignalProcess = new SignalProcessPanelViewModel(statusCallback, dialogService);
 
             // 초기 상태 동기화
-            SignalProcess.IsPlcPass        = Dashboard.IsPlcPass;
+            SignalProcess.IsPlcPass         = Dashboard.IsPlcPass;
             SignalProcess.IsCameraConnected = ConnectionState.IsCameraConnected;
 
             // Dashboard의 물류PASS 변경을 SignalProcess에 전파
@@ -64,6 +65,15 @@ namespace LeakDetectSystem_MVVM.ViewModels
         {
             if (e.PropertyName == nameof(ConnectionStatePanelViewModel.IsCameraConnected))
                 SignalProcess.IsCameraConnected = ConnectionState.IsCameraConnected;
+        }
+
+        public void Dispose()
+        {
+            if (_disposed) return;
+            Dashboard.PropertyChanged       -= OnDashboardPropertyChanged;
+            ConnectionState.PropertyChanged -= OnConnectionStatePropertyChanged;
+            _disposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }
