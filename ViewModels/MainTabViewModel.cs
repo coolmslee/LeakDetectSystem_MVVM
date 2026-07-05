@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using LeakDetectSystem_MVVM.Models;
 using LeakDetectSystem_MVVM.Services;
@@ -8,6 +9,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
 {
     public class MainTabViewModel : ViewModelBase, IDisposable
     {
+        private readonly ObservableCollection<CameraConfig> _cameras;
         private string _statusText = "모니터링 대기 중";
         private bool _disposed;
 
@@ -40,19 +42,52 @@ namespace LeakDetectSystem_MVVM.ViewModels
         public MainTabViewModel(ObservableCollection<CameraConfig> cameras, Action<string>? statusCallback,
             IDialogService? dialogService)
         {
+            _cameras      = cameras;
             StationGroup  = new StationGroupViewModel(cameras);
             Dashboard     = new MainTopDashboardViewModel(cameras, dialogService);
             SignalProcess = new SignalProcessPanelViewModel(statusCallback, dialogService);
 
+            // 카메라 설정 변경 구독 – ConnectionState 동기화
+            foreach (var cam in _cameras)
+                cam.PropertyChanged += OnCameraPropertyChanged;
+            _cameras.CollectionChanged += OnCamerasCollectionChanged;
+
             // 초기 상태 동기화
-            SignalProcess.IsPlcPass         = Dashboard.IsPlcPass;
-            SignalProcess.IsCameraConnected = ConnectionState.IsCameraConnected;
+            SyncCameraConnectionState();
+            SignalProcess.IsPlcPass = Dashboard.IsPlcPass;
 
             // Dashboard의 물류PASS 변경을 SignalProcess에 전파
             Dashboard.PropertyChanged += OnDashboardPropertyChanged;
 
             // ConnectionState의 카메라 연결 변경을 SignalProcess에 전파
             ConnectionState.PropertyChanged += OnConnectionStatePropertyChanged;
+        }
+
+        // 카메라 설정(IsConfigured) 변경 시 연결 상태 재계산
+        private void OnCameraPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(CameraConfig.IsConfigured))
+                SyncCameraConnectionState();
+        }
+
+        private void OnCamerasCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+                foreach (CameraConfig cam in e.NewItems)
+                    cam.PropertyChanged += OnCameraPropertyChanged;
+            if (e.OldItems != null)
+                foreach (CameraConfig cam in e.OldItems)
+                    cam.PropertyChanged -= OnCameraPropertyChanged;
+            SyncCameraConnectionState();
+        }
+
+        /// <summary>
+        /// 카메라가 1대 이상 설정(Use=true, IP 입력)되어 있으면 카메라 연결 상태를 true로 표시합니다.
+        /// </summary>
+        private void SyncCameraConnectionState()
+        {
+            ConnectionState.IsCameraConnected = _cameras.Any(c => c.IsConfigured);
+            SignalProcess.IsCameraConnected   = ConnectionState.IsCameraConnected;
         }
 
         private void OnDashboardPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -70,6 +105,9 @@ namespace LeakDetectSystem_MVVM.ViewModels
         public void Dispose()
         {
             if (_disposed) return;
+            foreach (var cam in _cameras)
+                cam.PropertyChanged -= OnCameraPropertyChanged;
+            _cameras.CollectionChanged      -= OnCamerasCollectionChanged;
             Dashboard.PropertyChanged       -= OnDashboardPropertyChanged;
             ConnectionState.PropertyChanged -= OnConnectionStatePropertyChanged;
             _disposed = true;

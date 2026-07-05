@@ -75,6 +75,7 @@ namespace LeakDetectSystem_MVVM.ViewModels
                     PressureValue = 0,
                     Threshold = 110.0,
                     ResultState = StationResultState.Unknown,
+                    IsLive = true,
                 });
             }
             OnPropertyChanged(nameof(GridColumns));
